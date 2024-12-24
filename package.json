@@ -5,8 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
-    "tailwind build":"tailwindcss -i ./src/Input.css -o ./src/Output.css --watch",
+    "build": "vite build && tailwindcss -i ./src/Input.css -o ./src/Output.css --watch",
     "lint": "eslint .",
     "preview": "vite preview"
   },
