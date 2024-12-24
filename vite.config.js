@@ -10,6 +10,9 @@ export default defineConfig({
       config: {
         config: "./tailwind.config.js",
       },
+      handler() {
+        console.log('Build is running');
+      },
     },
   ],
 });
