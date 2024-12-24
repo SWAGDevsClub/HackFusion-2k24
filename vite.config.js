@@ -3,16 +3,5 @@ import react from "@vitejs/plugin-react";
 // import {tailwindcss} from "tailwindcss"
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [
-    react(),
-    {
-      name: "tailwindcss",
-      config: {
-        config: "./tailwind.config.js",
-      },
-      handler() {
-        console.log('Build is running');
-      },
-    },
-  ],
+  plugins: [react()],
 });
