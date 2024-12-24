@@ -1,17 +1,4 @@
 {
-  "rewrites": [
-    { "source": "/:path*", "destination": "/" }
-  ],
-  "builds": [
-    {
-      "src": "package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "Main" // Ensure this matches your build output directory
-      }
-    }
-  ],
-  "routes": [
-    { "src": "/[^.]+", "dest": "/", "status": 200 }
-  ]
+    
+    "routes": [{ "src": "/[^.]+", "dest": "/", "status": 200 }]
 }
