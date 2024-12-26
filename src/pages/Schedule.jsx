@@ -7,8 +7,8 @@ function Schedule() {
     style={{ backgroundImage: "url('./bgcs.jpg')" }}
   >
       <div className="bg-black/50 p-8 rounded-lg shadow-lg">
-        <h2 className="text-3xl font-bold text-center py-6" style={{ fontFamily: 'GameOfSquids, sans-serif' }}>Event Schedule</h2>
-        <h1 className="text-3xl font-bold text-center py-4" style={{ fontFamily: 'GameOfSquids, sans-serif' }}>Coming Soon......</h1>
+        <h2 className="text-3xl font-bold text-center py-6 font-squid">Event Schedule</h2>
+        <h1 className="text-3xl font-bold text-center py-4 font-squid">Coming Soon......</h1>
         {/* <div className="flex flex-col md:flex-row justify-center text-center space-y-6 md:space-y-0 md:space-x-12">
           <div>
             <h3 className="text-2xl font-bold mb-2 text-yellow-400">Day 1</h3>
