@@ -1,14 +1,20 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 function Home() {
   return (
     <>
       {/* Main Banner Section */}
       <div
-  className="bg-cover bg-center bg-no-repeat min-h-screen flex items-center justify-center text-white px-4 md:px-8"
-  style={{ backgroundImage: "url('./bgcs.jpg')" }}
->
-        <div className="bg-black/50 p-8 rounded-lg text-center shadow-lg max-w-3xl w-full mx-4 sm:mx-8">
+  className="bg-gradient-to-br from-[#200f31] to-[#613b69] bg-cover bg-center bg-no-repeat min-h-screen flex items-center justify-center text-white px-4 md:px-8"
+  // style={{ backgroundImage: "url('./bgcs.jpg')" }}
+  >
+            <img
+              src="/man.png"
+              alt="GDG Logo"
+              className="w-auto sm:h-20"
+            />
+        <div className="p-8 text-center max-w-3xl w-full mx-4 sm:mx-8">
           {/* Logo */}
           <div className="flex items-center justify-center mb-4">
             <img
@@ -20,9 +26,12 @@ function Home() {
           {/* Subtitle */}
           <p className="text-lg italic mb-6 font-squid">"Code, Compete, Survive"</p>
           {/* Registration Button */}
+          <Link to="/registration">
+          
           <button className="bg-pink-500 py-2 px-6 rounded-full shadow-lg hover:bg-pink-600 transition duration-300 font-squid">
-            Registration starts from 10 Jan, 2025
+          Registration
           </button>
+          </Link>
           {/* Logos Section */}
           <div className="flex items-center justify-center gap-4 pt-8 flex-wrap">
             <img
@@ -37,6 +46,11 @@ function Home() {
             />
           </div>
         </div>
+        <img
+              src="/doll.png"
+              alt="GDG Logo"
+              className="h-24 w-auto sm:h-20"
+            />
       </div>
     </>
   );
