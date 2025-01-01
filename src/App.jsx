@@ -7,7 +7,7 @@ import Sponsors from "./pages/Sponsors";
 import PrizePool from "./pages/PrizePool";
 import Schedule from "./pages/Schedule";
 import RegistrationForm from "./pages/RegistrationForm";
-import TeamMembersForm from "./pages/TeamMembersForm";
+// import TeamMembersForm from "./pages/TeamMembersForm";
 import RegistrationSuccess from "./pages/RegistrationSuccess";
 
 
@@ -24,7 +24,7 @@ function App() {
           <Route path="/schedule" element={<Schedule />} />
           
         <Route path="/registration" element={<RegistrationForm />} />
-        <Route path="/team-members" element={<TeamMembersForm />} />
+        {/* <Route path="/team-members" element={<TeamMembersForm />} /> */}
         <Route path="/success" element={<RegistrationSuccess />} />
 
         </Routes>
