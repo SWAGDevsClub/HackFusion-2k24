@@ -50,9 +50,9 @@ const RegistrationForm = () => {
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-[#200f31] to-[#613b69] overflow-auto" >
       <form
         onSubmit={handleSubmit}
-        className="bg-pink-600 shadow-md rounded px-8 py-6 w-full max-w-full overflow-y-auto"
+        className="bg-gradient-to-br from-[#200f31] to-[#613b69] shadow-md rounded px-8 py-6 w-full max-w-full overflow-y-auto"
       >
-        <h2 className="text-2xl font-squid text-center mb-6">
+        <h2 className="text-white text-2xl font-squid text-center mb-6">
           Hackfusion Registration
         </h2>
 
@@ -207,7 +207,7 @@ const RegistrationForm = () => {
         {/* Additional Inputs */}
         <div className="mt-6">
           <div className="mb-4">
-            <label className="block text-black text-sm font-squid mb-2">
+            <label className="block text-white text-sm font-squid mb-2">
               College
             </label>
             <input
@@ -220,7 +220,7 @@ const RegistrationForm = () => {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-black text-sm font-squid mb-2">
+            <label className="block text-white text-sm font-squid mb-2">
               City
             </label>
             <input
@@ -233,7 +233,7 @@ const RegistrationForm = () => {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-black text-sm font-squid mb-2">
+            <label className="block text-white text-sm font-squid mb-2">
               Abstract
             </label>
             <textarea
@@ -248,7 +248,7 @@ const RegistrationForm = () => {
           </div>
           <div className="flex gap-4 mb-4">
             <div className="flex-1">
-              <label className="block text-black text-sm font-squid mb-2">
+              <label className="block text-white text-sm font-squid mb-2">
                 Payment Reference Number
               </label>
               <input
@@ -261,20 +261,20 @@ const RegistrationForm = () => {
               />
             </div>
             <div className="flex-1">
-              <label className="block text-black text-sm font-squid mb-2">
+              <label className="block text-white text-sm font-squid mb-2">
                 Payment Screenshot
               </label>
               <input
                 type="file"
                 onChange={handleFileChange}
-                className="border rounded w-full py-2 px-3 text-black"
+                className="border rounded w-full py-2 px-3 text-white"
                 required
               />
             </div>
           </div>
           <div className="flex gap-4 mb-4">
             <div className="flex-1">
-              <label className="block text-black text-sm font-squid mb-2">
+              <label className="block text-white text-sm font-squid mb-2">
                 Password
               </label>
               <input
@@ -287,7 +287,7 @@ const RegistrationForm = () => {
               />
             </div>
             <div className="flex-1">
-              <label className="block text-black text-sm font-squid mb-2">
+              <label className="block text-white text-sm font-squid mb-2">
                 Confirm Password
               </label>
               <input
