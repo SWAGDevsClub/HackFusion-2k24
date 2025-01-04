@@ -5,25 +5,20 @@ function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <div className="bg-black bg-repeat bg-center text-white py-4 navbar relative">
+    <div className="absolute z-50 inset-0 text-white py-4 w-full h-fit">
       <div className="container mx-auto flex justify-between items-center px-4 sm:px-6 lg:px-8">
         {/* Logo Section */}
-        <img
-          src="logonew.png"
-          className="h-10 w-auto"
-          alt="Logo"
-        />
 
         {/* Navigation Links for Larger Screens */}
         <ul className="hidden sm:flex space-x-6">
           <li>
-            <Link to="/" className="hover:text-pink-400 font-squid">Home</Link>
+            <Link to="/" className="hover:text-pink-400 cursor-pointer transition font-squid">Home</Link>
           </li>
           <li>
-            <Link to="/sponsors" className="hover:text-pink-400 font-squid">Sponsors</Link>
+            <Link to="/sponsors" className="hover:text-pink-400 cursor-pointer transition font-squid">Sponsors</Link>
           </li>
           <li>
-            <Link to="/schedule" className="hover:text-pink-400 font-squid">Schedule</Link>
+            <Link to="/schedule" className="hover:text-pink-400 cursor-pointer transition font-squid">Schedule</Link>
           </li>
         </ul>
 
@@ -76,21 +71,21 @@ function Navbar() {
         <div className="flex flex-col space-y-2 text-center bg-black/75 p-4 absolute top-16 left-0 w-full sm:hidden">
           <Link
             to="/"
-            className="hover:text-pink-400 font-squid"
+            className="hover:text-pink-400 font-squid cursor-pointer transition"
             onClick={() => setMenuOpen(false)}
           >
             Home
           </Link>
           <Link
             to="/sponsors"
-            className="hover:text-pink-400 font-squid"
+            className="hover:text-pink-400 font-squid cursor-pointer transition"
             onClick={() => setMenuOpen(false)}
           >
             Sponsors
           </Link>
           <Link
             to="/schedule"
-            className="hover:text-pink-400 font-squid"
+            className="hover:text-pink-400 font-squid cursor-pointer transition"
             onClick={() => setMenuOpen(false)}
           >
             Schedule
