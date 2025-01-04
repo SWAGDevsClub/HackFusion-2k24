@@ -1,12 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import Footer from "../components/Footer";
 
 function Home() {
   return (
     <>
       {/* Main Banner Section */}
       <div
-  className="bg-gradient-to-br from-[#200f31] to-[#613b69] bg-cover bg-center bg-no-repeat min-h-screen flex items-center justify-center text-white px-4 md:px-8"
+  className="absolute z-40 inset-0 flex items-center justify-center text-white font-bold px-4  text-center  w-full md:px-8"
   // style={{ backgroundImage: "url('./bgcs.jpg')" }}
   >
             <img
@@ -26,12 +27,12 @@ function Home() {
           {/* Subtitle */}
           <p className="text-lg italic mb-6 font-squid">"Code, Compete, Survive"</p>
           {/* Registration Button */}
-          <Link to="/registration">
           
-          <button className="bg-pink-500 py-2 px-6 rounded-full shadow-lg hover:bg-pink-600 transition duration-300 font-squid">
-          Registration
+          
+          <button className="bg-pink-500 py-2 px-6 rounded-full shadow-lg hover:bg-pink-600 transition duration-300 font-squid cursor-pointer">
+          Registrations will start from 2025, 10th Jan * 
           </button>
-          </Link>
+          
           {/* Logos Section */}
           <div className="flex items-center justify-center gap-4 pt-8 flex-wrap">
             <img

@@ -3,8 +3,8 @@ import React from "react";
 function Schedule() {
   return (
     <div
-      className="bg-cover bg-center bg-no-repeat h-screen flex items-center justify-center text-white"
-    style={{ backgroundImage: "url('./bgcs.jpg')" }}
+      className=" absolute z-40 inset-0 flex items-center justify-center bg-cover bg-center bg-no-repeat h-screen  text-white"
+  
   >
       <div className="bg-black/50 p-8 rounded-lg shadow-lg">
         <h2 className="text-3xl font-bold text-center py-6 font-squid">Event Schedule</h2>

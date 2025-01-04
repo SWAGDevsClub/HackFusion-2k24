@@ -7,3 +7,6 @@
     background:url(../public/lod.jpg);
     background-position: center;
 }
+.transition{
+    transition: all 0.2s ease-in-out;
+}
