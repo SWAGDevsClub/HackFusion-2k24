@@ -7,13 +7,13 @@ function Home() {
     <>
       {/* Main Banner Section */}
       <div
-  className="absolute z-40 inset-0 flex items-center justify-center text-white font-bold px-4  text-center  w-full md:px-8"
+  className="absolute z-40 inset-0 flex items-center justify-center text-white font-bold px-4  text-center  w-full md:px-8 sm:flex "
   // style={{ backgroundImage: "url('./bgcs.jpg')" }}
   >
             <img
               src="/man.png"
               alt="GDG Logo"
-              className="w-auto sm:h-20"
+              className="w-auto h-24 sm:w-20 sm:h-20"
             />
         <div className="p-8 text-center max-w-3xl w-full mx-4 sm:mx-8">
           {/* Logo */}
