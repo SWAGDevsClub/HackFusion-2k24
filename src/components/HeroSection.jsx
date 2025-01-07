@@ -8,7 +8,7 @@ const HeroSection = () => {
       <div className="absolute top-10 right-10 w-20 h-20 bg-red-500 transform rotate-45"></div>
       <div className="absolute bottom-10 left-10 w-20 h-20 bg-red-500"></div>
 
-      
+       
       <h1 className="text-5xl md:text-6xl font-bold tracking-wide mb-4">
         <span className="text-pink-500">HackFusion 2024</span>
       </h1>
