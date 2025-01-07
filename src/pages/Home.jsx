@@ -25,7 +25,9 @@ function Home() {
             />
           </div>
           {/* Subtitle */}
+
           <p className="text-lg italic mb-6 font-squid">"Code, Compete, Survive"</p>
+
           {/* Registration Button */}
           
           
