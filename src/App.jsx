@@ -20,10 +20,10 @@ function App() {
           <Route path="/sponsors" element={<Sponsors />} />
 
           <Route path="/schedule" element={<Schedule />} />
-
-          <Route path="/registration" element={<RegistrationForm />} />
+{/* 
+          <Route path="/registration" element={<RegistrationForm />} /> */}
           {/* <Route path="/team-members" element={<TeamMembersForm />} /> */}
-          <Route path="/success" element={<RegistrationSuccess />} />
+{/*           <Route path="/success" element={<RegistrationSuccess />} /> */}
         </Routes>
         <Footer />
       </BackgroundGradientAnimation>
