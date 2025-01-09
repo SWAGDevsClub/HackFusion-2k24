@@ -8,7 +8,7 @@ function Home() {
       {/* Main Banner Section */}
       <div
 
-  className="absolute z-40 inset-0 flex items-center justify-center text-white font-bold px-4  text-center  w-full md:px-8 sm:flex "
+  className="absolute z-50 inset-0 flex items-center justify-center text-white font-bold px-4  text-center  w-full md:px-8 sm:flex "
   // style={{ backgroundImage: "url('./bgcs.jpg')" }}
   >
             <img
