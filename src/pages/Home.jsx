@@ -11,10 +11,15 @@ function Home() {
   className="absolute z-50 inset-0 flex items-center justify-center text-white font-bold px-4  text-center  w-full md:px-8 sm:flex "
   // style={{ backgroundImage: "url('./bgcs.jpg')" }}
   >
-            <img
-              src="/man.png"
+    <img
+              src="/mask.png"
               alt="GDG Logo"
-              className="h-60"
+              className="h-40 absolute top-20 left-40"
+            />
+            <img
+              src="/theboss.png"
+              alt="GDG Logo"
+              className="h-60 absolute  bottom-20 left-20"
             />
         <div className="p-8 text-center max-w-3xl w-full mx-4 sm:mx-8">
           {/* Logo */}
@@ -53,9 +58,9 @@ function Home() {
         </div>
 
         <img
-              src="/doll.png"
+              src="/gaurd.png"
               alt="GDG Logo"
-              className="h-60"
+              className="h-60 absolute  bottom-20 right-20"
             />
               
               <div className="fixed top-4 right-4 group">

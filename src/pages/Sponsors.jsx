@@ -87,8 +87,8 @@ function Sponsors() {
                   <h2 className="tracking-widest text-xs title-font font-medium text-gray-400 mb-1">
                     CATEGORY
                   </h2>
-                  <h1 className="title-font sm:text-2xl text-xl font-medium text-white mb-3 hover:shadow-[0_0_10px_rgba(255,255,255,0.8)]">
-                    ₹90,000 Prize Pool
+                  <h1 className="title-font sm:text-2xl text-xl font-medium text-white mb-3 hover:shadow-[0_0_10px_rgba(255,255,255,0.8)] font-squid">
+                    ₹1,00,000 Prize Pool
                   </h1>
                   <p className="leading-relaxed mb-3">
                     Exciting awards and gifts for the best solutions of problem
@@ -121,7 +121,7 @@ function Sponsors() {
                   <h2 className="tracking-widest text-xs title-font font-medium text-gray-400 mb-1">
                     CATEGORY
                   </h2>
-                  <h1 className="title-font sm:text-2xl text-xl font-medium text-white mb-3 hover:shadow-[0_0_10px_rgba(255,255,255,0.8)]">
+                  <h1 className="title-font sm:text-2xl text-xl font-medium text-white mb-3 hover:shadow-[0_0_10px_rgba(255,255,255,0.8)] font-squid">
                     Great Community
                   </h1>
                   <p className="leading-relaxed mb-3">
@@ -157,10 +157,10 @@ function Sponsors() {
                   <h2 className="tracking-widest text-xs title-font font-medium text-gray-400 mb-1">
                     CATEGORY
                   </h2>
-                  <h1 className="title-font sm:text-2xl text-xl font-medium text-white mb-3 hover:shadow-[0_0_10px_rgba(255,255,255,0.8)]">
+                  <h1 className="title-font sm:text-2xl text-xl font-medium text-white mb-3 hover:shadow-[0_0_10px_rgba(255,255,255,0.8)] font-squid">
                     36+ Hours
                   </h1>
-                  <p className="leading-relaxed mb-3">
+                  <p className="leading-relaxed mb-3 ">
                     Immerse yourself in two days of intense brainstorming and
                     coding sessions, where innovation takes center stage. Engage
                     in dynamic discussions, exchange ideas with top-notch
@@ -347,8 +347,8 @@ function Sponsors() {
         <section className="text-white body-font">
         
   <div className="container px-5 py-24 mx-auto">
-  <h1 className="text-7xl font-bold title-font mb-2 text-center">Winners</h1>
-  <p className="text-3xl text-white mb-8 text-center">Previous Year</p>
+  <h1 className="text-6xl font-bold title-font mb-4 text-center font-squid">Winners</h1>
+  <p className="text-2xl text-white mb-8 text-center font-squid">Previous Year</p>
     <div className="flex flex-wrap -m-4">
       {/* Card 1 */}
       <div className="p-4 md:w-1/3">
@@ -424,9 +424,9 @@ function Sponsors() {
     <section class="text-gray-600 body-font">
 
   <div class="container px-4 py-24 mx-auto mb-0">
-  <h1 className="text-6xl font-bold title-font mb-2 text-center text-white">Sponsers</h1>
+  <h1 className="text-6xl font-bold title-font mb-2 text-center text-white font-squid">Sponsers</h1>
 
-  <h1 className="text-3xl font-bold title-font mb-2 text-white">Title Sponser</h1>
+  <h1 className="text-2xl font-bold title-font mb-2 text-white font-squid">Title Sponser</h1>
     <div class="flex flex-wrap -m-4">
       <div class="lg:w-1/4 md:w-1/2 p-4 w-full">
         <a class="block relative h-48 rounded overflow-hidden">
@@ -449,7 +449,7 @@ function Sponsors() {
 
 {/* Second Section without vertical gap */}
 <div class="container px-4 mx-auto mb-20">
-  <h1 className="text-3xl font-bold title-font mb-2 text-white">Track Sponsor</h1>
+  <h1 className="text-3xl font-bold title-font mb-2 text-white font-squid">Track Sponsor</h1>
   <div class="flex flex-wrap -m-4">
     
 
@@ -467,7 +467,7 @@ function Sponsors() {
 
 {/* Second Section without vertical gap */}
 <div class="container px-4 mx-auto mb-20">
-  <h1 className="text-3xl font-bold title-font mb-2 text-white">Web Hosting Partner</h1>
+  <h1 className="text-3xl font-bold title-font mb-2 text-white font-squid">Web Hosting Partner</h1>
   <div class="flex flex-wrap -m-4">
     
 
@@ -486,7 +486,7 @@ function Sponsors() {
 
   {/* Second Section without vertical gap */}
   <div class="container px-4 mx-auto mb-20">
-    <h1 className="text-3xl font-bold title-font mb-2 text-white">Platform Partner</h1>
+    <h1 className="text-3xl font-bold title-font mb-2 text-white font-squid">Platform Partner</h1>
     <div class="flex flex-wrap -m-4">
       
 
@@ -504,7 +504,7 @@ function Sponsors() {
 
 {/* Second Section without vertical gap */}
 <div class="container px-4 mx-auto mb-20">
-  <h1 className="text-3xl font-bold title-font mb-2 text-white">Community Partners</h1>
+  <h1 className="text-3xl font-bold title-font mb-2 text-white font-squid">Community Partners</h1>
   <div class="flex flex-wrap -m-4">
     
 
@@ -535,8 +535,8 @@ function Sponsors() {
   <div class="container mx-auto">
     <div class="flex justify-center items-center space-x-8">
  
-      <div class="w-1/2">
-        <img src="/dolls.png" alt="" class="rounded-lg shadow-lg " />
+      <div class="w-auto">
+        <img src="/dolls.png" alt="" class="rounded-full shadow-lg h-2/3 w-2/3 transform transition-transform duration-700 hover:rotate-360" />
       </div>
 
      
