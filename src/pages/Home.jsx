@@ -13,14 +13,14 @@ function Home() {
             <img
               src="/man.png"
               alt="GDG Logo"
-              className="w-auto h-24 sm:w-20 sm:h-20"
+              className="h-60"
             />
         <div className="p-8 text-center max-w-3xl w-full mx-4 sm:mx-8">
           {/* Logo */}
           <div className="flex items-center justify-center mb-4">
             <img
-              src="logon.png"
-              className="h-12 w-auto"
+              src="/logon.png"
+              className="h-12 w-80"
               alt="Logo"
             />
           </div>
@@ -52,9 +52,25 @@ function Home() {
         <img
               src="/doll.png"
               alt="GDG Logo"
-              className="h-24 w-auto sm:h-20"
+              className="h-60"
             />
+              
+              <div className="fixed top-4 right-4 group">
+  {/* Image */}
+  <img
+    src="/master-1.png"
+    alt="GDG Logo"
+    className="w-24 h-24 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6"
+  />
+
+  {/* Tooltip Text */}
+  <div className="absolute top-20 right-0 bg-gray-800 text-white text-sm py-2 px-4 rounded opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+    get ready for it
+  </div>
+</div>
+
       </div>
+    
     </>
   );
 }
