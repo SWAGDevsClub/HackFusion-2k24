@@ -5,7 +5,7 @@ function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <div className="absolute z-50 inset-0 text-white py-4 w-full h-fit">
+    <div className="absolute z-40  text-white py-4 w-full h-fit">
       <div className="container mx-auto flex justify-between items-center px-4 sm:px-6 lg:px-8">
         {/* Logo Section */}
 

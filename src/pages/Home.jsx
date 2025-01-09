@@ -7,6 +7,7 @@ function Home() {
     <>
       {/* Main Banner Section */}
       <div
+
   className="absolute z-40 inset-0 flex items-center justify-center text-white font-bold px-4  text-center  w-full md:px-8 sm:flex "
   // style={{ backgroundImage: "url('./bgcs.jpg')" }}
   >
@@ -23,18 +24,19 @@ function Home() {
               className="h-12 w-80"
               alt="Logo"
             />
+        
           </div>
           {/* Subtitle */}
 
           <p className="text-lg italic mb-6 font-squid">"Code, Compete, Survive"</p>
 
+
           {/* Registration Button */}
-          
-          
+
           <button className="bg-pink-500 py-2 px-6 rounded-full shadow-lg hover:bg-pink-600 transition duration-300 font-squid cursor-pointer">
-          Registrations will start from 2025, 10th Jan * 
+            Registrations will start from 2025, 10th Jan *
           </button>
-          
+
           {/* Logos Section */}
           <div className="flex items-center justify-center gap-4 pt-8 flex-wrap">
             <img
@@ -49,6 +51,7 @@ function Home() {
             />
           </div>
         </div>
+
         <img
               src="/doll.png"
               alt="GDG Logo"
@@ -69,8 +72,10 @@ function Home() {
   </div>
 </div>
 
-      </div>
-    
+      
+        </div>
+
+      
     </>
   );
 }
