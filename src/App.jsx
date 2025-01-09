@@ -25,7 +25,7 @@ function App() {
           {/* <Route path="/team-members" element={<TeamMembersForm />} /> */}
           <Route path="/success" element={<RegistrationSuccess />} />
         </Routes>
-        <Footer />
+        
       </BackgroundGradientAnimation>
     </Router>
   );
