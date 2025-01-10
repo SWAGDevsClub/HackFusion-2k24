@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-
+import trisqc from "/trisqc.png"
 function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -10,15 +10,19 @@ function Navbar() {
         {/* Logo Section */}
 
         {/* Navigation Links for Larger Screens */}
-        <ul className="hidden sm:flex space-x-6">
+        <ul className="hidden  justify-center w-full items-center sm:flex space-x-6">
           <li>
             <Link to="/" className="hover:text-pink-400 cursor-pointer transition font-squid">Home</Link>
           </li>
           <li>
             <Link to="/sponsors" className="hover:text-pink-400 cursor-pointer transition font-squid">Sponsors</Link>
           </li>
+          <img src={trisqc} className="w-auto h-[45px]"/>
           <li>
             <Link to="/schedule" className="hover:text-pink-400 cursor-pointer transition font-squid">Schedule</Link>
+          </li>
+          <li>
+            <Link to="#" className="hover:text-pink-400 cursor-pointer transition font-squid">Perks</Link>
           </li>
         </ul>
 
