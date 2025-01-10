@@ -200,9 +200,9 @@ function Sponsors() {
       {/* Price Header */}
       <div className="flex flex-col items-center mb-4 ">
         <div className="text-pink-500 text-5xl">
-          <i className="tf-ion-android-bulb"></i>
+          <img src="/pep.png" alt="" className="h-24"/>
         </div>
-        <h2 className="text-4xl font-bold text-white mt-4">₹499/-</h2>
+        <h2 className="text-4xl font-bold text-white mt-4">₹749/-</h2>
       </div>
       {/* Package Name */}
       <h6 className="text-center text-lg font-semibold text-white mb-4">Early</h6>
@@ -224,7 +224,7 @@ function Sponsors() {
       <div className="text-center mt-6">
         <a
           href="#"
-          className="bg-red-400 text-white py-2 px-6 rounded-full shadow-lg hover:bg-red-800 transition duration-300"
+          className="bg-pink-400 text-white py-2 px-6 rounded-full shadow-lg hover:bg-pink-800 transition duration-300"
         >
           Get now
         </a>
@@ -536,26 +536,26 @@ function Sponsors() {
     <div class="flex justify-center items-center space-x-8">
  
       <div class="w-auto">
-        <img src="/dolls.png" alt="" class="rounded-full shadow-lg h-2/3 w-2/3 transform transition-transform duration-700 hover:rotate-360" />
+        <img src="/dolls.png" alt="" class="rounded-full shadow-lg h-2/3 w-2/3 transform transition-transform duration-700 ease-in-out hover:rotate-[360deg] hover:scale-110 hover:shadow-2xl" />
       </div>
 
      
       <div class="w-1/3 h-2/3">
         <div class="bg-white bg-opacity-90 p-6 rounded-lg shadow-lg transition-transform transform hover:scale-125 hover:shadow-2xl">
-          <h5 class="text-lg font-bold uppercase tracking-wide mb-4 text-gray-800">
+          <h5 class="text-2xl font-bold uppercase tracking-wide mb-4 text-gray-800 font-squid">
             Venue Location
           </h5>
-          <h6 class="text-base text-pink-700 font-semibold mb-3">
-            18 - 21 December, 2019
+          <h6 class="text-base text-pink-700 font-semibold mb-3 font-squid">
+            21 - 23 February, 2025
           </h6>
           <p class="text-gray-600 leading-relaxed">
-            85 Golden Street, Darlinghurst <br /> ERP 2019, United States
+            Shri Guru Gobind Singhji Institue of Engineering and Technology <br /> Vishnupuri, Nanded
           </p>
           <a
             href="contact.html"
-            class="mt-3 inline-flex items-center text-pink-600 hover:text-pink-800"
+            class="mt-3 inline-flex items-center text-pink-600 hover:text-pink-800 font-squid"
           >
-            <i class="tf-ion-ios-location mr-2"></i>View Map Location
+            <i class="tf-ion-ios-location mr-2 font-squid"></i>View Map Location
           </a>
         </div>
       </div>
