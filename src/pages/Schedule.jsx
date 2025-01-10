@@ -5,7 +5,7 @@ function Schedule() {
     <>
       
   
-    <div class="container mx-auto">
+    <div class="container mx-auto mb-20 py-16">
     <div class="flex flex-col">
       <nav class="flex justify-center space-x-4 mb-8" id="TopicTab" role="tablist">
         

@@ -206,7 +206,7 @@ function Sponsors() {
                     as you seize networking opportunities with fellow
                     enthusiasts and industry experts. Don't just win an award,
                     create lasting connections that propel your success to new
-                    heights!
+                    heights!        
                   </p>
                   <a
                     href="#"
@@ -276,15 +276,15 @@ function Sponsors() {
             >
               {/* Price Header */}
               <div className="flex flex-col items-center mb-4 ">
-                <div className="text-pink-500 text-5xl">
+                <div className="text-pink-500 text-5xl ">
                   <i className="tf-ion-android-bulb"></i>
                 </div>
-                <h2 className="text-4xl font-bold text-white mt-4">₹499/-</h2>
+                <h2 className="text-4xl font-bold text-white mt-4 font-squid">₹749/-</h2>
               </div>
               {/* Package Name */}
-              <h6 className="text-center text-lg font-semibold text-white mb-4">Early</h6>
+              <h6 className="text-center text-lg font-semibold text-white mb-4 border-2 rounded-lg font-squid">Early</h6>
               {/* List */}
-              <ul className="list-none text-white text-sm space-y-2 text-center">
+              <ul className="list-none text-white text-sm space-y-2 text-center font-mono">
                 <li>₹1,00,000 Prize pool</li>
                 <li>Fun and Enjoyment </li>
                 <li>Certificate of participation </li>
@@ -301,7 +301,7 @@ function Sponsors() {
               <div className="text-center mt-6">
                 <a
                   href="#"
-                  className="bg-red-400 text-white py-2 px-6 rounded-full shadow-lg hover:bg-red-800 transition duration-300"
+                  className="font-squid bg-pink-400 text-white py-2 px-6 rounded-full shadow-lg hover:bg-pink-700 transition duration-300"
                 >
                   Get now
                 </a>
@@ -546,36 +546,43 @@ function Sponsors() {
         </section>
 
         <section class="cta-2 py-12">
-          <div class="container mx-auto">
-            <div class="flex justify-center items-center space-x-8">
+  <div class="container mx-auto px-4">
+    <div class="flex flex-col md:flex-row justify-center items-center space-y-6 md:space-y-0 md:space-x-8">
+      
+      
+      <div class="w-auto flex justify-center">
+        <img 
+          src="/dolls.png" 
+          alt="Rotating Image" 
+          class="shadow-lg h-40 w-40 sm:h-48 sm:w-48 md:h-2/3 md:w-2/3 rounded-full transform transition-transform duration-700 ease-in-out hover:rotate-[360deg] hover:scale-50 hover:shadow-2xl" 
+        />
+      </div>
 
-              <div class="w-auto">
-                <img src="/dolls.png" alt="" class="shadow-lg h-2/3 w-2/3 rounded-full transform transition-transform duration-700 ease-in-out hover:rotate-[360deg] hover:scale-110 hover:shadow-2xl" />
-              </div>
-
-
-              <div class="w-1/3 h-2/3">
-                <div class="bg-white bg-opacity-90 p-6 rounded-lg shadow-lg transition-transform transform hover:scale-125 hover:shadow-2xl">
-                  <h5 class="text-lg font-bold uppercase tracking-wide mb-4 text-gray-800 font-squid">
-                    Venue Location
-                  </h5>
-                  <h6 class="text-base text-pink-700 font-semibold mb-3 font-squid">
-                    21 - 23 February, 2025
-                  </h6>
-                  <p class="text-gray-800 leading-relaxed">
-                    Shri Guru Gobind Singhji Institute of Engineering and Technology <br /> Vishnupuri, Nanded 431-606
-                  </p>
-                  <a
-                    href="contact.html"
-                    class="mt-3 inline-flex items-center text-pink-600 hover:text-pink-800 font-squid"
-                  >
-                    <i class="tf-ion-ios-location mr-2"></i>View Map Location
-                  </a>
-                </div>
-              </div>
-            </div>
+      <div class="w-full md:w-1/3">
+        <div class="bg-white bg-opacity-90 p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-2xl">
+          <h5 class="text-lg font-bold uppercase tracking-wide mb-4 text-gray-800 font-squid text-center md:text-left">
+            Venue Location
+          </h5>
+          <h6 class="text-base text-pink-700 font-semibold mb-3 font-squid text-center md:text-left">
+            21 - 23 February, 2025
+          </h6>
+          <p class="text-gray-800 leading-relaxed text-center md:text-left">
+            Shri Guru Gobind Singhji Institute of Engineering and Technology <br /> Vishnupuri, Nanded 431-606
+          </p>
+          <div class="flex justify-center md:justify-start mt-3">
+            <a
+              href="contact.html"
+              class="inline-flex items-center text-pink-600 hover:text-pink-800 font-squid"
+            >
+              <i class="tf-ion-ios-location mr-2"></i>View Map Location
+            </a>
           </div>
-        </section>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 
 
       </div>
