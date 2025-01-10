@@ -277,7 +277,7 @@ function Sponsors() {
               {/* Price Header */}
               <div className="flex flex-col items-center mb-4 ">
                 <div className="text-pink-500 text-5xl ">
-                  <i className="tf-ion-android-bulb"></i>
+                  <img src="/pep.png" alt="" className="h-20" />                  
                 </div>
                 <h2 className="text-4xl font-bold text-white mt-4 font-squid">₹749/-</h2>
               </div>
