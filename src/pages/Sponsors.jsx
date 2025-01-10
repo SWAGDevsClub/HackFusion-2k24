@@ -559,7 +559,7 @@ function Sponsors() {
       </div>
 
       <div class="w-full md:w-1/3">
-        <div class="bg-white bg-opacity-90 p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-2xl">
+        <div class="bg-white bg-opacity-90 p-6 rounded-lg shadow-lg transition-transform transform hover:scale-125 hover:shadow-2xl">
           <h5 class="text-lg font-bold uppercase tracking-wide mb-4 text-gray-800 font-squid text-center md:text-left">
             Venue Location
           </h5>
