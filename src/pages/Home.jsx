@@ -42,7 +42,7 @@ function Home() {
           <div className="flex items-center justify-center mb-4">
             <img
               src="/logon.png"
-              className="h-12 w-80 md:h-auto md:w-[900px]"
+              className="h-12 w-80 md:h-auto md:w-[600px]"
               alt="Logo"
             />
 
