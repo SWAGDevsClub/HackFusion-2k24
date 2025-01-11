@@ -28,7 +28,7 @@ function Home() {
           {/* Registration Button */}
 
           <button className="bg-pink-500 py-2 px-6 rounded-full shadow-lg hover:bg-pink-600 transition duration-300 font-squid cursor-pointer">
-            Registrations will start from 2025, 10th Jan *
+            Registrations will start from 2025, 15th Jan *
           </button>
 
           {/* Logos Section */}
