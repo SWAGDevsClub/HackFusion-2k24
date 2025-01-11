@@ -13,12 +13,12 @@ function Home() {
         <img
           src="/man.png"
           alt="GDG Logo"
-          className="w-auto h-24 sm:w-20 sm:h-20"
+          className="w-auto h-24 sm:h-20"
         />
         <div className="p-8 text-center max-w-3xl w-full mx-4 sm:mx-8">
           {/* Logo */}
           <div className="flex items-center justify-center mb-4">
-            <img src="logon.png" className="h-12 w-auto" alt="Logo" />
+            <img src="logon.png" className="h-auto w-85" alt="Logo" />
           </div>
           {/* Subtitle */}
 
