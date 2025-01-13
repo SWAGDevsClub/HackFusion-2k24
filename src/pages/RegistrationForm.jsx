@@ -4,19 +4,31 @@ import cardBoard from "/cardboard.jpeg";
 import logo from "/logon.png";
 import tricsq from "/tricsq.png";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { ref as dbRef, set } from "firebase/database";
+import {
+  ref as dbRef,
+  set,
+  query,
+  orderByChild,
+  equalTo,
+  orderByKey,
+  get,
+} from "firebase/database";
 import { db, storage } from "../Firebase";
+
 const RegistrationForm = () => {
+  const [loading, setLoading] = useState(false);
   const [isTeamLeadSubmitted, setIsTeamLeadSubmitted] = useState(false);
   const [isTeamMemberSubmitted, setisTeamMemberSubmitted] = useState(false);
   const [isOtpSent, setIsOtpSent] = useState(false);
   const [otpVerified, setOtpVerified] = useState(false);
   const [emailVerified, setEmailVerified] = useState(false);
   const [file, setFile] = useState(null);
-  const [cnfPassword,setCnfPassowrd] = useState("");
+  const [cnfPassword, setCnfPassowrd] = useState("");
   const [otp, setOtp] = useState("");
   const [msg, setMsg] = useState("");
   const [otpStruc, setOtpStruc] = useState({});
+  const groupChatLink = import.meta.env.VITE_CHAT;
+  const app = import.meta.env.VITE_APP;
   const [formData, setFormData] = useState({
     leadMobile: "",
     leadName: "",
@@ -40,7 +52,6 @@ const RegistrationForm = () => {
     abstract: "",
     password: "",
     paymentReferenceID: "",
-    paymentScreenShotLink: "",
   });
 
   const cart = {
@@ -126,46 +137,92 @@ const RegistrationForm = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     if (name === "paymentScreenShotLink") {
-      setFile(prev => e.target.files[0]);
-    }
-    else if(name ==="cnfPassword"){
-      setCnfPassowrd(prev=>e.target.value);
-    }
-    else {
+      setFile((prev) => e.target.files[0]);
+    } else if (name === "cnfPassword") {
+      setCnfPassowrd((prev) => e.target.value);
+    } else {
       setFormData({ ...formData, [name]: value });
     }
   };
-
-  const handleTeamLeadSubmit = (e) => {
+  const doesExists = async (mob = null, teamName = null) => {
+    const usersRef = dbRef(db, "user2");
+    if (mob !== null) {
+      try {
+        const mobileQuery = query(usersRef, orderByKey(), equalTo(mob));
+        const snapshot = await get(mobileQuery);
+        if (snapshot.exists()) {
+          return "Mob No";
+        } else {
+          if (teamName !== null) {
+            try {
+              const teamQuery = query(
+                usersRef,
+                orderByChild("teamName"),
+                equalTo(teamName)
+              );
+              const snapshot = await get(teamQuery);
+              if (snapshot.exists()) {
+                return "Team Name";
+              } else {
+                return false;
+              }
+            } catch (error) {
+              console.error("Error checking team name:", error);
+              throw error;
+            }
+          }
+        }
+      } catch (error) {
+        console.error("Error checking mobile number:", error);
+        throw error;
+      }
+    }
+  };
+  const handleTeamLeadSubmit = async (e) => {
     e.preventDefault();
-    setIsTeamLeadSubmitted((prev) => true);
+    setLoading((prev) => true);
+    const check = await doesExists(formData.leadMobile, formData.teamName);
+
+    if (check === "Mob No") {
+      alert("Mobile No already registered!");
+    } else if (check === "Team Name") {
+      alert("Team Name already taken !");
+    } else {
+      setIsTeamLeadSubmitted((prev) => true);
+    }
+    setLoading((prev) => false);
   };
   const handleTeamMemberSubmit = (e) => {
     e.preventDefault();
+    setLoading((prev) => true);
     setisTeamMemberSubmitted((prev) => true);
+    setLoading((prev) => false);
   };
   const handleFinalSUbmit = async (e) => {
     e.preventDefault();
-
+    setLoading((prev) => true);
     if (!formData.leadMobile || !file) {
       if (!formData.leadMobile) {
         alert("Team leader's mobile number is required!");
-      }
-      else {
+      } else {
         alert("Please select a file to upload.");
       }
+      setLoading((prev) => false);
       return;
     }
     // File upload to Firebase Storage
-    const fileRef = ref(storage, `hackFusion-2k25/${formData.leadMobile}/${file}`);
+    const fileRef = ref(
+      storage,
+      `hackFusion-2k25/${formData.leadMobile}/${file}`
+    );
     try {
-      const uploadTask = await uploadBytes(fileRef,file);
+      const uploadTask = await uploadBytes(fileRef, file);
 
       // Get download URL
       const downloadURL = await getDownloadURL(uploadTask.ref);
-      setFormData({...formData,paymentScreenShotLink:downloadURL});
       const dataToSave = {
         ...formData,
+        paymentScreenShotLink: downloadURL,
         cart,
         coupon,
         status: "Pending",
@@ -175,38 +232,86 @@ const RegistrationForm = () => {
       // Save file URL and other data to Firebase Realtime Database
       const dataRef = dbRef(db, `user2/${formData.leadMobile}`);
       await set(dataRef, dataToSave);
-      setFormData({
-        leadMobile: "",
-        leadName: "",
-        leadEmail: "",
-        leadGender: "",
-        m1Mobile: "",
-        m1Name: "",
-        m1Email: "",
-        m1Gender: "",
-        m2Mobile: "",
-        m2Name: "",
-        m2Email: "",
-        m2Gender: "",
-        m3Mobile: "",
-        m3Name: "",
-        m3Email: "",
-        m3Gender: "",
-        city: "",
-        college: "",
-        teamName: "",
-        abstract: "",
-        password: "",
-        paymentReferenceID: "",
-        paymentScreenShotLink: "",
-      });
-      setCnfPassowrd("")
-      setFile(null);
-      alert("File uploaded and data saved successfully!");
-      
+      const data = new FormData();
+      const message = `
+     <div style="font-family: Arial, sans-serif; line-height: 1.5; color: #333;">
+    <h2 style="color: #0056b3;">Welcome to HackFusion 2.0 Hackathon!</h2>
+    <p>Hi <strong>Team ${formData.teamName}</strong>,</p>
+    <p>Congratulations on successfully registering for <strong>HackFusion 2.0 Hackathon</strong>!</p>
+    <p> We are thrilled to have you join this exciting journey of innovation and collaboration. </p>
+
+    <h3 style="color: #0056b3;"> What's Next?</h3>
+    <ol>
+      <li stye="display:flex; flex-direction:column;>Join our official group chat further updates and to  ask queries: 
+       <br/>
+       <p>Link : ${groupChatLink}</p>
+      </li>
+      <li stye="display:flex; flex-direction:column;>Download our official HackFusion App to stay updated with the schedule, resources, and announcements: 
+        <br/>
+        <p> App : ${app}</p>
+      </li>
+      <li>Prepare to showcase your skills, learn, and have fun! </li>
+    </ol>
+
+    <p>If you have any questions, feel free to reach out to us at 
+      <a href="mailto:swag@sggs.ac.in" style="color: #0056b3;">swag@sggs.ac.in</a>.
+    </p>
+
+    <p>Looking forward to seeing you at <strong>HackFusion 2.0</strong>! </p>
+
+    <p>Best regards,</p>
+    <p><strong>HackFusion 2.0 Team</strong></p>
+  </div>
+`.replace(/\r?\n/g, "");
+      data.append("email_id", formData.leadEmail);
+      data.append("subject", "Registration Successfull !");
+      data.append("body", message);
+      try {
+        const response = await fetch(
+          `https://sggsapp.co.in/api/send_email.php`,
+          {
+            method: "POST",
+            body: data,
+          }
+        );
+        const res = await response.json();
+        if (res.Message === "Mail Sent") {
+          setFormData({
+            leadMobile: "",
+            leadName: "",
+            leadEmail: "",
+            leadGender: "",
+            m1Mobile: "",
+            m1Name: "",
+            m1Email: "",
+            m1Gender: "",
+            m2Mobile: "",
+            m2Name: "",
+            m2Email: "",
+            m2Gender: "",
+            m3Mobile: "",
+            m3Name: "",
+            m3Email: "",
+            m3Gender: "",
+            city: "",
+            college: "",
+            teamName: "",
+            abstract: "",
+            password: "",
+            paymentReferenceID: "",
+          });
+          setCnfPassowrd("");
+          setFile(null);
+          alert("File uploaded and data saved successfully!");
+          setLoading((prev) => false);
+        }
+      } catch (error) {
+        console.error(error);
+      }
     } catch (error) {
       console.error("Error uploading file:", error);
       alert("Error uploading file. Please try again.");
+      setLoading((prev) => false);
     }
   };
   const genrateOTP = () => {
@@ -214,8 +319,10 @@ const RegistrationForm = () => {
     return otp;
   };
   async function verifyOTP(email, enteredOtp) {
+    setLoading((prev) => true);
     if (!otpStruc[email] || !otpStruc[email].otp) {
       setMsg("No OTP was sent to this email. Please try resending.");
+      setLoading((prev) => false);
       return false;
     }
 
@@ -226,26 +333,29 @@ const RegistrationForm = () => {
 
     if (!validOtp) {
       setMsg("Invalid OTP. Please try again.");
+      setLoading((prev) => false);
       return false;
     }
 
     // If a match is found, OTP is valid
     setMsg("OTP verified successfully!");
     setOtpVerified((prev) => true);
-    setEmailVerified(prev => true);
+    setEmailVerified((prev) => true);
     setIsOtpSent((prev) => false);
     setOtpStruc((prev) => {
       const updated = { ...prev };
       // Clear the OTP array entirely
       updated[email].otp = [];
+
       return updated;
     });
+    setLoading((prev) => false);
     return true;
   }
 
   async function validateEmail(email, resend = false) {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-
+    setLoading((prev) => true);
     if (emailRegex.test(email)) {
       // Generate OTP and update the otpStruc state
       let otpCode = genrateOTP();
@@ -319,17 +429,28 @@ const RegistrationForm = () => {
       } catch (error) {
         console.error("Error sending email:", error);
       }
+      setLoading((prev) => false);
     } else {
       console.log("Email format not supported!");
+      setLoading((prev) => false);
     }
   }
 
   return (
-    <div className="flex flex-col items-center mt-32 absolute w-full z-50 justify-start h-full  hide overflow-scroll">
-      <img src={cardBoard} className="rounded-md w-[600px] h-[700px]" />
-      <img src={tricsq} className="absolute mt-24 opacity-70" />
-      <div className="absolute flex flex-col justify-start items-center mt-10 w-[550px] h-[600px] px-10 py-4 bg-opacity-20">
-        <img src={logo} className="w-full " />
+    <div className="flex flex-col items-center mt-32 absolute w-full z-50 justify-start h-full  hide overflow-scroll max-sm:mt-40">
+      <img
+        src={cardBoard}
+        className="rounded-md lg:w-[600px] lg:h-[700px] md:w-[550px] md:h-[600px] sm:w-[450px] sm:h-[550px] max-sm:px-6 max-sm:rounded-lg max-sm:h-[550px]"
+      />
+      <img
+        src={tricsq}
+        className="absolute mt-24 opacity-70 lg:w-[500px] md:w-[400px] sm:w-[300px] max-sm:w-[300px] max-sm:mt-28"
+      />
+      <div className="absolute  flex flex-col justify-start items-center mt-10 lg:w-[550px] lg:h-[600px] md:w-[450px] sm:w-[400px] max-sm:w-[375px] overflow-y-scroll max-sm:mt-4 px-10 py-4 bg-opacity-20">
+        <img
+          src={logo}
+          className="lg:w-full md:w-[450px] sm:w-[350px] max-sm:w-[350px] max-sm:mb-4"
+        />
         {!isTeamLeadSubmitted ? (
           <>
             {!emailVerified ? (
@@ -351,19 +472,29 @@ const RegistrationForm = () => {
                     onChange={handleChange}
                     placeholder=" Lead Email"
                   />
-                  <button
-                    className="bg-green-500 font-squid px-2 py-2 rounded-md disabled:bg-red-600 disabled:cursor-not-allowed hover:bg-green-400 text-sm text-black focus:bg-neutral-400 focus:bg-opacity-50"
-                    disabled={formData.leadEmail === "" || isOtpSent}
-                    onClick={() => validateEmail(formData.leadEmail)}
-                  >
-                    Verify
-                  </button>
+
+                  {loading ? (
+                    <iframe src="/loading.gif" className="h-[50px] w-auto"></iframe>
+                  ) : (
+                    <button
+                      className="bg-green-500 font-squid px-2 py-2 rounded-md disabled:bg-red-600 disabled:cursor-not-allowed hover:bg-green-400 text-sm text-black focus:bg-neutral-400 focus:bg-opacity-50"
+                      disabled={
+                        formData.leadEmail === "" || isOtpSent || loading
+                      }
+                      onClick={() => validateEmail(formData.leadEmail)}
+                    >
+                
+                      Verify
+                    </button>
+                  )}
                 </span>
                 <p className="text-green-600 font-squid text-sm px-2 py-2">
                   {msg}
                 </p>
               </span>
-            ) : ("")}
+            ) : (
+              ""
+            )}
             {isOtpSent ? (
               <div className="flex flex-col justify-center items-center w-full">
                 <OtpInput
@@ -383,24 +514,33 @@ const RegistrationForm = () => {
                 />
                 <p className="text-black font-squid text-sm px-2 py-2">{msg}</p>
                 <span className="flex flex-row gap-4 w-full justify-center">
-                  <button
-                    className="bg-pink-500 font-squid px-2 py-2 rounded-md hover:bg-pink-400"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      verifyOTP(formData.leadEmail, otp);
-                    }}
-                  >
-                    Verify
-                  </button>
-                  <button
-                    className="bg-orange-500 font-squid px-2 py-2 rounded-md hover:bg-orange-400"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      validateEmail(formData.leadEmail, true);
-                    }}
-                  >
-                    Resend
-                  </button>
+                  {loading ? (
+                    <iframe src="/loading.gif" className="h-[50px] w-[50px]"></iframe>
+                  ) : (
+                    <button
+                      className="bg-pink-500 font-squid px-2 py-2 rounded-md hover:bg-pink-400"
+                      disabled={loading}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        verifyOTP(formData.leadEmail, otp);
+                      }}
+                    >
+                      Verify
+                    </button>
+                  )}
+
+                 
+                    <button
+                      className="bg-orange-500 font-squid px-2 py-2 rounded-md hover:bg-orange-400"
+                      disabled={loading}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        validateEmail(formData.leadEmail, true);
+                      }}
+                    >
+                      {loading ?<iframe src="/loading.gif" className="h-[50px]  w-[50px]"></iframe> : "Resend"}
+                    </button>
+               
                 </span>
               </div>
             ) : (
@@ -409,7 +549,7 @@ const RegistrationForm = () => {
             {otpVerified ? (
               <form
                 onSubmit={handleTeamLeadSubmit}
-                className="flex flex-col justify-center w-full h-[500px] gap-5  overflow-y-scroll hide "
+                className="flex flex-col justify-center lg:w-full lg:h-[500px] md:h-[500px] sm:h-[500px] gap-5  overflow-y-scroll hide "
               >
                 <h2 className="text-xl font-squid text-black ">
                   Team Lead Details
@@ -419,7 +559,7 @@ const RegistrationForm = () => {
                     htmlFor="teamName"
                     className="font-squid text-base text-black mb-4"
                   >
-                    Lead Name
+                    Team Name
                   </label>
                   <input
                     type="text"
@@ -497,15 +637,20 @@ const RegistrationForm = () => {
                   Save and Next
                 </button>
               </form>
-            ) : ("")}
+            ) : (
+              ""
+            )}
           </>
-
         ) : (
           <>
-
-            {!isTeamMemberSubmitted ?
-              (
-                <form className="flex flex-col w-full h-[500px] gap-5  overflow-y-scroll hide" onSubmit={handleTeamMemberSubmit}>
+            {!isTeamMemberSubmitted ? (
+              loading ? (
+                <iframe src="/loading.gif" className="h-[100px] w-auto"></iframe>
+              ) : (
+                <form
+                  className="flex flex-col lg:w-full lg:h-[500px] gap-5 md:h-[470px] max-sm:h-[450px] overflow-y-scroll hide"
+                  onSubmit={handleTeamMemberSubmit}
+                >
                   <h2 className="text-xl font-squid">Team Members Details</h2>
                   <span>
                     <label
@@ -737,125 +882,139 @@ const RegistrationForm = () => {
                     Save and Next
                   </button>
                 </form>
-              ) :
-              (
-                <form className="flex flex-col justify-center w-full h-[500px] gap-5  overflow-y-scroll hide" onSubmit={handleFinalSUbmit}>
-                  <span>
-                    <label
-                      htmlFor="password"
-                      className="font-squid text-base text-black mb-4"
-                    >
-                      Password
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      className="bg-transparent w-full h-10 indent-1 border-2 border-fuchsia-300 placeholder:text-slate-200 font-squid text-sm px-4 py-2 rounded-md focus:bg-neutral-400 focus:bg-opacity-50 focus:outline-none focus:border-emerald-500 transition-all ease-in-out"
-                      autoComplete="true"
-                      name="password"
-                      value={formData.password}
-                      onChange={handleChange}
-                      placeholder="Password"
-                    />
-                  </span>
-                  <span>
-                    <label
-                      htmlFor="cnfPassword"
-                      className="font-squid text-base text-black mb-4"
-                    >
-                      Confirm Password
-                      <p className="text-red-600 font-squid text-sm">{formData.password !== cnfPassword? "Passwords Don't Match":""}</p>
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      className="bg-transparent w-full h-10 indent-1 border-2 border-fuchsia-300 placeholder:text-slate-200 font-squid text-sm px-4 py-2 rounded-md focus:bg-neutral-400 focus:bg-opacity-50 focus:outline-none focus:border-emerald-500 transition-all ease-in-out"
-                      autoComplete="true"
-                      name="cnfPassword"
-                      value={cnfPassword}
-                      onChange={handleChange}
-                      placeholder="Confirm Password"
-                    />
-                  </span>
-                  <span>
-                    <label
-                      htmlFor="city"
-                      className="font-squid text-base text-black mb-4"
-                    >
-                      City
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      className="bg-transparent w-full h-10 indent-1 border-2 border-fuchsia-300 placeholder:text-slate-200 font-squid text-sm px-4 py-2 rounded-md focus:bg-neutral-400 focus:bg-opacity-50 focus:outline-none focus:border-emerald-500 transition-all ease-in-out"
-                      autoComplete="true"
-                      name="city"
-                      value={formData.city}
-                      onChange={handleChange}
-                      placeholder="City"
-                    />
-                  </span>
-                  <span>
-                    <label
-                      htmlFor="college"
-                      className="font-squid text-base text-black mb-4"
-                    >
-                      College
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      className="bg-transparent w-full h-10 indent-1 border-2 border-fuchsia-300 placeholder:text-slate-200 font-squid text-sm px-4 py-2 rounded-md focus:bg-neutral-400 focus:bg-opacity-50 focus:outline-none focus:border-emerald-500 transition-all ease-in-out"
-                      autoComplete="true"
-                      name="college"
-                      value={formData.college}
-                      onChange={handleChange}
-                      placeholder="College"
-                    />
-                  </span>
-                  <span>
-                    <label
-                      htmlFor="paymentReferenceID"
-                      className="font-squid text-base text-black mb-4"
-                    >
-                      Payment Reference ID / UTR Number
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      className="bg-transparent w-full h-10 indent-1 border-2 border-fuchsia-300 placeholder:text-slate-200 font-squid text-sm px-4 py-2 rounded-md focus:bg-neutral-400 focus:bg-opacity-50 focus:outline-none focus:border-emerald-500 transition-all ease-in-out"
-                      autoComplete="true"
-                      name="paymentReferenceID"
-                      value={formData.paymentReferenceID}
-                      onChange={handleChange}
-                      placeholder="Payment Reference ID"
-                    />
-                  </span>
-                  <span>
-                    <label
-                      htmlFor="paymentScreenShotLink"
-                      className="font-squid text-base text-black mb-4"
-                    >
-                      Payment Screenshot/ PDF
-                    </label>
-                    <input
-                      type="file"
-                      required
-                      className="bg-transparent w-full h-10 indent-1 border-2 border-fuchsia-300 placeholder:text-slate-200 font-squid text-sm px-4 py-2 rounded-md focus:bg-neutral-400 focus:bg-opacity-50 focus:outline-none focus:border-emerald-500 transition-all ease-in-out"
-                      autoComplete="true"
-                      name="paymentScreenShotLink"
-                      onChange={handleChange}
-                    />
-                  </span>
+              )
+            ) : loading ? (
+              <iframe src="/loading.gif" className="h-[100px] w-auto"></iframe>
+            ) : (
+              <form
+                className="flex flex-col  lg:w-full lg:h-[500px] md:h-[470px] max-sm:h-[450px] gap-5  overflow-y-scroll hide"
+                onSubmit={handleFinalSUbmit}
+              >
+                <span>
+                  <label
+                    htmlFor="password"
+                    className="font-squid text-base text-black mb-4"
+                  >
+                    Password
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    className="bg-transparent w-full h-10 indent-1 border-2 border-fuchsia-300 placeholder:text-slate-200 font-squid text-sm px-4 py-2 rounded-md focus:bg-neutral-400 focus:bg-opacity-50 focus:outline-none focus:border-emerald-500 transition-all ease-in-out"
+                    autoComplete="true"
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    placeholder="Set Password"
+                  />
+                </span>
+                <span>
+                  <label
+                    htmlFor="cnfPassword"
+                    className="font-squid text-base text-black mb-4"
+                  >
+                    Confirm Password
+                    <p className="text-red-600 font-squid text-sm">
+                      {formData.password !== cnfPassword
+                        ? "Passwords Don't Match"
+                        : ""}
+                    </p>
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    className="bg-transparent w-full h-10 indent-1 border-2 border-fuchsia-300 placeholder:text-slate-200 font-squid text-sm px-4 py-2 rounded-md focus:bg-neutral-400 focus:bg-opacity-50 focus:outline-none focus:border-emerald-500 transition-all ease-in-out"
+                    autoComplete="true"
+                    name="cnfPassword"
+                    value={cnfPassword}
+                    onChange={handleChange}
+                    placeholder="Confirm Password"
+                  />
+                </span>
+                <span>
+                  <label
+                    htmlFor="city"
+                    className="font-squid text-base text-black mb-4"
+                  >
+                    City
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    className="bg-transparent w-full h-10 indent-1 border-2 border-fuchsia-300 placeholder:text-slate-200 font-squid text-sm px-4 py-2 rounded-md focus:bg-neutral-400 focus:bg-opacity-50 focus:outline-none focus:border-emerald-500 transition-all ease-in-out"
+                    autoComplete="true"
+                    name="city"
+                    value={formData.city}
+                    onChange={handleChange}
+                    placeholder="City"
+                  />
+                </span>
+                <span>
+                  <label
+                    htmlFor="college"
+                    className="font-squid text-base text-black mb-4"
+                  >
+                    College
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    className="bg-transparent w-full h-10 indent-1 border-2 border-fuchsia-300 placeholder:text-slate-200 font-squid text-sm px-4 py-2 rounded-md focus:bg-neutral-400 focus:bg-opacity-50 focus:outline-none focus:border-emerald-500 transition-all ease-in-out"
+                    autoComplete="true"
+                    name="college"
+                    value={formData.college}
+                    onChange={handleChange}
+                    placeholder="College"
+                  />
+                </span>
+                <span>
+                  <label
+                    htmlFor="paymentReferenceID"
+                    className="font-squid text-base text-black mb-4"
+                  >
+                    Payment Reference ID / UTR Number
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    className="bg-transparent w-full h-10 indent-1 border-2 border-fuchsia-300 placeholder:text-slate-200 font-squid text-sm px-4 py-2 rounded-md focus:bg-neutral-400 focus:bg-opacity-50 focus:outline-none focus:border-emerald-500 transition-all ease-in-out"
+                    autoComplete="true"
+                    name="paymentReferenceID"
+                    value={formData.paymentReferenceID}
+                    onChange={handleChange}
+                    placeholder="Payment Reference ID"
+                  />
+                </span>
+                <span>
+                  <label
+                    htmlFor="paymentScreenShotLink"
+                    className="font-squid text-base text-black mb-4"
+                  >
+                    Payment Screenshot/ PDF
+                  </label>
+                  <input
+                    type="file"
+                    required
+                    className="bg-transparent w-full h-10 indent-1 border-2 border-fuchsia-300 placeholder:text-slate-200 font-squid text-sm px-4 py-2 rounded-md focus:bg-neutral-400 focus:bg-opacity-50 focus:outline-none focus:border-emerald-500 transition-all ease-in-out"
+                    autoComplete="true"
+                    name="paymentScreenShotLink"
+                    onChange={handleChange}
+                  />
+                </span>
+
+                {loading ? (
+                  <iframe src="/loading.gif" className="h-[50px] w-[50]"></iframe>
+                ) : (
                   <button
                     type="submit"
                     className="font-squid px-4 py-2 bg-green-500 text-black  rounded-md hover:bg-green-600 disabled:cursor-not-allowed disabled:bg-red-500"
-                    disabled={formData.password !== cnfPassword}
+                    disabled={formData.password !== cnfPassword || loading}
                   >
                     Register
                   </button>
-                </form>
-              )}
+                )}
+              </form>
+            )}
           </>
         )}
       </div>

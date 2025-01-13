@@ -47,9 +47,11 @@ function Home() {
           <p className="text-lg italic mb-6 font-squid">"Code, Compete, Survive"</p>
 
           {/* Registration Button */}
-          <button className="bg-pink-500 py-2 px-6 rounded-full shadow-lg hover:bg-pink-600 transition duration-300 font-squid cursor-pointer">
-            Register Now
-          </button>
+          <Link to={"/registration"}>
+            <button className="bg-pink-500 py-2 px-6 rounded-full shadow-lg hover:bg-pink-600 transition duration-300 font-squid cursor-pointer">
+              Register Now
+            </button>
+          </Link>
 
           {/* Countdown Timer */}
           <CountdownTimer targetDate="2025-02-10T00:00:00" />

@@ -23,7 +23,7 @@ function App() {
 
           <Route path="/registration" element={<RegistrationForm />} />
           {/* <Route path="/team-members" element={<TeamMembersForm />} /> */}
-          <Route path="/success" element={<RegistrationSuccess />} />
+          {/* <Route path="/success" element={<RegistrationSuccess />} /> */}
         </Routes>
         
       </BackgroundGradientAnimation>
