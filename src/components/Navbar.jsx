@@ -27,7 +27,7 @@ function Navbar() {
         </ul>
 
         {/* Hamburger Menu for Smaller Screens */}
-        <div className="sm:hidden">
+        <div className="sm:hidden transition-all ease-in-out">
           <button
             id="menu-button"
             className="text-white focus:outline-none"
