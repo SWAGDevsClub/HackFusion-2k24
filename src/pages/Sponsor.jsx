@@ -35,7 +35,7 @@ export default function Sponsor() {
 
 
                         <div className="lg:w-1/4 md:w-1/2 p-4 w-full">
-                            <a className="block relative h-50 rounded overflow-hidden">
+                            <a className="block relative h-30 rounded overflow-hidden">
                                 <img alt="ecommerce" className="object-cover object-center w-full h-full block" src={github} />
                             </a>
 
@@ -114,8 +114,8 @@ export default function Sponsor() {
                         </div>
 
                         <div className="lg:w-1/4 md:w-1/2 p-4 w-full">
-                            <a className="block relative h-50 rounded overflow-hidden ">
-                                <img alt="ecommerce" className="object-cover object-center mt-16 w-full h-full block" src="/Black.png" />
+                            <a className="block relative h-30 rounded overflow-hidden ">
+                                <img alt="ecommerce" className="object-cover object-center mt-16 w-full h-15 block" src="/Black.png" />
                             </a>
 
                         </div>

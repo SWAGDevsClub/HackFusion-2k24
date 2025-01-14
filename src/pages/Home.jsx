@@ -191,7 +191,7 @@ function Home() {
             </Link>
 
             {/* Countdown Timer */}
-            <CountdownTimer targetDate="2025-02-10T00:00:00" />
+            <CountdownTimer targetDate="2025-02-21T00:00:00" />
 
             {/* Logos Section */}
             <div className="flex items-center justify-center gap-4 pt-8 flex-wrap">
@@ -232,7 +232,7 @@ function Home() {
               </h1>
               <p className="mb-8 leading-relaxed font-outfit tracking-wide lg:w-2/3">
                 Join us for a thriling Natinal Level Hackathon - HACKFUSION 2.0 !
-                Immerse yourself in the lively atmosphere of the SGGSIE&T. Compete with 100+ Teams!
+                Immerse yourselves in the vibrant atmosphere of the SGGSIEST as you compete alongside 100+ teams. This isn't just about coding; it's a fusion of ideas, code, and excitement. Hackfusion 2.0 offers an incredible opportunity to connect with like-minded developers, mentors, and sponsors!
               </p>
               <div className="flex justify-center">
                 <button className="font-squid inline-flex text-white bg-pink-500  py-2 px-6 focus:outline-none hover:bg-pink-600 rounded text-lg border-0 hover:shadow-[0_0_20px_5px] hover:shadow-pink-800">
@@ -251,9 +251,7 @@ function Home() {
 
               </h1>
               <p className="mb-4 leading-relaxed font-outfit tracking-wide lg:w-2/3">
-                Dive into Excitement with a ₹2,00,000 Prize Pool! , Use Tezos
-                blockchain for an extra ₹40,000 boost in your solution.
-
+              Prepare to be captivated by a ₹2,00,000 prize pool! This isn't just about the competition; it's about the journey. Embrace the challenge, collaborate with your team, and let your creativity soar. Hackfusion 2.0 promises an unforgettable experience filled with fun, engagement, and the thrill of innovation. So, are you ready to code your way to success? Join us for Hackfusion 2.0 and let the coding begin!
               </p>
 
               {/* <div className="flex justify-center">
@@ -264,9 +262,9 @@ function Home() {
             </div>
             <div className="lg:max-w-lg lg:w-full md:w-1/2 w-5/6 mb-10 md:mb-0">
               <img
-                className="object-cover object-center rounded h-720 w-600"
+                className="object-cover object-center rounded h-720 w-auto"
                 alt="hero"
-                src="/army.png"
+                src="/hero.png"
               />
             </div>
           </div>
