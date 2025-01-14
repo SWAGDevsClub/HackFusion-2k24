@@ -345,7 +345,7 @@ function Home() {
               <h6 className="text-center text-lg font-semibold text-white mb-4 border-2 rounded-lg font-squid">Benefits</h6>
               {/* List */}
               <ul className="list-none text-white text-sm space-y-2 text-center font-outfit tracking-wide ">
-                <li>₹1,00,000 Prize pool</li>
+                <li>₹2,00,000 Prize pool</li>
                 <li>Fun and Enjoyment </li>
                 <li>Certificate of participation </li>
                 <li>Skill Development  </li>
@@ -359,12 +359,12 @@ function Home() {
               </ul>
               {/* Button */}
               <div className="text-center mt-6">
-                <a
-                  href="#"
+                <Link
+                  to="/registration"
                   className="font-squid bg-pink-400 text-white py-2 px-6 rounded-full shadow-lg hover:bg-pink-700 transition duration-300"
                 >
                   Get now
-                </a>
+                </Link>
               </div>
             </div>
           </div>
@@ -707,9 +707,6 @@ function Home() {
             </div>
           </div>
         </section>
-
-
-
       </div>
     </>
   );

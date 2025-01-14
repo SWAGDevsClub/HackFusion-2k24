@@ -14,14 +14,14 @@ function Navbar() {
         {/* Navigation Links for Larger Screens */}
         <ul className="hidden  justify-center w-full py-2  items-center sm:flex space-x-6">
           <li>
-            <Link to="/" className="hover:text-pink-400 cursor-pointer transition font-squid">Home</Link>
+            <Link to="" className="hover:text-pink-400 cursor-pointer transition font-squid">Home</Link>
           </li>
           <li>
-            <Link to="#" className="hover:text-pink-400 cursor-pointer transition font-squid">Sponsors</Link>
+            <Link to="/sponsors" className="hover:text-pink-400 cursor-pointer transition font-squid">Sponsors</Link>
           </li>
           <img src={trisqc} className="w-auto h-[45px]" />
           <li>
-            <Link to="/#" className="hover:text-pink-400 cursor-pointer transition font-squid">Schedule</Link>
+            <Link to="/schedule" className="hover:text-pink-400 cursor-pointer transition font-squid">Schedule</Link>
           </li>
           <li>
             <Link to="#" className="hover:text-pink-400 cursor-pointer transition font-squid">Perks</Link>

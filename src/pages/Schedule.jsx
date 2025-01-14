@@ -1,121 +1,185 @@
 import React from "react";
-
+import { useState } from "react";
 function Schedule() {
+  const [activeTab, setActiveTab] = useState('day1');
+
+  const scheduleData = {
+    day1: [
+      {
+        time: '6.00 pm',
+        title: 'Opening Ceremony\nIntroduction & problem statement briefing',
+        speaker: '',
+        role: '',
+        image: '/api/placeholder/80/80'
+      },
+      {
+        time: '8:00 pm',
+        title: 'Dinner Break',
+        speaker: '',
+        role: '',
+        image: '/api/placeholder/80/80'
+      },
+      {
+        time: '9.00 pm',
+        title: 'Hackathon Begins',
+        speaker: '',
+        role: '',
+        image: '/api/placeholder/80/80'
+      },
+      {
+        time: '10.00 pm',
+        title: 'First Invigilation',
+        speaker: '',
+        role: '',
+        image: '/api/placeholder/80/80'
+      },
+      {
+        time: '12.00 am',
+        title: 'Coffee/Tea Break',
+        speaker: '',
+        role: '',
+        image: '/api/placeholder/80/80'
+      }
+    ],
+    day2: [
+      {
+        time: '8.00am',
+        title: 'Breakfast & Coffee',
+        speaker: '',
+        role: '',
+        image: '/api/placeholder/80/80'
+      },
+      {
+        time: '9.00 am',
+        title: '1st Evaluation", "Respective seats", "End of First Invigilation',
+        speaker: '',
+        role: '',
+        image: '/api/placeholder/80/80'
+      },
+      {
+        time: '12.00 pm',
+        title: 'Lunch Break',
+        speaker: '',
+        role: '',
+        image: '/api/placeholder/80/80'
+      },
+      {
+        time: '4.00 pm',
+        title: 'Game for all participants',
+        speaker: '',
+        role: '',
+        image: '/api/placeholder/80/80'
+      },
+      {
+        time: '5.00 pm',
+        title: '2nd Evaluation',
+        speaker: '',
+        role: '',
+        image: '/api/placeholder/80/80'
+      },
+      {
+        time: '8.00 pm',
+        title: 'Dinner Break", "End of Secod Invigilation',
+        speaker: '',
+        role: '',
+        image: '/api/placeholder/80/80'
+      },
+      {
+        time: '12.00 am',
+        title: 'Coffee/Tea Break',
+        speaker: '',
+        role: '',
+        image: '/api/placeholder/80/80'
+      },
+    ],
+    day3: [
+      {
+        time: '8.00 am',
+        title: 'Breakfast & Coffee/Tea',
+        speaker: '',
+        role: '',
+        image: '/api/placeholder/80/80'
+      },
+      {
+        time: '9.00 am',
+        title: 'Hackathon Ends',
+        speaker: '',
+        role: '',
+        image: '/api/placeholder/80/80'
+      },
+      {
+        time: '11.00 am',
+        title: 'Final evaluation (presentation to judges)',
+        speaker: '',
+        role: '',
+        image: '/api/placeholder/80/80'
+      },
+      {
+        time: '4.00 pm',
+        title: 'Award ceremony!!!',
+        speaker: '',
+        role: '',
+        image: '/api/placeholder/80/80'
+      }
+    ]
+  };
+
+  const tabs = [
+    { id: 'day1', label: 'Day 1', date: '21 Feb, 2025' },
+    { id: 'day2', label: 'Day 2', date: '22 Feb, 2025' },
+    { id: 'day3', label: 'Day 3', date: '23 Feb, 2025' }
+  ];
   return (
-    <>
-      
-  
-    <div class="container mx-auto mb-20 py-16">
-    <div class="flex flex-col">
-      <nav class="flex justify-center space-x-4 mb-8" id="TopicTab" role="tablist">
-        
-        <a
-          class="text-center px-6 py-4 bg-pink-500 text-white font-bold rounded-md shadow-md hover:bg-pink-600 transition duration-300 active"
-          id="home-tab"
-          data-toggle="tab"
-          href="#home"
-          role="tab"
-          aria-controls="home"
-          aria-selected="true"
-        >
-          <h2 class="text-lg">Day 1</h2>
-          <p class="text-sm">13 Nov, 2019 [09.00am - 04.00pm]</p>
-        </a>
-  
-       
-        <a
-          class="text-center px-6 py-4 bg-gray-200 text-gray-700 font-bold rounded-md shadow-md hover:bg-gray-300 transition duration-300"
-          id="profile-tab"
-          data-toggle="tab"
-          href="#profile"
-          role="tab"
-          aria-controls="profile"
-          aria-selected="false"
-        >
-          <h2 class="text-lg">Day 2</h2>
-          <p class="text-sm">13 Nov, 2019 [09.00am - 04.00pm]</p>
-        </a>
-  
-        
-        <a
-          class="text-center px-6 py-4 bg-gray-200 text-gray-700 font-bold rounded-md shadow-md hover:bg-gray-300 transition duration-300"
-          id="contact-tab"
-          data-toggle="tab"
-          href="#contact"
-          role="tab"
-          aria-controls="contact"
-          aria-selected="false"
-        >
-          <h2 class="text-lg">Day 3</h2>
-          <p class="text-sm">13 Nov, 2019 [09.00am - 04.00pm]</p>
-        </a>
-      </nav>
-  
-      <div class="tab-content">
-       
-        <div
-          class="tab-pane fade show active"
-          id="home"
-          role="tabpanel"
-          aria-labelledby="home-tab"
-        >
-          <ul class="space-y-4">
-            <li class="flex items-center justify-between bg-gray-100 p-4 rounded-lg shadow-lg">
-              <h4 class="text-pink-500 font-bold">9.00am</h4>
-              <div class="flex-1 px-4">
-                <h3 class="text-lg font-bold mb-2">Introduction of Material Design</h3>
-                <span class="text-sm font-semibold">By Risabh Moinul</span>
-                <p class="text-sm text-gray-600">CEO of Themefisher</p>
-              </div>
-              <div class="w-20">
-                <img src="images/about/wordpress.png" alt="" class="rounded-lg" />
-              </div>
-            </li>
-  
-            <li class="flex items-center justify-between bg-gray-100 p-4 rounded-lg shadow-lg">
-              <h4 class="text-pink-500 font-bold">12.20pm</h4>
-              <div class="flex-1 px-4">
-                <h3 class="text-lg font-bold mb-2">Marketing Matters in Design Area</h3>
-                <span class="text-sm font-semibold">By Risabh Moinul</span>
-                <p class="text-sm text-gray-600">CEO of Themefisher</p>
-              </div>
-              <div class="w-20">
-                <img src="images/about/big-data.png" alt="" class="rounded-lg" />
-              </div>
-            </li>
-  
-            <li class="flex items-center justify-between bg-gray-100 p-4 rounded-lg shadow-lg">
-              <h4 class="text-pink-500 font-bold">2.20pm</h4>
-              <div class="flex-1 px-4">
-                <h3 class="text-lg font-bold mb-2">Launch Break</h3>
-                <p class="text-sm text-gray-600">
-                  Doloribus veritatis, placeat, laborum amet voluptates cupiditate sapiente.
-                </p>
-              </div>
-              <div class="w-20">
-                <img src="images/about/lunch.jpg" alt="" class="rounded-lg" />
-              </div>
-            </li>
-  
-            <li class="flex items-center justify-between bg-gray-100 p-4 rounded-lg shadow-lg">
-              <h4 class="text-pink-500 font-bold">2.40pm</h4>
-              <div class="flex-1 px-4">
-                <h3 class="text-lg font-bold mb-2">Cultures of Creativity</h3>
-                <span class="text-sm font-semibold">By Risabh Moinul</span>
-                <p class="text-sm text-gray-600">CEO of Themefisher</p>
-              </div>
-              <div class="w-20">
-                <img src="images/about/creativity.jpg" alt="" class="rounded-lg" />
-              </div>
-            </li>
-          </ul>
+    <div className="absolute z-30 inset-0 overflow-y-scroll hide py-32">
+
+      <h1 className="text-4xl font-bold title-font mb-10 text-center text-white font-squid transition-all ease-in-out hover:drop-shadow-[0_0_10px_#ff69b4]">Schedule</h1>
+
+      <div className=" container lg:mx-auto mt-32 md:p-16  max-sm:p-6 ">
+        <div className="flex flex-col ">
+          <nav className="flex justify-center space-x-4 mb-8 tracking-wide font-outfit" role="tablist">
+            {tabs.map(tab => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`w-1/3 text-center px-6 py-4 font-bold rounded-md shadow-md transition duration-300 ${activeTab === tab.id
+                  ? 'bg-pink-500 text-white'
+                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                  }`}
+                role="tab"
+                aria-selected={activeTab === tab.id}
+              >
+                <h2 className="text-lg">{tab.label}</h2>
+                <p className="text-sm">{tab.date}</p>
+              </button>
+            ))}
+          </nav>
+
+          <div className="tab-content">
+            <ul className="space-y-4 font-outfit tracking-wide ">
+              {scheduleData[activeTab].map((item, index) => (
+                <li key={index} className="flex items-center justify-center gap-10 bg-gray-100 p-4 rounded-lg shadow-lg">
+                  <h4 className="text-pink-500 font-bold">{item.time}</h4>
+                  <div className="flex-1 px-4 items-center justify-center">
+                    <h3 className="text-lg font-bold mb-2">{item.title}</h3>
+                    {/* {item.speaker && (
+                        <>
+                          <span className="text-sm font-semibold">By {item.speaker}</span>
+                          <p className="text-sm text-gray-600">{item.role}</p>
+                        </>
+                      )} */}
+                    {/* {item.description && (
+                        <p className="text-sm text-gray-600">{item.description}</p>
+                      )} */}
+                  </div>
+
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
-  
       </div>
+
     </div>
-  </div>
-  
-    </>
   );
 }
 
