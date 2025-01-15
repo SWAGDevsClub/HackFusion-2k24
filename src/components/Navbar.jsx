@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import trisqc from "/trisqc.png"
+import AOS from "aos"
+import "aos/dist/aos.css"
 function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
-  // const [bg, setBg] = useState(false);
-
+ 
+  useEffect(()=>{
+    AOS.init();
+  },[]) 
 
   return (
-    <div className={`absolute z-40  text-white py-4 w-full h-fit  `} id="abc">
+    <div className={`absolute z-40  text-white py-4 w-full h-fit  `} data-aos="fade-down" id="abc">
       <div className="container lg:backdrop-blur-3xl mx-auto lg:w-2/4 flex rounded-2xl justify-between items-center px-4 sm:px-6 lg:px-8">
         {/* Logo Section */}
 

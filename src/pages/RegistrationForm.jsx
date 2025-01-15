@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import OtpInput from "react-otp-input";
 import cardBoard from "/cardboard.jpeg";
 import logo from "/logon.png";
@@ -17,7 +17,8 @@ import {
 import { db, storage } from "../Firebase";
 import { h1 } from "framer-motion/client";
 import Footer from "../components/Footer";
-
+import AOS from "aos"
+import "aos/dist/aos.css"
 const RegistrationForm = () => {
   const [loading, setLoading] = useState(false);
   const [isTeamLeadSubmitted, setIsTeamLeadSubmitted] = useState(false);
@@ -441,10 +442,12 @@ const RegistrationForm = () => {
       setLoading((prev) => false);
     }
   }
-
+  useEffect(()=>{
+    AOS.init();
+  },[])
   return (
     <>
-      <div className="flex flex-col items-center mt-32 absolute w-full z-30 justify-start h-full  hide overflow-scroll max-sm:mt-32">
+      <div className="flex flex-col items-center mt-32 absolute w-full z-30 justify-start h-full  hide overflow-scroll max-sm:mt-32" data-aos="fade-up-right">
         <img
           src={cardBoard}
           className="rounded-md lg:w-[600px] lg:h-[700px] md:w-[550px] md:h-[600px] sm:w-[450px] sm:h-[550px] max-sm:px-6 max-sm:rounded-lg max-sm:h-[550px]"

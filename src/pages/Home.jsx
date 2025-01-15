@@ -1,5 +1,5 @@
 import React from "react";
-import React1, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
 import CountdownTimer from "../components/CountdownTimer";
 import askmeidentity from "/askmeidentity.png"
@@ -8,11 +8,14 @@ import gdgpune from "/gdgpunewhite.png"
 import nexus from "/NEXUS.png"
 import scce from "/scce.png"
 import swoc from "/SWOC.png"
-import Footer from "../components/Footer";
+import AOS from "aos"
+import "aos/dist/aos.css"
 function Home() {
 
   const [activeTab, setActiveTab] = useState('day1');
-
+  useEffect(() => {
+    AOS.init();
+  }, [])
   const scheduleData = {
     day1: [
       {
@@ -174,7 +177,7 @@ function Home() {
 
         {/* Add floating animation styles */}
         <style>
-                    {`
+          {`
               @keyframes floatscroll {
                 0%, 100% {
                   transform: translate(-50%, -50%) translateY(0);
@@ -193,30 +196,33 @@ function Home() {
             src="/mask.png"
             alt="Mask"
             className="h-28 mt-10 lg:block lg:ms-24 md:hidden sm:hidden max-sm:hidden sm:h-30 md:h-40 absolute top-10 left-8 md:left-36 md:top-20"
+            data-aos="fade-down-right"
           />
           <img
             src="/theboss.png"
             alt="The Boss"
             className="h-40 lg:ms-36 md:ms-30  sm:h-50 md:h-60 absolute bottom-10 left-4 md:left-16"
+            data-aos="fade-up-right"
           />
 
           {/* Main Content */}
-          <div className="p-4 text-center max-w-3xl w-full mx-4 sm:mx-8">
+          <div className="p-4 text-center max-w-3xl w-full mx-4 sm:mx-8 max-sm:mb-20">
             {/* Logo */}
             <div className="flex items-center justify-center mb-4">
               <img
                 src="/logon.png"
                 className="h-10 w-auto sm:h-12 md:h-16 md:w-[600px]"
                 alt="Logo"
+                data-aos="flip-right"
               />
             </div>
 
             {/* Subtitle */}
-            <p className="text-lg italic mb-6 font-squid">"Code, Compete, Survive"</p>
+            <p className="text-lg italic mb-6 font-squid" data-aos="fade-right">"Code, Compete, Survive"</p>
 
             {/* Registration Button */}
-            <Link to={"/registration"}>
-              <button className="bg-pink-500 py-2 px-6 rounded-full shadow-lg hover:bg-pink-600 transition duration-300 font-squid cursor-pointer">
+            <Link to={"/registration"} >
+              <button className="bg-pink-500 py-2 px-6 rounded-full shadow-lg hover:bg-pink-600 transition duration-300 font-squid cursor-pointer" data-aos="fade-right">
                 Register Now
               </button>
             </Link>
@@ -230,11 +236,13 @@ function Home() {
                 src="/swag_white.png"
                 alt="Swag Logo"
                 className="w-16 h-16 sm:w-20 sm:h-20 "
+                data-aos="zoom-in-up"
               />
               <img
                 src="/GDG_White_logo.png"
                 alt="GDG Logo"
                 className="h-16 sm:h-20 w-auto"
+                data-aos="zoom-in-up"
               />
             </div>
           </div>
@@ -244,6 +252,7 @@ function Home() {
             src="/gaurd.png"
             alt="Guard"
             className="h-40 lg:me-32 md:me-30  sm:h-50 md:h-60 absolute bottom-10 right-4 md:right-16"
+            data-aos="fade-up-left"
           />
         </div>
         <section className="text-white body-font mt-10">
@@ -253,6 +262,7 @@ function Home() {
                 className="object-cover object-center rounded h-720 w-600"
                 alt="hero"
                 src="/replaace.png"
+                
               />
             </div>
             <div className="lg:flex-grow md:w-1/2 lg:pl-24 md:pl-16 flex flex-col md:items-start md:text-left items-center text-center">
@@ -275,7 +285,7 @@ function Home() {
             </div>
           </div>
         </section>
-        <section className="text-white body-font ">
+        <section className="text-white body-font">
           <div className="container mx-auto flex px-5 py-24 md:flex-row flex-col items-center">
             <div className="lg:flex-grow md:w-1/2 lg:pl-24 md:pl-16 flex flex-col md:items-start md:text-left items-center text-center">
               <h1 className="title-font sm:text-4xl text-3xl mb-4 font-medium text-white font-squid drop-shadow-[0_0_10px_#ff69b4]">
@@ -307,13 +317,13 @@ function Home() {
           <div className="container px-5 py-24 mx-auto">
             <div className="flex flex-wrap -m-4">
               {/* Card 1 */}
-              <div className="lg:p-4 lg:mx-0 sm:p-2 max-sm:p-6 md:mx-16 lg:w-1/3 ">
+              <div className="lg:p-4 lg:mx-0 sm:p-2 max-sm:p-6 md:mx-16 lg:w-1/3 " >
                 <div className="h-60 bg-[#000957] bg-opacity-75 px-8 pt-8 pb-24 rounded-lg overflow-hidden text-center relative transform transition-transform duration-300 hover:scale-110 hover:shadow-[0_0_30px_10px_rgba(255,105,180,0.8)]">
 
                   <h1 className="title-font sm:text-2xl text-xl font-medium text-white mb-3  font-squid">
                     ₹2,00,000 Prize Pool
                   </h1>
-                  <p className="leading-relaxed mb-3 font-outfit tracking-wide">
+                  <p className="leading-relaxed mb-3 font-outfit tracking-wide max-sm:text-sm">
                     Exciting awards and gifts for the best solutions of problem
                     statement!! Don't miss this chance to showcase your talents
                     and be recognized for the best solutions.
@@ -322,13 +332,13 @@ function Home() {
                 </div>
               </div>
               {/* Card 2 */}
-              <div className="lg:p-4 lg:mx-0 sm:p-2 max-sm:p-6 md:mx-16 lg:w-1/3 ">
+              <div className="lg:p-4 lg:mx-0 sm:p-2 max-sm:p-6 md:mx-16 lg:w-1/3 " >
                 <div className="h-60 bg-[#000957] bg-opacity-75 px-4 pt-8 pb-24 rounded-lg overflow-hidden text-center relative transform transition-transform duration-300 hover:scale-110 hover:shadow-[0_0_30px_10px_rgba(255,105,180,0.8)]">
 
                   <h1 className="title-font sm:text-2xl text-xl font-medium text-white mb-3  font-squid">
                     Great Community
                   </h1>
-                  <p className="leading-relaxed mb-3 font-outfit tracking-wide">
+                  <p className="leading-relaxed mb-3 font-outfit tracking-wide max-sm:text-sm">
                     Embark on a journey of collaboration and knowledge exchange
                     as you seize networking opportunities with fellow
                     enthusiasts and industry experts. Don't just win an award,
@@ -339,13 +349,13 @@ function Home() {
                 </div>
               </div>
               {/* Card 3 */}
-              <div className="lg:p-4 lg:mx-0 sm:p-2 max-sm:p-6 md:mx-16 lg:w-1/3 ">
+              <div className="lg:p-4 lg:mx-0 sm:p-2 max-sm:p-6 md:mx-16 lg:w-1/3 " >
                 <div className="h-60 bg-[#000957] bg-opacity-75 px-8 pt-8 pb-24 rounded-lg overflow-hidden text-center relative transform transition-transform duration-300 hover:scale-110 hover:shadow-[0_0_30px_10px_rgba(255,105,180,0.8)]">
 
                   <h1 className="title-font sm:text-2xl text-xl font-medium text-white mb-3  font-squid">
                     36+ Hours
                   </h1>
-                  <p className="leading-relaxed mb-3 font-outfit tracking-wide">
+                  <p className="leading-relaxed mb-3 font-outfit tracking-wide max-sm:text-sm">
                     Immerse yourself in two days of intense brainstorming and
                     coding sessions, where innovation takes center stage. Engage
                     in dynamic discussions, exchange ideas with top-notch
@@ -394,12 +404,12 @@ function Home() {
                   transform: translate(-10, -20);
                 }
               }
-    `}
+           `}
           </style>
 
 
           {/* Package 1 */}
-          <div className="w-full md:w-1/2 lg:w-1/3  max-sm:p-6"   >
+          <div className="w-full md:w-1/2 lg:w-1/3  max-sm:p-6" >
             <div className=" shadow-lg rounded-lg p-6 bg-gradient-to-t from-purple-900 via-pink-800 to-pink-900 hover:shadow-[0_0_30px_10px_rgba(255,105,180,0.5)]"
             >
               {/* Price Header */}
@@ -467,12 +477,12 @@ function Home() {
                   transform: translate(-10, -20);
                 }
               }
-    `}
+           `}
           </style>
 
         </div>
 
-        <div className=" container lg:mx-auto mt-32 md:p-16  max-sm:p-6 ">
+        <div className=" container lg:mx-auto mt-32 md:p-16  max-sm:p-6 " >
           <div className="flex flex-col ">
             <nav className="flex justify-center space-x-4 mb-8 tracking-wide font-outfit" role="tablist">
               {tabs.map(tab => (
@@ -498,7 +508,7 @@ function Home() {
                   <li key={index} className="flex items-center justify-center gap-10 bg-gray-100 p-4 rounded-lg shadow-lg">
                     <h4 className="text-pink-500 font-bold">{item.time}</h4>
                     <div className="flex-1 px-4 items-center justify-center">
-                      <h3 className="text-lg font-bold mb-2">{item.title}</h3>
+                      <h3 className="text-lg font-bold mb-2 max-sm:text-sm">{item.title}</h3>
                       {/* {item.speaker && (
                         <>
                           <span className="text-sm font-semibold">By {item.speaker}</span>
@@ -524,7 +534,7 @@ function Home() {
             <p className="text-2xl text-white mb-8 text-center font-squid">Previous Year</p>
             <div className="flex flex-wrap md:ml-10">
               {/* Card 1 */}
-              <div className="lg:p-4 lg:mx-0 sm:p-2 max-sm:p-2 md:mx-16 lg:w-1/3">
+              <div className="lg:p-4 lg:mx-0 sm:p-2 max-sm:p-2 md:mx-16 lg:w-1/3" >
 
                 <div className=" rounded-lg overflow-hidden transform transition-transform duration-300 hover:scale-105 hover:shadow-[0_0_30px_10px_rgba(255,105,180,0.5)] font-outfit tracking-wide">
                   <img
@@ -618,13 +628,10 @@ function Home() {
           <div className="container px-4 mx-auto mb-20 max-sm:p-7">
             <h1 className="lg:text-xl max-sm:text-base font-bold title-font mb-2 text-white font-squid">Diamond Sponsor</h1>
             <div className="flex flex-wrap -m-4">
-
-
               <div className="lg:w-1/4 md:w-1/2 p-4 w-full">
-                <a className="block relative h-50 rounded overflow-hidden">
+                <a className="block relative h-50 rounded overflow-hidden" >
                   <img alt="ecommerce" className="object-cover object-center w-full h-full block" src={github} />
                 </a>
-
               </div>
             </div>
           </div>
@@ -674,32 +681,32 @@ function Home() {
             <div className="flex flex-wrap -m-4">
 
 
-              <div className="lg:w-1/4 md:w-1/2 p-4 w-full">
+              <div className="lg:w-1/4 md:w-1/2 p-4 w-full" >
                 <a className="block relative h-50 rounded overflow-hidden">
                   <img alt="ecommerce" className="object-cover object-center mt-16 w-full h-full block" src={gdgpune} />
                 </a>
 
               </div>
-              <div className="lg:w-1/4 md:w-1/2 p-4 w-full mb-2">
+              <div className="lg:w-1/4 md:w-1/2 p-4 w-full mb-2" >
                 <a className="block relative h-50 rounded overflow-hidden">
                   <img alt="ecommerce" className="object-cover object-center w-full h-full block" src={nexus} />
                 </a>
 
               </div>
-              <div className="lg:w-1/4 md:w-1/2 p-4 w-full mb-2">
+              <div className="lg:w-1/4 md:w-1/2 p-4 w-full mb-2" >
                 <a className="block relative h-50 rounded overflow-hidden">
                   <img alt="ecommerce" className="object-cover object-center w-full h-full block" src={scce} />
                 </a>
 
               </div>
-              <div className="lg:w-1/4 md:w-1/2 p-4 w-full mb-2">
+              <div className="lg:w-1/4 md:w-1/2 p-4 w-full mb-2" >
                 <a className="block relative h-50 rounded overflow-hidden">
                   <img alt="ecommerce" className="object-cover object-center w-full h-full block" src={swoc} />
                 </a>
 
               </div>
 
-              <div className="lg:w-1/4 md:w-1/2 p-4 w-full">
+              <div className="lg:w-1/4 md:w-1/2 p-4 w-full" >
                 <a className="block relative h-50 rounded overflow-hidden ">
                   <img alt="ecommerce" className="object-cover object-center mt-16 w-full h-full block" src="/Black.png" />
                 </a>
@@ -710,59 +717,59 @@ function Home() {
           </div>
         </section>
         <section className="text-gray-600 body-font">
-          <div className="container px-4 mx-auto mb-20 max-sm:p-7">
+          <div className="container px-4 mx-auto mb-20 max-sm:p-7" >
             <h1 className="lg:text-xl max-sm:text-base font-bold title-font mb-2 text-white font-squid  ">GDG on Campus Community Partners</h1>
             <div className="flex flex-wrap -m-4">
-              <div className="lg:w-1/3 md:w-1/2 p-10 w-full">
-                <a className="block relative h-50 rounded overflow-hidden">
+              <div className="lg:w-1/3 md:w-1/2 p-10 w-full" >
+                <a className="block relative h-50 rounded overflow-hidden" >
                   <img alt="ecommerce" className="object-cover object-center mt-16 w-full h-full block" src="/KBJ.png" />
                 </a>
 
               </div>
-              <div className="lg:w-1/3 md:w-1/2 p-10 w-full">
-                <a className="block relative h-50 rounded overflow-hidden">
+              <div className="lg:w-1/3 md:w-1/2 p-10 w-full" >
+                <a className="block relative h-50 rounded overflow-hidden" >
                   <img alt="ecommerce" className="object-cover object-center mt-16 w-full h-full block" src="/Xavier.png" />
                 </a>
 
               </div>
-              <div className="lg:w-1/3 md:w-1/2 p-10 w-full">
-                <a className="block relative h-50 rounded overflow-hidden">
+              <div className="lg:w-1/3 md:w-1/2 p-10 w-full" >
+                <a className="block relative h-50 rounded overflow-hidden" >
                   <img alt="ecommerce" className="object-cover object-center mt-16 w-full h-full block" src="/SIES.png" />
                 </a>
 
               </div>
-              <div className="lg:w-1/3 md:w-1/2 p-10 w-full">
-                <a className="block relative h-50 rounded overflow-hidden">
+              <div className="lg:w-1/3 md:w-1/2 p-10 w-full" >
+                <a className="block relative h-50 rounded overflow-hidden" >
                   <img alt="ecommerce" className="object-cover object-center mt-16 w-full h-full block" src="/Atharva.png" />
                 </a>
 
               </div>
               <div className="lg:w-1/3 md:w-1/2 p-10 w-full">
-                <a className="block relative h-50 rounded overflow-hidden">
+                <a className="block relative h-50 rounded overflow-hidden" >
                   <img alt="ecommerce" className="object-cover object-center mt-16 w-full h-full block" src="/icfai.png" />
                 </a>
 
               </div>
-              <div className="lg:w-1/3 md:w-1/2 p-10 w-full">
-                <a className="block relative h-50 rounded overflow-hidden">
+              <div className="lg:w-1/3 md:w-1/2 p-10 w-full" >
+                <a className="block relative h-50 rounded overflow-hidden" >
                   <img alt="ecommerce" className="object-cover object-center mt-16 w-full h-full block" src="/MIT.png" />
                 </a>
 
               </div>
-              <div className="lg:w-1/3 md:w-1/2 p-10 w-full">
-                <a className="block relative h-50 rounded overflow-hidden">
+              <div className="lg:w-1/3 md:w-1/2 p-10 w-full" >
+                <a className="block relative h-50 rounded overflow-hidden" >
                   <img alt="ecommerce" className="object-cover object-center mt-16 w-full h-full block" src="/MGMCO.png" />
                 </a>
 
               </div>
-              <div className="lg:w-1/3 md:w-1/2 p-10 w-full">
-                <a className="block relative h-50 rounded overflow-hidden">
+              <div className="lg:w-1/3 md:w-1/2 p-10 w-full" >
+                <a className="block relative h-50 rounded overflow-hidden" >
                   <img alt="ecommerce" className="object-cover object-center mt-16 w-full h-full block" src="/nbnscoe.png" />
                 </a>
 
               </div>
-              <div className="lg:w-1/3 md:w-1/2 p-10 w-full">
-                <a className="block relative h-50 rounded overflow-hidden">
+              <div className="lg:w-1/3 md:w-1/2 p-10 w-full" >
+                <a className="block relative h-50 rounded overflow-hidden" >
                   <img alt="ecommerce" className="object-cover object-center mt-16 w-full h-full block" src="/SVECW.png" />
                 </a>
 
@@ -771,12 +778,12 @@ function Home() {
 
           </div>
         </section>
-        <section className="cta-2 py-12">
-          <div className="container mx-auto px-4">
+        <section className="cta-2 py-12 z-40" >
+          <div className="container mx-auto px-4" >
             <div className="flex flex-col md:flex-row justify-center items-center space-y-6 md:space-y-0 md:space-x-8">
 
 
-              <div className="w-auto flex justify-center">
+              <div className="w-auto flex justify-center z-40" >
                 <img
                   src="/dolls.png"
                   alt="Rotating Image"
@@ -784,7 +791,7 @@ function Home() {
                 />
               </div>
 
-              <div className="w-full md:w-1/3 max-sm:p-4">
+              <div className="w-full md:w-1/3 max-sm:p-4" >
                 <div className="bg-white bg-opacity-90 p-6 rounded-lg shadow-lg transition-transform transform hover:scale-125 hover:shadow-2xl">
                   <h5 className="text-lg font-bold uppercase tracking-wide mb-4 text-gray-800 font-squid text-center md:text-left">
                     Venue Location
