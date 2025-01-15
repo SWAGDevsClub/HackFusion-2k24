@@ -1,32 +1,37 @@
-import React from "react";
+import React, { useState } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
 import Home from "./pages/Home";
-import Sponsors from "./pages/Sponsors";
-import PrizePool from "./pages/PrizePool";
 import Schedule from "./pages/Schedule";
 import RegistrationForm from "./pages/RegistrationForm";
 import { BackgroundGradientAnimation } from "./components/ui/background-gradient-animation";
-import RegistrationSuccess from "./pages/RegistrationSuccess";
+import Sponsor from "./pages/Sponsor";
+import Contact from "./pages/Contact";
+import SplashScreen from "./components/SplashScreen";
 
 function App() {
+  const [splashScreen, setSplashScreen] = useState(true);
+  const handleSplashEnd = () => {
+    setSplashScreen(false);
+  };
   return (
     <Router>
-      <BackgroundGradientAnimation>
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/sponsors" element={<Sponsors />} />
+      {splashScreen ?
+        <SplashScreen onEnd={handleSplashEnd} />
+        :
+        <BackgroundGradientAnimation>
+          <Navbar />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/registration" element={<RegistrationForm />} />
+            <Route path="/sponsors" element={<Sponsor />} />
+            <Route path="/schedule" element={<Schedule />} />
+            <Route path="/contact" element={<Contact />} />
+          </Routes>
+        </BackgroundGradientAnimation>
+      }
 
-          <Route path="/schedule" element={<Schedule />} />
-{/* 
-          <Route path="/registration" element={<RegistrationForm />} /> */}
-          {/* <Route path="/team-members" element={<TeamMembersForm />} /> */}
-{/*           <Route path="/success" element={<RegistrationSuccess />} /> */}
-        </Routes>
-        <Footer />
-      </BackgroundGradientAnimation>
+
     </Router>
   );
 }

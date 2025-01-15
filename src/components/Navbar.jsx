@@ -1,29 +1,39 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-
+import trisqc from "/trisqc.png"
+import AOS from "aos"
+import "aos/dist/aos.css"
 function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+ 
+  useEffect(()=>{
+    AOS.init();
+  },[]) 
 
   return (
-    <div className="absolute z-40  text-white py-4 w-full h-fit">
-      <div className="container mx-auto flex justify-between items-center px-4 sm:px-6 lg:px-8">
+    <div className={`absolute z-40  text-white py-4 w-full h-fit  `} data-aos="fade-down" id="abc">
+      <div className="container lg:backdrop-blur-3xl mx-auto lg:w-2/4 flex rounded-2xl justify-between items-center px-4 sm:px-6 lg:px-8">
         {/* Logo Section */}
 
         {/* Navigation Links for Larger Screens */}
-        <ul className="hidden sm:flex space-x-6">
+        <ul className="hidden  justify-center w-full py-2  items-center sm:flex space-x-6">
           <li>
-            <Link to="/" className="hover:text-pink-400 cursor-pointer transition font-squid">Home</Link>
+            <Link to="" className="hover:text-pink-400 cursor-pointer transition font-squid">Home</Link>
           </li>
           <li>
             <Link to="/sponsors" className="hover:text-pink-400 cursor-pointer transition font-squid">Sponsors</Link>
           </li>
+          <img src={trisqc} className="w-auto h-[45px]" />
           <li>
             <Link to="/schedule" className="hover:text-pink-400 cursor-pointer transition font-squid">Schedule</Link>
+          </li>
+          <li>
+            <Link to="/contact" className="hover:text-pink-400 cursor-pointer transition font-squid">Contact</Link>
           </li>
         </ul>
 
         {/* Hamburger Menu for Smaller Screens */}
-        <div className="sm:hidden">
+        <div className="sm:hidden ">
           <button
             id="menu-button"
             className="text-white focus:outline-none"
@@ -68,7 +78,7 @@ function Navbar() {
 
       {/* Dropdown Menu for Small Screens */}
       {menuOpen && (
-        <div className="flex flex-col space-y-2 text-center bg-black/75 p-4 absolute top-16 left-0 w-full sm:hidden">
+        <div className="flex flex-col z-50 space-y-2 text-center  bg-black/75 p-4 absolute top-16 left-0 w-full sm:hidden">
           <Link
             to="/"
             className="hover:text-pink-400 font-squid cursor-pointer transition"
@@ -89,6 +99,13 @@ function Navbar() {
             onClick={() => setMenuOpen(false)}
           >
             Schedule
+          </Link>
+          <Link
+            to="/contact"
+            className="hover:text-pink-400 font-squid cursor-pointer transition"
+            onClick={() => setMenuOpen(false)}
+          >
+            Contact
           </Link>
         </div>
 
