@@ -636,25 +636,22 @@ function Home() {
             </div>
           </div>
         </section>
-        {/* 
+
+
         <section className="text-gray-600 body-font">
 
+          {/* Second Section without vertical gap */}
           <div className="container px-4 mx-auto mb-20 max-sm:p-7">
-            <h1 className="lg:text-xl max-sm:text-base font-bold title-font mb-2 text-white font-squid">Web Hosting Partner</h1>
+            <h1 className="lg:text-xl max-sm:text-base font-bold title-font mb-2 text-white font-squid">Hiring Partner</h1>
             <div className="flex flex-wrap -m-4">
-
-
               <div className="lg:w-1/4 md:w-1/2 p-4 w-full">
-                <a className="block relative h-50 rounded overflow-hidden">
-                  <img alt="ecommerce" className="object-cover object-center w-full h-full block" src="https://dummyimage.com/423x263" />
+                <a className="block relative h-50 rounded overflow-hidden" >
+                  <img alt="ecommerce" className="object-cover object-center w-full h-full block" src="/riskgaurd.png" />
                 </a>
-
               </div>
             </div>
           </div>
-        </section> */}
-
-
+        </section>
         {/* <section className="text-gray-600 body-font">
 
       
