@@ -8,6 +8,7 @@ import RegistrationForm from "./pages/RegistrationForm";
 import { BackgroundGradientAnimation } from "./components/ui/background-gradient-animation";
 import RegistrationSuccess from "./pages/Sponsor";
 import Sponsor from "./pages/Sponsor";
+import Contact from "./pages/Contact";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route path="/registration" element={<RegistrationForm />} />
           <Route path="/sponsors" element={<Sponsor/>}/>
           <Route path="/schedule" element={<Schedule/>}/>
+          <Route path="/contact" element={<Contact/>}/>
         </Routes>
       </BackgroundGradientAnimation>
     </Router>

@@ -14,6 +14,8 @@ import {
   get,
 } from "firebase/database";
 import { db, storage } from "../Firebase";
+import { h1 } from "framer-motion/client";
+import Footer from "../components/Footer";
 
 const RegistrationForm = () => {
   const [loading, setLoading] = useState(false);
@@ -189,6 +191,7 @@ const RegistrationForm = () => {
     } else if (check === "Team Name") {
       alert("Team Name already taken !");
     } else {
+
       setIsTeamLeadSubmitted((prev) => true);
     }
     setLoading((prev) => false);
@@ -237,7 +240,7 @@ const RegistrationForm = () => {
       const message = `
      <div style="font-family: Arial, sans-serif; line-height: 1.5; color: #333;">
     <h2 style="color: #0056b3;">Welcome to HackFusion 2.0 Hackathon!</h2>
-    <p>Hi <strong>Team ${formData.teamName}</strong>,</p>
+    <p>Hi <strong>${formData.teamName}</strong>,</p>
     <p>Congratulations on successfully registering for <strong>HackFusion 2.0 Hackathon</strong>!</p>
     <p> We are thrilled to have you join this exciting journey of innovation and collaboration. </p>
 
@@ -245,11 +248,11 @@ const RegistrationForm = () => {
     <ol>
       <li stye="display:flex; flex-direction:column;>Join our official group chat further updates and to  ask queries: 
        <br/>
-       <p>Link : ${groupChatLink}</p>
+       <p>Link : ${"https://chat.whatsapp.com/L8zYJVSyhMA55noJZddywj"} </p>
       </li>
       <li stye="display:flex; flex-direction:column;>Download our official HackFusion App to stay updated with the schedule, resources, and announcements: 
         <br/>
-        <p> App : ${app}</p>
+        <p> App : ${"https://play.google.com/store/apps/details?id=com.swag.hackfusion2"}</p>
       </li>
       <li>Prepare to showcase your skills, learn, and have fun! </li>
     </ol>
@@ -438,22 +441,23 @@ const RegistrationForm = () => {
   }
 
   return (
-    <div className="flex flex-col items-center mt-32 absolute w-full z-30 justify-start h-full  hide overflow-scroll max-sm:mt-32">
-      <img
-        src={cardBoard}
-        className="rounded-md lg:w-[600px] lg:h-[700px] md:w-[550px] md:h-[600px] sm:w-[450px] sm:h-[550px] max-sm:px-6 max-sm:rounded-lg max-sm:h-[550px]"
-      />
-      <img
-        src={tricsq}
-        className="absolute mt-24 opacity-40 lg:w-[500px] md:w-[400px] sm:w-[300px] max-sm:w-[300px] max-sm:mt-28"
-      />
-      <div className="absolute hide flex flex-col justify-start items-center mt-10 lg:w-[550px] lg:h-[600px] md:w-[450px] sm:w-[400px] max-sm:w-[375px] overflow-y-scroll max-sm:mt-4 px-10 py-4 bg-opacity-20">
+    <>
+      <div className="flex flex-col items-center mt-32 absolute w-full z-30 justify-start h-full  hide overflow-scroll max-sm:mt-32">
         <img
-          src={logo}
-          className="lg:w-full md:w-[450px] sm:w-[350px] max-sm:w-[350px] max-sm:mb-4"
+          src={cardBoard}
+          className="rounded-md lg:w-[600px] lg:h-[700px] md:w-[550px] md:h-[600px] sm:w-[450px] sm:h-[550px] max-sm:px-6 max-sm:rounded-lg max-sm:h-[550px]"
         />
-        {
-          next ?
+        <img
+          src={tricsq}
+          className="absolute mt-24 opacity-40 lg:w-[500px] md:w-[400px] sm:w-[300px] max-sm:w-[300px] max-sm:mt-28"
+        />
+        <div className="absolute hide flex flex-col justify-start items-center mt-10 lg:w-[550px] lg:h-[600px] md:w-[450px] sm:w-[400px] max-sm:w-[375px] overflow-y-scroll max-sm:mt-4 px-10 py-4 bg-opacity-20">
+          <img
+            src={logo}
+            className="lg:w-full md:w-[450px] sm:w-[350px] max-sm:w-[350px] max-sm:mb-4"
+          />
+          {
+
             !isTeamLeadSubmitted ? (
               <>
                 {!emailVerified ? (
@@ -468,7 +472,7 @@ const RegistrationForm = () => {
                       <input
                         type="email"
                         required
-                        className="bg-transparent w-full h-10 indent-1 border-2 border-fuchsia-300 placeholder:text-slate-200 font-squid text-sm px-4 py-2 rounded-md focus:bg-neutral-400 focus:bg-opacity-50 focus:outline-none focus:border-emerald-500 transition-all ease-in-out"
+                        className="bg-transparent w-full h-10 indent-1 border-2 border-fuchsia-300 placeholder:text-slate-200 font-outfit  text-sm px-4 py-2 rounded-md focus:bg-neutral-400 focus:bg-opacity-50 focus:outline-none focus:border-emerald-500 transition-all ease-in-out"
                         autoComplete="true"
                         name="leadEmail"
                         value={formData.leadEmail}
@@ -476,24 +480,22 @@ const RegistrationForm = () => {
                         placeholder=" Lead Email"
                       />
 
-                      {loading ? (
-                        <iframe src="/loading.gif" className="h-[50px] w-auto"></iframe>
-                      ) : (
-                        <button
-                          className="bg-green-500 font-squid px-2 py-2 rounded-md disabled:bg-red-600 disabled:cursor-not-allowed hover:bg-green-400 text-sm text-black focus:bg-neutral-400 focus:bg-opacity-50"
-                          disabled={
-                            formData.leadEmail === "" || isOtpSent || loading
-                          }
-                          onClick={() => validateEmail(formData.leadEmail)}
-                        >
 
-                          Verify
-                        </button>
-                      )}
+                      <button
+                        className="bg-green-500 font-squid px-2 py-2 rounded-md disabled:bg-red-600 disabled:cursor-not-allowed hover:bg-green-400 text-sm text-black focus:bg-neutral-400 focus:bg-opacity-50"
+                        disabled={
+                          formData.leadEmail === "" || isOtpSent || loading
+                        }
+                        onClick={() => validateEmail(formData.leadEmail)}
+                      >
+
+                        {loading ? "Wait..." : "Verify"}
+                      </button>
+
                     </span>
-                    <p className="text-green-600 font-squid text-sm px-2 py-2">
-                      {msg}
-                    </p>
+                    {/* <p className="text-green-600 font-squid text-sm px-2 py-2">
+                    {msg}
+                  </p> */}
                   </span>
                 ) : (
                   ""
@@ -517,20 +519,18 @@ const RegistrationForm = () => {
                     />
                     <p className="text-black font-squid text-sm px-2 py-2">{msg}</p>
                     <span className="flex flex-row gap-4 w-full justify-center">
-                      {loading ? (
-                        <iframe src="/loading.gif" className="h-[50px] w-[50px]"></iframe>
-                      ) : (
-                        <button
-                          className="bg-pink-500 font-squid px-2 py-2 rounded-md hover:bg-pink-400"
-                          disabled={loading}
-                          onClick={(e) => {
-                            e.preventDefault();
-                            verifyOTP(formData.leadEmail, otp);
-                          }}
-                        >
-                          Verify
-                        </button>
-                      )}
+
+                      <button
+                        className="bg-pink-500 font-squid px-2 py-2 rounded-md hover:bg-pink-400"
+                        disabled={loading}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          verifyOTP(formData.leadEmail, otp);
+                        }}
+                      >
+                        {loading ? "Wait..." : "Verify"}
+                      </button>
+
 
 
                       <button
@@ -541,7 +541,7 @@ const RegistrationForm = () => {
                           validateEmail(formData.leadEmail, true);
                         }}
                       >
-                        {loading ? <iframe src="/loading.gif" className="h-[50px]  w-[50px]"></iframe> : "Resend"}
+                        {loading ? "Wait..." : "Resend"}
                       </button>
 
                     </span>
@@ -567,7 +567,7 @@ const RegistrationForm = () => {
                       <input
                         type="text"
                         required
-                        className="bg-transparent w-full h-10 indent-1 border-2 border-fuchsia-300 placeholder:text-slate-200 font-squid text-sm px-4 py-2 rounded-md focus:bg-neutral-400 focus:bg-opacity-50 focus:outline-none focus:border-emerald-500 transition-all ease-in-out"
+                        className="bg-transparent w-full h-10 indent-1 border-2 border-fuchsia-300 placeholder:text-slate-200 font-outfit text-sm px-4 py-2 rounded-md focus:bg-neutral-400 focus:bg-opacity-50 focus:outline-none focus:border-emerald-500 transition-all ease-in-out"
                         autoComplete="true"
                         name="teamName"
                         value={formData.teamName}
@@ -585,7 +585,7 @@ const RegistrationForm = () => {
                       <input
                         type="text"
                         required
-                        className="bg-transparent w-full h-10 indent-1 border-2 border-fuchsia-300 placeholder:text-slate-200 font-squid text-sm px-4 py-2 rounded-md focus:bg-neutral-400 focus:bg-opacity-50 focus:outline-none focus:border-emerald-500 transition-all ease-in-out"
+                        className="bg-transparent w-full h-10 indent-1 border-2 border-fuchsia-300 placeholder:text-slate-200 font-outfit text-sm px-4 py-2 rounded-md focus:bg-neutral-400 focus:bg-opacity-50 focus:outline-none focus:border-emerald-500 transition-all ease-in-out"
                         autoComplete="true"
                         name="leadName"
                         value={formData.leadName}
@@ -605,7 +605,7 @@ const RegistrationForm = () => {
                         type="text"
                         maxLength={10}
                         required
-                        className="bg-transparent w-full h-10 indent-1 border-2 border-fuchsia-300  placeholder:text-slate-200 font-squid text-sm px-4 py-2 rounded-md focus:bg-neutral-400 focus:bg-opacity-50 focus:outline-none focus:border-emerald-500 transition-all ease-in-out"
+                        className="bg-transparent w-full h-10 indent-1 border-2 border-fuchsia-300  placeholder:text-slate-200 font-outfit text-sm px-4 py-2 rounded-md focus:bg-neutral-400 focus:bg-opacity-50 focus:outline-none focus:border-emerald-500 transition-all ease-in-out"
                         autoComplete="true"
                         name="leadMobile"
                         value={formData.leadMobile}
@@ -621,7 +621,7 @@ const RegistrationForm = () => {
                         Gender
                       </label>
                       <select
-                        className="bg-transparent w-full h-10 indent-1 border-2 border-fuchsia-300   placeholder:text-slate-200 font-squid px-4 py-2 rounded-md focus:bg-neutral-400 focus:bg-opacity-50 focus:outline-none focus:border-emerald-500 transition-all ease-in-out"
+                        className="bg-transparent w-full h-10 indent-1 border-2 border-fuchsia-300   placeholder:text-slate-200 font-outfit px-4 py-2 rounded-md focus:bg-neutral-400 focus:bg-opacity-50 focus:outline-none focus:border-emerald-500 transition-all ease-in-out"
                         name="leadGender"
                         onChange={handleChange}
                         autoComplete="true"
@@ -644,415 +644,416 @@ const RegistrationForm = () => {
                   ""
                 )}
               </>
-            ) : (
-              <>
-                {!isTeamMemberSubmitted ? (
-                  loading ? (
+            ) :
+              !next ? (
+                <div className="flex flex-col justify-center items-center overflow-y-scroll hide lg:h-[600px] sm:h-[500px] max-sm:h-[450px]">
+                  <h2 className="my-6 font-squid font-bold tracking-wider text-2xl max-sm:text-xl">Payment Details</h2>
+                  <div className="mt-2 w-full flex flex-col justify-center items-center gap-10">
+                    <span className="flex flex-row w-full">
+                      <h3 className="font-squid  tracking-wider w-[185px] max-sm:text-xs">ACCOUNT NAME:</h3>
+                      <p className="font-outfit tracking-wide font-bold  max-sm:text-xs text-gray-800">&ensp; THE DIRECTOR SGGSIE&T VISHNUPURI NANDED</p>
+                    </span>
+                    <span className="flex flex-row w-full">
+                      <h3 className="font-squid  tracking-wider  max-sm:text-xs">BANK NAME: </h3>
+                      <p className="font-outfit tracking-wide font-bold max-sm:text-xs text-gray-800">&ensp; STATE OF BANK OF INDIA</p>
+                    </span>
+                    <span className="flex flex-row w-full">
+                      <h3 className="font-squid  tracking-wider max-sm:text-xs "> ACCOUNT NO: </h3>
+                      <p className="font-outfit tracking-wide font-bold max-sm:text-xs text-gray-800">&ensp; 11265870493</p>
+                    </span>
+                    <span className="flex flex-row w-full">
+                      <h3 className="font-squid  tracking-wider max-sm:text-xs">IFS CODE: </h3>
+                      <p className="font-outfit tracking-wide font-bold max-sm:text-xs text-gray-800">&ensp; SBIN0011651</p>
+                    </span>
+                    <span className="flex flex-row w-full">
+                      <h3 className="font-squid  tracking-wider  max-sm:text-xs">BRANCH: </h3>
+                      <p className="font-outfit tracking-wide font-bold max-sm:text-xs text-gray-800">&ensp; VISHNUPURI</p>
+                    </span>
+                  </div>
+                  <h3 className="mt-6 font-outfit tracking-wider text-center max-sm:text-xs">( Pay Registration Fees on deatils provided above and keep payment Screesnshot and reference No to move further !! )</h3>
+                  <button type="button" className="px-4 py-2 mt-4 bg-green-600 rounded-md font-squid tracking-wide hover:bg-green-400" onClick={(e) => { e.preventDefault(); setNext(prev => true); setLoading(prev => true) }}>{loading ? "Wait..." : "Proceed"}</button>
+                </div>
+              ) : (
+                <>
+                  {!isTeamMemberSubmitted ? (
+                    loading ? (
+                      <h1 className="font-squid">"Loading..."</h1>
+                    ) : (
+                      <form
+                        className="flex flex-col lg:w-full lg:h-[500px] gap-5 md:h-[470px] max-sm:h-[450px] overflow-y-scroll hide"
+                        onSubmit={handleTeamMemberSubmit}
+                      >
+                        <h2 className="text-xl font-squid">Team Members Details</h2>
+                        <span>
+                          <label
+                            htmlFor="m1Name"
+                            className="font-squid text-base text-black mb-4"
+                          >
+                            Member 1 Name
+                          </label>
+                          <input
+                            type="text"
+                            required
+                            className="bg-transparent w-full h-10 indent-1 border-2 border-fuchsia-300 placeholder:text-slate-200 font-outfit  text-sm px-4 py-2 rounded-md focus:bg-neutral-400 focus:bg-opacity-50 focus:outline-none focus:border-emerald-500 transition-all ease-in-out"
+                            autoComplete="true"
+                            name="m1Name"
+                            value={formData.m1Name}
+                            onChange={handleChange}
+                            placeholder="Member 1 Name"
+                          />
+                        </span>
+                        <span>
+                          <label
+                            htmlFor="m1Email"
+                            className="font-squid text-base text-black mb-4"
+                          >
+                            Member 1 Email
+                          </label>
+                          <input
+                            type="email"
+                            required
+                            className="bg-transparent w-full h-10 indent-1 border-2 border-fuchsia-300 placeholder:text-slate-200 font-outfit text-sm px-4 py-2 rounded-md focus:bg-neutral-400 focus:bg-opacity-50 focus:outline-none focus:border-emerald-500 transition-all ease-in-out"
+                            autoComplete="true"
+                            name="m1Email"
+                            value={formData.m1Email}
+                            onChange={handleChange}
+                            placeholder="Member 1 Email"
+                          />
+                        </span>
+                        <span>
+                          <label
+                            htmlFor="m1Mobile"
+                            className="font-squid text-base text-black mb-4"
+                          >
+                            Member 1 Mobile
+                          </label>
+                          <input
+                            type="text"
+                            required
+                            maxLength={10}
+                            className="bg-transparent w-full h-10 indent-1 border-2 border-fuchsia-300 placeholder:text-slate-200 font-outfit  text-sm px-4 py-2 rounded-md focus:bg-neutral-400 focus:bg-opacity-50 focus:outline-none focus:border-emerald-500 transition-all ease-in-out"
+                            autoComplete="true"
+                            name="m1Mobile"
+                            value={formData.m1Mobile}
+                            onChange={handleChange}
+                            placeholder="Member 1 Mobile"
+                          />
+                        </span>
+                        <span>
+                          <label
+                            htmlFor="m1Gender"
+                            className="font-squid text-base text-black mb-4"
+                          >
+                            Member 1 Gender
+                          </label>
+                          <select
+                            className="bg-transparent w-full h-10 indent-1 border-2 border-fuchsia-300   placeholder:text-slate-200 font-outfit px-4 py-2 rounded-md focus:bg-neutral-400 focus:bg-opacity-50 focus:outline-none focus:border-emerald-500 transition-all ease-in-out"
+                            name="m1Gender"
+                            onChange={handleChange}
+                            autoComplete="true"
+                            value={formData.m1Gender}
+                          >
+                            <option></option>
+                            <option>M</option>
+                            <option>F</option>
+                          </select>
+                        </span>
+                        <span>
+                          <label
+                            htmlFor="m2Name"
+                            className="font-squid text-base text-black mb-4"
+                          >
+                            Member 2 Name
+                          </label>
+                          <input
+                            type="text"
+                            required
+                            className="bg-transparent w-full h-10 indent-1 border-2 border-fuchsia-300 placeholder:text-slate-200 font-outfit  text-sm px-4 py-2 rounded-md focus:bg-neutral-400 focus:bg-opacity-50 focus:outline-none focus:border-emerald-500 transition-all ease-in-out"
+                            autoComplete="true"
+                            name="m2Name"
+                            value={formData.m2Name}
+                            onChange={handleChange}
+                            placeholder="Member 2 Name"
+                          />
+                        </span>
+                        <span>
+                          <label
+                            htmlFor="m2Email"
+                            className="font-squid text-base text-black mb-4"
+                          >
+                            Member 2 Email
+                          </label>
+                          <input
+                            type="email"
+                            required
+                            className="bg-transparent w-full h-10 indent-1 border-2 border-fuchsia-300 placeholder:text-slate-200 font-outfit text-sm px-4 py-2 rounded-md focus:bg-neutral-400 focus:bg-opacity-50 focus:outline-none focus:border-emerald-500 transition-all ease-in-out"
+                            autoComplete="true"
+                            name="m2Email"
+                            value={formData.m2Email}
+                            onChange={handleChange}
+                            placeholder="Member 2 Email"
+                          />
+                        </span>
+                        <span>
+                          <label
+                            htmlFor="m2Mobile"
+                            className="font-squid text-base text-black mb-4"
+                          >
+                            Member 2 Mobile
+                          </label>
+                          <input
+                            type="text"
+                            required
+                            maxLength={10}
+                            className="bg-transparent w-full h-10 indent-1 border-2 border-fuchsia-300 placeholder:text-slate-200 font-outfit text-sm px-4 py-2 rounded-md focus:bg-neutral-400 focus:bg-opacity-50 focus:outline-none focus:border-emerald-500 transition-all ease-in-out"
+                            autoComplete="true"
+                            name="m2Mobile"
+                            value={formData.m2Mobile}
+                            onChange={handleChange}
+                            placeholder="Member 2 Mobile"
+                          />
+                        </span>
+                        <span>
+                          <label
+                            htmlFor="m2Gender"
+                            className="font-squid text-base text-black mb-4"
+                          >
+                            Member 2 Gender
+                          </label>
+                          <select
+                            className="bg-transparent w-full h-10 indent-1 border-2 border-fuchsia-300   placeholder:text-slate-200 font-outfit px-4 py-2 rounded-md focus:bg-neutral-400 focus:bg-opacity-50 focus:outline-none focus:border-emerald-500 transition-all ease-in-out"
+                            name="m2Gender"
+                            onChange={handleChange}
+                            autoComplete="true"
+                            value={formData.m2Gender}
+                          >
+                            <option></option>
+                            <option>M</option>
+                            <option>F</option>
+                          </select>
+                        </span>
+                        <span>
+                          <label
+                            htmlFor="m3Name"
+                            className="font-squid text-base text-black mb-4"
+                          >
+                            Member 3 Name
+                          </label>
+                          <input
+                            type="text"
+                            required
+                            className="bg-transparent w-full h-10 indent-1 border-2 border-fuchsia-300 placeholder:text-slate-200 font-outfit text-sm px-4 py-2 rounded-md focus:bg-neutral-400 focus:bg-opacity-50 focus:outline-none focus:border-emerald-500 transition-all ease-in-out"
+                            autoComplete="true"
+                            name="m3Name"
+                            value={formData.m3Name}
+                            onChange={handleChange}
+                            placeholder="Member 3 Name"
+                          />
+                        </span>
+                        <span>
+                          <label
+                            htmlFor="m3Email"
+                            className="font-squid text-base text-black mb-4"
+                          >
+                            Member 3 Email
+                          </label>
+                          <input
+                            type="email"
+                            required
+                            className="bg-transparent w-full h-10 indent-1 border-2 border-fuchsia-300 placeholder:text-slate-200 font-outfit text-sm px-4 py-2 rounded-md focus:bg-neutral-400 focus:bg-opacity-50 focus:outline-none focus:border-emerald-500 transition-all ease-in-out"
+                            autoComplete="true"
+                            name="m3Email"
+                            value={formData.m3Email}
+                            onChange={handleChange}
+                            placeholder="Member 3 Email"
+                          />
+                        </span>
+                        <span>
+                          <label
+                            htmlFor="m3Mobile"
+                            className="font-squid text-base text-black mb-4"
+                          >
+                            Member 3 Mobile
+                          </label>
+                          <input
+                            type="text"
+                            required
+                            maxLength={10}
+                            className="bg-transparent w-full h-10 indent-1 border-2 border-fuchsia-300 placeholder:text-slate-200 font-outfit text-sm px-4 py-2 rounded-md focus:bg-neutral-400 focus:bg-opacity-50 focus:outline-none focus:border-emerald-500 transition-all ease-in-out"
+                            autoComplete="true"
+                            name="m3Mobile"
+                            value={formData.m3Mobile}
+                            onChange={handleChange}
+                            placeholder="Member 3 Mobile"
+                          />
+                        </span>
+                        <span>
+                          <label
+                            htmlFor="m3Gender"
+                            className="font-squid text-base text-black mb-4"
+                          >
+                            Member 3 Gender
+                          </label>
+                          <select
+                            className="bg-transparent w-full h-10 indent-1 border-2 border-fuchsia-300   placeholder:text-slate-200 font-outfit px-4 py-2 rounded-md focus:bg-neutral-400 focus:bg-opacity-50 focus:outline-none focus:border-emerald-500 transition-all ease-in-out"
+                            name="m3Gender"
+                            onChange={handleChange}
+                            autoComplete="true"
+                            value={formData.m3Gender}
+                          >
+                            <option></option>
+                            <option>M</option>
+                            <option>F</option>
+                          </select>
+                        </span>
+
+                        <button
+                          type="submit"
+                          className="font-squid px-4 py-2 bg-green-500 text-black  rounded-md hover:bg-green-600"
+                        >
+                          Save and Next
+                        </button>
+                      </form>
+                    )
+                  ) : loading ? (
                     <iframe src="/loading.gif" className="h-[100px] w-auto"></iframe>
                   ) : (
                     <form
-                      className="flex flex-col lg:w-full lg:h-[500px] gap-5 md:h-[470px] max-sm:h-[450px] overflow-y-scroll hide"
-                      onSubmit={handleTeamMemberSubmit}
+                      className="flex flex-col  lg:w-full lg:h-[500px] md:h-[470px] max-sm:h-[450px] gap-5  overflow-y-scroll hide"
+                      onSubmit={handleFinalSUbmit}
                     >
-                      <h2 className="text-xl font-squid">Team Members Details</h2>
                       <span>
                         <label
-                          htmlFor="m1Name"
+                          htmlFor="password"
                           className="font-squid text-base text-black mb-4"
                         >
-                          Member 1 Name
+                          Password
                         </label>
                         <input
                           type="text"
                           required
-                          className="bg-transparent w-full h-10 indent-1 border-2 border-fuchsia-300 placeholder:text-slate-200 font-squid text-sm px-4 py-2 rounded-md focus:bg-neutral-400 focus:bg-opacity-50 focus:outline-none focus:border-emerald-500 transition-all ease-in-out"
+                          className="bg-transparent w-full h-10 indent-1 border-2 border-fuchsia-300 placeholder:text-slate-200 font-outfit text-sm px-4 py-2 rounded-md focus:bg-neutral-400 focus:bg-opacity-50 focus:outline-none focus:border-emerald-500 transition-all ease-in-out"
                           autoComplete="true"
-                          name="m1Name"
-                          value={formData.m1Name}
+                          name="password"
+                          value={formData.password}
                           onChange={handleChange}
-                          placeholder="Member 1 Name"
+                          placeholder="Set Password"
                         />
                       </span>
                       <span>
                         <label
-                          htmlFor="m1Email"
+                          htmlFor="cnfPassword"
                           className="font-squid text-base text-black mb-4"
                         >
-                          Member 1 Email
-                        </label>
-                        <input
-                          type="email"
-                          required
-                          className="bg-transparent w-full h-10 indent-1 border-2 border-fuchsia-300 placeholder:text-slate-200 font-squid text-sm px-4 py-2 rounded-md focus:bg-neutral-400 focus:bg-opacity-50 focus:outline-none focus:border-emerald-500 transition-all ease-in-out"
-                          autoComplete="true"
-                          name="m1Email"
-                          value={formData.m1Email}
-                          onChange={handleChange}
-                          placeholder="Member 1 Email"
-                        />
-                      </span>
-                      <span>
-                        <label
-                          htmlFor="m1Mobile"
-                          className="font-squid text-base text-black mb-4"
-                        >
-                          Member 1 Mobile
+                          Confirm Password
+                          <p className="text-red-600 font-squid text-sm">
+                            {formData.password !== cnfPassword
+                              ? "Passwords Don't Match"
+                              : ""}
+                          </p>
                         </label>
                         <input
                           type="text"
                           required
-                          maxLength={10}
-                          className="bg-transparent w-full h-10 indent-1 border-2 border-fuchsia-300 placeholder:text-slate-200 font-squid text-sm px-4 py-2 rounded-md focus:bg-neutral-400 focus:bg-opacity-50 focus:outline-none focus:border-emerald-500 transition-all ease-in-out"
+                          className="bg-transparent w-full h-10 indent-1 border-2 border-fuchsia-300 placeholder:text-slate-200 font-outfit text-sm px-4 py-2 rounded-md focus:bg-neutral-400 focus:bg-opacity-50 focus:outline-none focus:border-emerald-500 transition-all ease-in-out"
                           autoComplete="true"
-                          name="m1Mobile"
-                          value={formData.m1Mobile}
+                          name="cnfPassword"
+                          value={cnfPassword}
                           onChange={handleChange}
-                          placeholder="Member 1 Mobile"
+                          placeholder="Confirm Password"
                         />
                       </span>
                       <span>
                         <label
-                          htmlFor="m1Gender"
+                          htmlFor="city"
                           className="font-squid text-base text-black mb-4"
                         >
-                          Member 1 Gender
-                        </label>
-                        <select
-                          className="bg-transparent w-full h-10 indent-1 border-2 border-fuchsia-300   placeholder:text-slate-200 font-squid px-4 py-2 rounded-md focus:bg-neutral-400 focus:bg-opacity-50 focus:outline-none focus:border-emerald-500 transition-all ease-in-out"
-                          name="m1Gender"
-                          onChange={handleChange}
-                          autoComplete="true"
-                          value={formData.m1Gender}
-                        >
-                          <option></option>
-                          <option>M</option>
-                          <option>F</option>
-                        </select>
-                      </span>
-                      <span>
-                        <label
-                          htmlFor="m2Name"
-                          className="font-squid text-base text-black mb-4"
-                        >
-                          Member 2 Name
+                          City
                         </label>
                         <input
                           type="text"
                           required
-                          className="bg-transparent w-full h-10 indent-1 border-2 border-fuchsia-300 placeholder:text-slate-200 font-squid text-sm px-4 py-2 rounded-md focus:bg-neutral-400 focus:bg-opacity-50 focus:outline-none focus:border-emerald-500 transition-all ease-in-out"
+                          className="bg-transparent w-full h-10 indent-1 border-2 border-fuchsia-300 placeholder:text-slate-200 font-outfit text-sm px-4 py-2 rounded-md focus:bg-neutral-400 focus:bg-opacity-50 focus:outline-none focus:border-emerald-500 transition-all ease-in-out"
                           autoComplete="true"
-                          name="m2Name"
-                          value={formData.m2Name}
+                          name="city"
+                          value={formData.city}
                           onChange={handleChange}
-                          placeholder="Member 2 Name"
+                          placeholder="City"
                         />
                       </span>
                       <span>
                         <label
-                          htmlFor="m2Email"
+                          htmlFor="college"
                           className="font-squid text-base text-black mb-4"
                         >
-                          Member 2 Email
-                        </label>
-                        <input
-                          type="email"
-                          required
-                          className="bg-transparent w-full h-10 indent-1 border-2 border-fuchsia-300 placeholder:text-slate-200 font-squid text-sm px-4 py-2 rounded-md focus:bg-neutral-400 focus:bg-opacity-50 focus:outline-none focus:border-emerald-500 transition-all ease-in-out"
-                          autoComplete="true"
-                          name="m2Email"
-                          value={formData.m2Email}
-                          onChange={handleChange}
-                          placeholder="Member 2 Email"
-                        />
-                      </span>
-                      <span>
-                        <label
-                          htmlFor="m2Mobile"
-                          className="font-squid text-base text-black mb-4"
-                        >
-                          Member 2 Mobile
+                          College
                         </label>
                         <input
                           type="text"
                           required
-                          maxLength={10}
-                          className="bg-transparent w-full h-10 indent-1 border-2 border-fuchsia-300 placeholder:text-slate-200 font-squid text-sm px-4 py-2 rounded-md focus:bg-neutral-400 focus:bg-opacity-50 focus:outline-none focus:border-emerald-500 transition-all ease-in-out"
+                          className="bg-transparent w-full h-10 indent-1 border-2 border-fuchsia-300 placeholder:text-slate-200 font-outfit text-sm px-4 py-2 rounded-md focus:bg-neutral-400 focus:bg-opacity-50 focus:outline-none focus:border-emerald-500 transition-all ease-in-out"
                           autoComplete="true"
-                          name="m2Mobile"
-                          value={formData.m2Mobile}
+                          name="college"
+                          value={formData.college}
                           onChange={handleChange}
-                          placeholder="Member 2 Mobile"
+                          placeholder="College"
                         />
                       </span>
                       <span>
                         <label
-                          htmlFor="m2Gender"
+                          htmlFor="paymentReferenceID"
                           className="font-squid text-base text-black mb-4"
                         >
-                          Member 2 Gender
-                        </label>
-                        <select
-                          className="bg-transparent w-full h-10 indent-1 border-2 border-fuchsia-300   placeholder:text-slate-200 font-squid px-4 py-2 rounded-md focus:bg-neutral-400 focus:bg-opacity-50 focus:outline-none focus:border-emerald-500 transition-all ease-in-out"
-                          name="m2Gender"
-                          onChange={handleChange}
-                          autoComplete="true"
-                          value={formData.m2Gender}
-                        >
-                          <option></option>
-                          <option>M</option>
-                          <option>F</option>
-                        </select>
-                      </span>
-                      <span>
-                        <label
-                          htmlFor="m3Name"
-                          className="font-squid text-base text-black mb-4"
-                        >
-                          Member 3 Name
+                          Payment Reference ID / UTR Number
                         </label>
                         <input
                           type="text"
                           required
-                          className="bg-transparent w-full h-10 indent-1 border-2 border-fuchsia-300 placeholder:text-slate-200 font-squid text-sm px-4 py-2 rounded-md focus:bg-neutral-400 focus:bg-opacity-50 focus:outline-none focus:border-emerald-500 transition-all ease-in-out"
+                          className="bg-transparent w-full h-10 indent-1 border-2 border-fuchsia-300 placeholder:text-slate-200 font-outfit text-sm px-4 py-2 rounded-md focus:bg-neutral-400 focus:bg-opacity-50 focus:outline-none focus:border-emerald-500 transition-all ease-in-out"
                           autoComplete="true"
-                          name="m3Name"
-                          value={formData.m3Name}
+                          name="paymentReferenceID"
+                          value={formData.paymentReferenceID}
                           onChange={handleChange}
-                          placeholder="Member 3 Name"
+                          placeholder="Payment Reference ID"
                         />
                       </span>
                       <span>
                         <label
-                          htmlFor="m3Email"
+                          htmlFor="paymentScreenShotLink"
                           className="font-squid text-base text-black mb-4"
                         >
-                          Member 3 Email
+                          Payment Screenshot/ PDF
                         </label>
                         <input
-                          type="email"
+                          type="file"
                           required
-                          className="bg-transparent w-full h-10 indent-1 border-2 border-fuchsia-300 placeholder:text-slate-200 font-squid text-sm px-4 py-2 rounded-md focus:bg-neutral-400 focus:bg-opacity-50 focus:outline-none focus:border-emerald-500 transition-all ease-in-out"
+                          className="bg-transparent w-full h-10 indent-1 border-2 border-fuchsia-300 placeholder:text-slate-200 font-outfit text-sm px-4 py-2 rounded-md focus:bg-neutral-400 focus:bg-opacity-50 focus:outline-none focus:border-emerald-500 transition-all ease-in-out"
                           autoComplete="true"
-                          name="m3Email"
-                          value={formData.m3Email}
+                          name="paymentScreenShotLink"
                           onChange={handleChange}
-                          placeholder="Member 3 Email"
                         />
-                      </span>
-                      <span>
-                        <label
-                          htmlFor="m3Mobile"
-                          className="font-squid text-base text-black mb-4"
-                        >
-                          Member 3 Mobile
-                        </label>
-                        <input
-                          type="text"
-                          required
-                          maxLength={10}
-                          className="bg-transparent w-full h-10 indent-1 border-2 border-fuchsia-300 placeholder:text-slate-200 font-squid text-sm px-4 py-2 rounded-md focus:bg-neutral-400 focus:bg-opacity-50 focus:outline-none focus:border-emerald-500 transition-all ease-in-out"
-                          autoComplete="true"
-                          name="m3Mobile"
-                          value={formData.m3Mobile}
-                          onChange={handleChange}
-                          placeholder="Member 3 Mobile"
-                        />
-                      </span>
-                      <span>
-                        <label
-                          htmlFor="m3Gender"
-                          className="font-squid text-base text-black mb-4"
-                        >
-                          Member 3 Gender
-                        </label>
-                        <select
-                          className="bg-transparent w-full h-10 indent-1 border-2 border-fuchsia-300   placeholder:text-slate-200 font-squid px-4 py-2 rounded-md focus:bg-neutral-400 focus:bg-opacity-50 focus:outline-none focus:border-emerald-500 transition-all ease-in-out"
-                          name="m3Gender"
-                          onChange={handleChange}
-                          autoComplete="true"
-                          value={formData.m3Gender}
-                        >
-                          <option></option>
-                          <option>M</option>
-                          <option>F</option>
-                        </select>
                       </span>
 
-                      <button
-                        type="submit"
-                        className="font-squid px-4 py-2 bg-green-500 text-black  rounded-md hover:bg-green-600"
-                      >
-                        Save and Next
-                      </button>
-                    </form>
-                  )
-                ) : loading ? (
-                  <iframe src="/loading.gif" className="h-[100px] w-auto"></iframe>
-                ) : (
-                  <form
-                    className="flex flex-col  lg:w-full lg:h-[500px] md:h-[470px] max-sm:h-[450px] gap-5  overflow-y-scroll hide"
-                    onSubmit={handleFinalSUbmit}
-                  >
-                    <span>
-                      <label
-                        htmlFor="password"
-                        className="font-squid text-base text-black mb-4"
-                      >
-                        Password
-                      </label>
-                      <input
-                        type="text"
-                        required
-                        className="bg-transparent w-full h-10 indent-1 border-2 border-fuchsia-300 placeholder:text-slate-200 font-squid text-sm px-4 py-2 rounded-md focus:bg-neutral-400 focus:bg-opacity-50 focus:outline-none focus:border-emerald-500 transition-all ease-in-out"
-                        autoComplete="true"
-                        name="password"
-                        value={formData.password}
-                        onChange={handleChange}
-                        placeholder="Set Password"
-                      />
-                    </span>
-                    <span>
-                      <label
-                        htmlFor="cnfPassword"
-                        className="font-squid text-base text-black mb-4"
-                      >
-                        Confirm Password
-                        <p className="text-red-600 font-squid text-sm">
-                          {formData.password !== cnfPassword
-                            ? "Passwords Don't Match"
-                            : ""}
-                        </p>
-                      </label>
-                      <input
-                        type="text"
-                        required
-                        className="bg-transparent w-full h-10 indent-1 border-2 border-fuchsia-300 placeholder:text-slate-200 font-squid text-sm px-4 py-2 rounded-md focus:bg-neutral-400 focus:bg-opacity-50 focus:outline-none focus:border-emerald-500 transition-all ease-in-out"
-                        autoComplete="true"
-                        name="cnfPassword"
-                        value={cnfPassword}
-                        onChange={handleChange}
-                        placeholder="Confirm Password"
-                      />
-                    </span>
-                    <span>
-                      <label
-                        htmlFor="city"
-                        className="font-squid text-base text-black mb-4"
-                      >
-                        City
-                      </label>
-                      <input
-                        type="text"
-                        required
-                        className="bg-transparent w-full h-10 indent-1 border-2 border-fuchsia-300 placeholder:text-slate-200 font-squid text-sm px-4 py-2 rounded-md focus:bg-neutral-400 focus:bg-opacity-50 focus:outline-none focus:border-emerald-500 transition-all ease-in-out"
-                        autoComplete="true"
-                        name="city"
-                        value={formData.city}
-                        onChange={handleChange}
-                        placeholder="City"
-                      />
-                    </span>
-                    <span>
-                      <label
-                        htmlFor="college"
-                        className="font-squid text-base text-black mb-4"
-                      >
-                        College
-                      </label>
-                      <input
-                        type="text"
-                        required
-                        className="bg-transparent w-full h-10 indent-1 border-2 border-fuchsia-300 placeholder:text-slate-200 font-squid text-sm px-4 py-2 rounded-md focus:bg-neutral-400 focus:bg-opacity-50 focus:outline-none focus:border-emerald-500 transition-all ease-in-out"
-                        autoComplete="true"
-                        name="college"
-                        value={formData.college}
-                        onChange={handleChange}
-                        placeholder="College"
-                      />
-                    </span>
-                    <span>
-                      <label
-                        htmlFor="paymentReferenceID"
-                        className="font-squid text-base text-black mb-4"
-                      >
-                        Payment Reference ID / UTR Number
-                      </label>
-                      <input
-                        type="text"
-                        required
-                        className="bg-transparent w-full h-10 indent-1 border-2 border-fuchsia-300 placeholder:text-slate-200 font-squid text-sm px-4 py-2 rounded-md focus:bg-neutral-400 focus:bg-opacity-50 focus:outline-none focus:border-emerald-500 transition-all ease-in-out"
-                        autoComplete="true"
-                        name="paymentReferenceID"
-                        value={formData.paymentReferenceID}
-                        onChange={handleChange}
-                        placeholder="Payment Reference ID"
-                      />
-                    </span>
-                    <span>
-                      <label
-                        htmlFor="paymentScreenShotLink"
-                        className="font-squid text-base text-black mb-4"
-                      >
-                        Payment Screenshot/ PDF
-                      </label>
-                      <input
-                        type="file"
-                        required
-                        className="bg-transparent w-full h-10 indent-1 border-2 border-fuchsia-300 placeholder:text-slate-200 font-squid text-sm px-4 py-2 rounded-md focus:bg-neutral-400 focus:bg-opacity-50 focus:outline-none focus:border-emerald-500 transition-all ease-in-out"
-                        autoComplete="true"
-                        name="paymentScreenShotLink"
-                        onChange={handleChange}
-                      />
-                    </span>
 
-                    {loading ? (
-                      <iframe src="/loading.gif" className="h-[50px] w-[50]"></iframe>
-                    ) : (
                       <button
                         type="submit"
                         className="font-squid px-4 py-2 bg-green-500 text-black  rounded-md hover:bg-green-600 disabled:cursor-not-allowed disabled:bg-red-500"
                         disabled={formData.password !== cnfPassword || loading}
                       >
-                        Register
+                        {loading ? "Wait..." : "Register"}
                       </button>
-                    )}
-                  </form>
-                )}
-              </>
-            )
-            :
-            (
-              <div className="flex flex-col justify-center items-center overflow-y-scroll hide sm:h-[500px] max-sm:h-[450px]">
-                <h2 className="my-6 font-squid font-bold tracking-wider text-2xl max-sm:text-xl">Payment Details</h2>
-                <div className="mt-2 w-full flex flex-col justify-center items-center gap-10">
-                  <span className="flex flex-row w-full">
-                    <h3 className="font-squid  tracking-wider w-[185px] max-sm:text-xs">ACCOUNT NAME:</h3>
-                    <p className="font-outfit tracking-wide font-bold  max-sm:text-xs text-gray-800">&ensp; THE DIRECTOR SGGSIE&T VISHNUPURI NANDED</p>
-                  </span>
-                  <span className="flex flex-row w-full">
-                    <h3 className="font-squid  tracking-wider  max-sm:text-xs">BANK NAME: </h3>
-                    <p className="font-outfit tracking-wide font-bold max-sm:text-xs text-gray-800">&ensp; STATE OF BANK OF INDIA</p>
-                  </span>
-                  <span className="flex flex-row w-full">
-                    <h3 className="font-squid  tracking-wider max-sm:text-xs "> ACCOUNT NO: </h3>
-                    <p className="font-outfit tracking-wide font-bold max-sm:text-xs text-gray-800">&ensp; 11265870493</p>
-                  </span>
-                  <span className="flex flex-row w-full">
-                    <h3 className="font-squid  tracking-wider max-sm:text-xs">IFS CODE: </h3>
-                    <p className="font-outfit tracking-wide font-bold max-sm:text-xs text-gray-800">&ensp; SBIN0011651</p>
-                  </span>
-                  <span className="flex flex-row w-full">
-                    <h3 className="font-squid  tracking-wider  max-sm:text-xs">BRANCH: </h3>
-                    <p className="font-outfit tracking-wide font-bold max-sm:text-xs text-gray-800">&ensp; VISHNUPURI</p>
-                  </span>
-                </div>
-                <h3 className="mt-6 font-outfit tracking-wider text-center max-sm:text-xs">( Pay Registration Fees on deatils provided above and keep payment Screesnshot and reference No to move further !! )</h3>
-                <button type="button" className="px-4 py-2 mt-4 bg-green-600 rounded-md font-squid tracking-wide hover:bg-green-400" onClick={(e)=>{e.preventDefault(); setNext(prev=>true)}}>Proceed</button>
-              </div>
-            )
-        }
+
+                    </form>
+                  )}
+                </>
+              )
+
+
+          }
+        </div>
       </div>
-    </div>
+      <Footer />
+    </>
   );
 };
 

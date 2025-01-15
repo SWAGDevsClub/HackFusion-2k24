@@ -24,7 +24,7 @@ function Navbar() {
             <Link to="/schedule" className="hover:text-pink-400 cursor-pointer transition font-squid">Schedule</Link>
           </li>
           <li>
-            <Link to="#" className="hover:text-pink-400 cursor-pointer transition font-squid">Perks</Link>
+            <Link to="/contact" className="hover:text-pink-400 cursor-pointer transition font-squid">Contact</Link>
           </li>
         </ul>
 

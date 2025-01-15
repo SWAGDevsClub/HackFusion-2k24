@@ -8,6 +8,7 @@ import gdgpune from "/gdgpunewhite.png"
 import nexus from "/NEXUS.png"
 import scce from "/scce.png"
 import swoc from "/SWOC.png"
+import Footer from "../components/Footer";
 function Home() {
 
   const [activeTab, setActiveTab] = useState('day1');
@@ -143,7 +144,7 @@ function Home() {
   return (
     <>
 
-      <div className="absolute z-30 inset-0 overflow-y-scroll hide">
+      <div className="absolute z-30 inset-0 pb-6 overflow-y-scroll hide">
         <div
           className="absolute inset-0 z-0"
           style={{
@@ -235,9 +236,11 @@ function Home() {
                 Immerse yourselves in the vibrant atmosphere of the SGGSIEST as you compete alongside 100+ teams. This isn't just about coding; it's a fusion of ideas, code, and excitement. Hackfusion 2.0 offers an incredible opportunity to connect with like-minded developers, mentors, and sponsors!
               </p>
               <div className="flex justify-center">
-                <button className="font-squid inline-flex text-white bg-pink-500  py-2 px-6 focus:outline-none hover:bg-pink-600 rounded text-lg border-0 hover:shadow-[0_0_20px_5px] hover:shadow-pink-800">
-                  Rule Book
-                </button>
+                <a href="/rulebook2025.pdf" target="_blank">
+                  <button className="font-squid inline-flex text-white bg-pink-500  py-2 px-6 focus:outline-none hover:bg-pink-600 rounded text-lg border-0 hover:shadow-[0_0_20px_5px] hover:shadow-pink-800">
+                    Rule Book
+                  </button>
+                </a>
               </div>
             </div>
           </div>
@@ -251,7 +254,7 @@ function Home() {
 
               </h1>
               <p className="mb-4 leading-relaxed font-outfit tracking-wide lg:w-2/3">
-              Prepare to be captivated by a ₹2,00,000 prize pool! This isn't just about the competition; it's about the journey. Embrace the challenge, collaborate with your team, and let your creativity soar. Hackfusion 2.0 promises an unforgettable experience filled with fun, engagement, and the thrill of innovation. So, are you ready to code your way to success? Join us for Hackfusion 2.0 and let the coding begin!
+                Prepare to be captivated by a ₹2,00,000 prize pool! This isn't just about the competition; it's about the journey. Embrace the challenge, collaborate with your team, and let your creativity soar. Hackfusion 2.0 promises an unforgettable experience filled with fun, engagement, and the thrill of innovation. So, are you ready to code your way to success? Join us for Hackfusion 2.0 and let the coding begin!
               </p>
 
               {/* <div className="flex justify-center">
@@ -706,6 +709,7 @@ function Home() {
           </div>
         </section>
       </div>
+      <Footer/>
     </>
   );
 }
