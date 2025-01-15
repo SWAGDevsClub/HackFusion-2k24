@@ -948,7 +948,7 @@ const RegistrationForm = () => {
                       </form>
                     )
                   ) : loading ? (
-                    <div className="w-full h-full flex items-center justify-start ">
+                    <div className="w-full h-full flex items-center justify-center ">
                       <iframe src="/loading.gif" className="h-[500px] w-auto hide"></iframe>
                     </div>
                   ) : (
