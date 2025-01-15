@@ -21,7 +21,6 @@ function App() {
         :
         <BackgroundGradientAnimation>
           <Navbar />
-
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/registration" element={<RegistrationForm />} />
@@ -31,6 +30,8 @@ function App() {
           </Routes>
         </BackgroundGradientAnimation>
       }
+
+
     </Router>
   );
 }
