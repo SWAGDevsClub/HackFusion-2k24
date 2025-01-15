@@ -668,6 +668,10 @@ const RegistrationForm = () => {
                       <h3 className="font-squid  tracking-wider  max-sm:text-xs">BRANCH: </h3>
                       <p className="font-outfit tracking-wide font-bold max-sm:text-xs text-gray-800">&ensp; VISHNUPURI</p>
                     </span>
+                    <span className="flex flex-row w-full">
+                      <h3 className="font-squid  tracking-wider  max-sm:text-xs">AMOUNT: </h3>
+                      <p className="font-outfit tracking-wide font-bold max-sm:text-xs text-gray-800">&ensp; ₹749/-</p>
+                    </span>
                   </div>
                   <h3 className="mt-6 font-outfit tracking-wider text-center max-sm:text-xs">( Pay Registration Fees on deatils provided above and keep payment Screesnshot and reference No to move further !! )</h3>
                   <button
