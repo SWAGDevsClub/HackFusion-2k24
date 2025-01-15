@@ -3,6 +3,7 @@ import OtpInput from "react-otp-input";
 import cardBoard from "/cardboard.jpeg";
 import logo from "/logon.png";
 import tricsq from "/tricsq.png";
+import logoblack from "/logoblack.png"
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import {
   ref as dbRef,
@@ -250,7 +251,7 @@ const RegistrationForm = () => {
        <br/>
        <p>Link : ${"https://chat.whatsapp.com/L8zYJVSyhMA55noJZddywj"} </p>
       </li>
-      <li stye="display:flex; flex-direction:column;>Download our official HackFusion App to stay updated with the schedule, resources, and announcements: 
+      <li stye="display:flex; flex-direction:column;>Download our official HackFusion App to access team DASHBOARD to stay updated with the schedule, resources, and announcements: 
         <br/>
         <p> App : ${"https://play.google.com/store/apps/details?id=com.swag.hackfusion2"}</p>
       </li>
@@ -279,7 +280,7 @@ const RegistrationForm = () => {
           }
         );
         const res = await response.json();
-        if (res.Message === "Mail Sent") {
+        if (res.Error === "200") {
           setFormData({
             leadMobile: "",
             leadName: "",
@@ -318,6 +319,7 @@ const RegistrationForm = () => {
       setLoading((prev) => false);
     }
   };
+
   const genrateOTP = () => {
     const otp = Math.floor(1000 + Math.random() * 9000);
     return otp;
@@ -426,7 +428,7 @@ const RegistrationForm = () => {
             });
           }, 30000);
 
-          setMsg("This OTP is valid only for 30 seconds.");
+          setMsg("This OTP is valid for 30 sec. (Check SPAM folder)");
         } else {
           console.log(res.Message);
         }
@@ -447,13 +449,10 @@ const RegistrationForm = () => {
           src={cardBoard}
           className="rounded-md lg:w-[600px] lg:h-[700px] md:w-[550px] md:h-[600px] sm:w-[450px] sm:h-[550px] max-sm:px-6 max-sm:rounded-lg max-sm:h-[550px]"
         />
-        <img
-          src={tricsq}
-          className="absolute mt-24 opacity-40 lg:w-[500px] md:w-[400px] sm:w-[300px] max-sm:w-[300px] max-sm:mt-28"
-        />
+
         <div className="absolute hide flex flex-col justify-start items-center mt-10 lg:w-[550px] lg:h-[600px] md:w-[450px] sm:w-[400px] max-sm:w-[375px] overflow-y-scroll max-sm:mt-4 px-10 py-4 bg-opacity-20">
           <img
-            src={logo}
+            src={logoblack}
             className="lg:w-full md:w-[450px] sm:w-[350px] max-sm:w-[350px] max-sm:mb-4"
           />
           {
@@ -461,7 +460,7 @@ const RegistrationForm = () => {
             !isTeamLeadSubmitted ? (
               <>
                 {!emailVerified ? (
-                  <span className="flex flex-col w-full mt-20">
+                  <span className="flex flex-col w-full mt-10">
                     <label
                       htmlFor="leadEmail"
                       className="font-squid text-base text-black mb-4"
@@ -512,7 +511,7 @@ const RegistrationForm = () => {
                         </span>
                       }
                       renderInput={(props) => <input {...props} />}
-                      containerStyle={"w-full mb-4 otpContainer justify-center"}
+                      containerStyle={"w-full mb-4 mt-5 otpContainer justify-center"}
                       inputStyle={
                         "otp border-2 border-fuchsia-300 bg-white focus:bg-neutral-400 focus:bg-opacity-50 focus:outline-none focus:border-emerald-500 transition-all ease-in-out"
                       }
@@ -671,7 +670,28 @@ const RegistrationForm = () => {
                     </span>
                   </div>
                   <h3 className="mt-6 font-outfit tracking-wider text-center max-sm:text-xs">( Pay Registration Fees on deatils provided above and keep payment Screesnshot and reference No to move further !! )</h3>
-                  <button type="button" className="px-4 py-2 mt-4 bg-green-600 rounded-md font-squid tracking-wide hover:bg-green-400" onClick={(e) => { e.preventDefault(); setNext(prev => true); setLoading(prev => true) }}>{loading ? "Wait..." : "Proceed"}</button>
+                  <button
+                    type="button"
+                    className="px-4 py-2 mt-4 bg-green-600 rounded-md font-squid tracking-wide hover:bg-green-400"
+                    onClick={async (e) => {
+                      e.preventDefault();
+                      setLoading(true); // Start the loading state
+
+                      // Simulate an async operation (e.g., API call)
+                      try {
+                        // Example: Replace this with your actual logic
+                        await new Promise((resolve) => setTimeout(resolve, 2000));
+
+                        setNext(true); // Proceed to the next state after the operation
+                      } catch (error) {
+                        console.error("An error occurred:", error);
+                      } finally {
+                        setLoading(false); // Reset the loading state
+                      }
+                    }}
+                  >
+                    {loading ? "Wait..." : "Proceed"}
+                  </button>
                 </div>
               ) : (
                 <>

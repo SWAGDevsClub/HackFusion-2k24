@@ -96,6 +96,13 @@ function Navbar() {
           >
             Schedule
           </Link>
+          <Link
+            to="/contact"
+            className="hover:text-pink-400 font-squid cursor-pointer transition"
+            onClick={() => setMenuOpen(false)}
+          >
+            Contact
+          </Link>
         </div>
 
       )}

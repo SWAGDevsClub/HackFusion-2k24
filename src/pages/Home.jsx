@@ -156,6 +156,36 @@ function Home() {
           }}
         />
 
+        <div
+          className="absolute"
+          style={{
+            top: "95%", // Adjust the vertical position
+            left: "51%", // Adjust the horizontal position
+            transform: "translate(-50%, -50%)", // Center the mouse image
+            animation: "floatscroll 3s ease-in-out infinite", // Add floating animation
+          }}
+        >
+          <img
+            src="/scroll.png" // Replace with the actual path to your mouse PNG
+            alt="Floating Mouse"
+            className="w-16 h-16" // Adjust size as needed
+          />
+        </div>
+
+        {/* Add floating animation styles */}
+        <style>
+                    {`
+              @keyframes floatscroll {
+                0%, 100% {
+                  transform: translate(-50%, -50%) translateY(0);
+                }
+                50% {
+                  transform: translate(-50%, -50%) translateY(-20px); /* Float upward */
+                }
+              }
+            `}
+        </style>
+
         {/* Main Banner Section */}
         <div className="relative z-10 flex flex-col items-center justify-center text-white font-bold px-4 w-full min-h-screen sm:mb-20">
           {/* Floating Images */}
@@ -329,8 +359,45 @@ function Home() {
           </div>
         </section>
 
-        <div className="flex flex-wrap justify-center items-center gap-6"
-        >
+        <div className="flex flex-wrap justify-center items-center gap-6">
+
+
+
+          {/* Floating Images */}
+          <div className=" top-10 left-10 z-10" style={{ animation: "float2 4s ease-in-out infinite" }}>
+            <img src="/triangle.png" alt="Floating 1" style={{ width: "80px", height: "80px" }} />
+          </div>
+          <div className=" top-20 right-10 z-10" style={{ animation: "float 5s ease-in-out infinite" }}>
+            <img src="/circle.png" alt="Floating 2" style={{ width: "96px", height: "96px" }} />
+          </div>
+          <div className=" bottom-10 left-20 z-10" style={{ animation: "float2 6s ease-in-out infinite" }}>
+            <img src="/square.png" alt="Floating 3" style={{ width: "64px", height: "64px" }} />
+          </div>
+
+          {/* Inline Keyframes */}
+          <style>
+            {`
+              @keyframes float2 {
+                0% {
+                  transform: translate(0, 0);
+                }
+                25% {
+                  transform: translate(30px, -30px);
+                }
+                50% {
+                  transform: translate(0, -40px);
+                }
+                75% {
+                  transform: translate(-20px, -30px);
+                }
+                100% {
+                  transform: translate(-10, -20);
+                }
+              }
+    `}
+          </style>
+
+
           {/* Package 1 */}
           <div className="w-full md:w-1/2 lg:w-1/3  max-sm:p-6"   >
             <div className=" shadow-lg rounded-lg p-6 bg-gradient-to-t from-purple-900 via-pink-800 to-pink-900 hover:shadow-[0_0_30px_10px_rgba(255,105,180,0.5)]"
@@ -347,7 +414,6 @@ function Home() {
               {/* List */}
               <ul className="list-none text-white text-sm space-y-2 text-center font-outfit tracking-wide ">
                 <li>₹2,00,000 Prize pool</li>
-                <li>Fun and Enjoyment </li>
                 <li>Certificate of participation </li>
                 <li>Skill Development  </li>
                 <li>Networking Opportunities        </li>
@@ -356,19 +422,53 @@ function Home() {
                 <li>Personal Growth</li>
                 <li>Internship Oppurtunity</li>
 
-
               </ul>
               {/* Button */}
               <div className="text-center mt-6">
                 <Link
                   to="/registration"
-                  className="font-squid bg-pink-400 text-white py-2 px-6 rounded-full shadow-lg hover:bg-pink-700 transition duration-300"
+                  className="font-squid bg-pink-600 text-white py-2 px-6 rounded-full shadow-lg hover:bg-pink-700 transition duration-300"
                 >
-                  Get now
+                  Register Now
                 </Link>
               </div>
             </div>
           </div>
+
+
+          {/* Floating Images */}
+          <div className=" top-10 left-10 z-10" style={{ animation: "float 4s ease-in-out infinite" }}>
+            <img src="/triangle.png" alt="Floating 1" style={{ width: "80px", height: "80px" }} />
+          </div>
+          <div className=" top-20 right-10 z-10" style={{ animation: "float2 5s ease-in-out infinite" }}>
+            <img src="/circle.png" alt="Floating 2" style={{ width: "96px", height: "96px" }} />
+          </div>
+          <div className=" bottom-10 left-20 z-10" style={{ animation: "float 6s ease-in-out infinite" }}>
+            <img src="/square.png" alt="Floating 3" style={{ width: "64px", height: "64px" }} />
+          </div>
+
+          {/* Inline Keyframes */}
+          <style>
+            {`
+              @keyframes float {
+                0% {
+                  transform: translate(0, 0);
+                }
+                25% {
+                  transform: translate(30px, -30px);
+                }
+                80% {
+                  transform: translate(0, -40px);
+                }
+                75% {
+                  transform: translate(-10px, -30px);
+                }
+                100% {
+                  transform: translate(-10, -20);
+                }
+              }
+    `}
+          </style>
 
         </div>
 
@@ -501,7 +601,7 @@ function Home() {
 
             <h1 className="lg:text-xl max-sm:text-base font-bold title-font mb-2 text-white font-squid">Title Sponser</h1>
             <div className="flex flex-wrap -m-4">
-              <div className="lg:w-1/4 md:w-1/2 p-4 w-full">
+              <div className="lg:w-1/1 md:w-1/1 p-4 w-full">
                 <a className="block relative h-50 rounded overflow-hidden">
                   <img alt="ecommerce" className=" object-fill object-center w-auto h-full block" src={askmeidentity} />
                 </a>
@@ -613,57 +713,57 @@ function Home() {
           <div className="container px-4 mx-auto mb-20 max-sm:p-7">
             <h1 className="lg:text-xl max-sm:text-base font-bold title-font mb-2 text-white font-squid  ">GDG on Campus Community Partners</h1>
             <div className="flex flex-wrap -m-4">
-              <div className="lg:w-1/4 md:w-1/2 p-4 w-full">
+              <div className="lg:w-1/3 md:w-1/2 p-10 w-full">
                 <a className="block relative h-50 rounded overflow-hidden">
                   <img alt="ecommerce" className="object-cover object-center mt-16 w-full h-full block" src="/KBJ.png" />
                 </a>
 
               </div>
-              <div className="lg:w-1/4 md:w-1/2 p-4 w-full">
+              <div className="lg:w-1/3 md:w-1/2 p-10 w-full">
                 <a className="block relative h-50 rounded overflow-hidden">
                   <img alt="ecommerce" className="object-cover object-center mt-16 w-full h-full block" src="/Xavier.png" />
                 </a>
 
               </div>
-              <div className="lg:w-1/4 md:w-1/2 p-4 w-full">
+              <div className="lg:w-1/3 md:w-1/2 p-10 w-full">
                 <a className="block relative h-50 rounded overflow-hidden">
                   <img alt="ecommerce" className="object-cover object-center mt-16 w-full h-full block" src="/SIES.png" />
                 </a>
 
               </div>
-              <div className="lg:w-1/4 md:w-1/2 p-4 w-full">
+              <div className="lg:w-1/3 md:w-1/2 p-10 w-full">
                 <a className="block relative h-50 rounded overflow-hidden">
                   <img alt="ecommerce" className="object-cover object-center mt-16 w-full h-full block" src="/Atharva.png" />
                 </a>
 
               </div>
-              <div className="lg:w-1/4 md:w-1/2 p-4 w-full">
+              <div className="lg:w-1/3 md:w-1/2 p-10 w-full">
                 <a className="block relative h-50 rounded overflow-hidden">
-                  <img alt="ecommerce" className="object-cover object-center mt-16 w-full h-full block" src="/SVECW.png" />
+                  <img alt="ecommerce" className="object-cover object-center mt-16 w-full h-full block" src="/icfai.png" />
                 </a>
 
               </div>
-              <div className="lg:w-1/4 md:w-1/2 p-4 w-full">
+              <div className="lg:w-1/3 md:w-1/2 p-10 w-full">
                 <a className="block relative h-50 rounded overflow-hidden">
                   <img alt="ecommerce" className="object-cover object-center mt-16 w-full h-full block" src="/MIT.png" />
                 </a>
 
               </div>
-              <div className="lg:w-1/4 md:w-1/2 p-4 w-full">
+              <div className="lg:w-1/3 md:w-1/2 p-10 w-full">
                 <a className="block relative h-50 rounded overflow-hidden">
                   <img alt="ecommerce" className="object-cover object-center mt-16 w-full h-full block" src="/MGMCO.png" />
                 </a>
 
               </div>
-              <div className="lg:w-1/4 md:w-1/2 p-4 w-full">
+              <div className="lg:w-1/3 md:w-1/2 p-10 w-full">
                 <a className="block relative h-50 rounded overflow-hidden">
                   <img alt="ecommerce" className="object-cover object-center mt-16 w-full h-full block" src="/nbnscoe.png" />
                 </a>
 
               </div>
-              <div className="lg:w-1/4 md:w-1/2 p-4 w-full">
+              <div className="lg:w-1/3 md:w-1/2 p-10 w-full">
                 <a className="block relative h-50 rounded overflow-hidden">
-                  <img alt="ecommerce" className="object-cover object-center mt-16 w-full h-full block" src="/icfai.png" />
+                  <img alt="ecommerce" className="object-cover object-center mt-16 w-full h-full block" src="/SVECW.png" />
                 </a>
 
               </div>
@@ -697,7 +797,8 @@ function Home() {
                   </p>
                   <div className="flex justify-center md:justify-start mt-3">
                     <a
-                      href="contact.html"
+                      href="https://maps.app.goo.gl/3X19we4e53V3j4a89"
+                      target="_blank"
                       className="inline-flex items-center text-pink-600 hover:text-pink-800 font-squid"
                     >
                       <i className="tf-ion-ios-location mr-2"></i>View Map Location
@@ -707,9 +808,11 @@ function Home() {
               </div>
             </div>
           </div>
+          <footer className="  z-20 inset-0 py-6 bg-transparent flex justify-center items-end text-center text-white">
+            <p className="text-sm font-squid">© 2025 HackFusion. All Rights Reserved.</p>
+          </footer>
         </section>
       </div>
-      <Footer/>
     </>
   );
 }
