@@ -14,8 +14,8 @@ export default function SplashScreen({onEnd}) {
     };
     return (
         <div className='bg-black  h-screen flex items-center justify-center hide'>
-            <div className=' h-screen flex items-center justify-center'>
-                <video src="/webintro.mp4" className='w-auto h-screen' onLoadedData={handleVideoLoad} autoPlay muted>
+            <div className=' h-screen flex items-center justify-center hide'>
+                <video src="/webintro.mp4" className='w-auto h-screen hide' onLoadedData={handleVideoLoad} autoPlay muted>
                     Your browser does not support the video .
                 </video>
                 {!isVideoLoaded?
