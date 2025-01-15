@@ -233,7 +233,6 @@ const RegistrationForm = () => {
         coupon,
         status: "Pending",
       };
-      console.log(dataToSave);
 
       // Save file URL and other data to Firebase Realtime Database
       const dataRef = dbRef(db, `user2/${formData.leadMobile}`);
@@ -246,7 +245,7 @@ const RegistrationForm = () => {
     <p>Congratulations on successfully registering for <strong>HackFusion 2.0 Hackathon</strong>!</p>
     <p> We are thrilled to have you join this exciting journey of innovation and collaboration. </p>
 
-    <h3 style="color: #0056b3;"> What's Next?</h3>
+    <h3 style="color: #0056b3;"> What is Next?</h3>
     <ol>
       <li stye="display:flex; flex-direction:column;>Join our official group chat further updates and to  ask queries: 
        <br/>
@@ -259,8 +258,11 @@ const RegistrationForm = () => {
       <li>Prepare to showcase your skills, learn, and have fun! </li>
     </ol>
 
-    <p>If you have any questions, feel free to reach out to us at 
+    <p>If you have any questions, feel free to reach out to us at :
+      <br/>
       <a href="mailto:swag@sggs.ac.in" style="color: #0056b3;">swag@sggs.ac.in</a>.
+      <br/>
+      <a href="mailto:gdg@sggs.ac.in" style="color: #0056b3;">gdg@sggs.ac.in</a>.
     </p>
 
     <p>Looking forward to seeing you at <strong>HackFusion 2.0</strong>! </p>
@@ -427,9 +429,9 @@ const RegistrationForm = () => {
               }
               return updated;
             });
-          }, 30000);
+          }, 60000);
 
-          setMsg("This OTP is valid for 30 sec. (Check SPAM folder)");
+          setMsg("This OTP is valid for 60 sec. (Check SPAM folder)");
         } else {
           console.log(res.Message);
         }
@@ -648,7 +650,7 @@ const RegistrationForm = () => {
               </>
             ) :
               !next ? (
-                <div className="flex flex-col justify-center items-center overflow-y-scroll hide lg:h-[600px] sm:h-[500px] max-sm:h-[450px]">
+                <div className="flex flex-col  items-center overflow-y-scroll hide lg:h-[600px] sm:h-[500px] max-sm:h-[450px]">
                   <h2 className="my-6 font-squid font-bold tracking-wider text-2xl max-sm:text-xl">Payment Details</h2>
                   <div className="mt-2 w-full flex flex-col justify-center items-center gap-10">
                     <span className="flex flex-row w-full">
@@ -671,9 +673,12 @@ const RegistrationForm = () => {
                       <h3 className="font-squid  tracking-wider  max-sm:text-xs">BRANCH: </h3>
                       <p className="font-outfit tracking-wide font-bold max-sm:text-xs text-gray-800">&ensp; VISHNUPURI</p>
                     </span>
-                    <span className="flex flex-row w-full">
+                    <span className="flex flex-row w-full items-center justify-between gap-10">
+                      <span className="flex flex-row ">
                       <h3 className="font-squid  tracking-wider  max-sm:text-xs">AMOUNT: </h3>
                       <p className="font-outfit tracking-wide font-bold max-sm:text-xs text-gray-800">&ensp; ₹749/-</p>
+                      </span>
+                      <img src="/scroll.gif"  className="h-[50px] w-auto cursor-pointer"/>
                     </span>
                   </div>
                   <h3 className="mt-6 font-outfit tracking-wider text-center max-sm:text-xs">( Pay Registration Fees on deatils provided above and keep payment Screesnshot and reference No to move further !! )</h3>
@@ -943,7 +948,9 @@ const RegistrationForm = () => {
                       </form>
                     )
                   ) : loading ? (
-                    <iframe src="/loading.gif" className="h-[100px] w-auto"></iframe>
+                    <div className="w-full h-full flex items-center justify-start ">
+                      <iframe src="/loading.gif" className="h-[500px] w-auto hide"></iframe>
+                    </div>
                   ) : (
                     <form
                       className="flex flex-col  lg:w-full lg:h-[500px] md:h-[470px] max-sm:h-[450px] gap-5  overflow-y-scroll hide"
