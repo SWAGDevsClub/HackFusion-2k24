@@ -211,7 +211,7 @@ function Home() {
             <div className="flex items-center justify-center mb-4">
               <img
                 src="/logon.png"
-                className="h-10 w-auto sm:h-12 md:h-16 md:w-[600px]"
+                className="h-10 w-auto sm:h-12 md:h-auto md:w-[600px]"
                 alt="Logo"
                 data-aos="flip-right"
               />
