@@ -163,7 +163,7 @@ function Home() {
           className="absolute"
           style={{
             top: "95%", // Adjust the vertical position
-            left: "51%", // Adjust the horizontal position
+            left: "50%", // Adjust the horizontal position
             transform: "translate(-50%, -50%)", // Center the mouse image
             animation: "floatscroll 3s ease-in-out infinite", // Add floating animation
           }}
