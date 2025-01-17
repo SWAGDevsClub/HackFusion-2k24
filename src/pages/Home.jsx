@@ -418,6 +418,7 @@ function Home() {
                   <img src="/pep.png" alt="" className="h-20" />
                 </div>
                 <h2 className="text-4xl font-bold text-white mt-4 font-squid">₹749/-</h2>
+                <p className="text-xs mt-2 font-squid font-bold tracking-wider">( Non-Refundable )</p>
               </div>
               {/* Package Name */}
               <h6 className="text-center text-lg font-semibold text-white mb-4 border-2 rounded-lg font-squid">Benefits</h6>

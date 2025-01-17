@@ -12,18 +12,18 @@ function Navbar() {
 
   return (
     <div className={`absolute z-40  text-white py-4 w-full h-fit  `} data-aos="fade-down" id="abc">
-      <div className="container lg:backdrop-blur-3xl mx-auto lg:w-2/4 flex rounded-2xl justify-between items-center px-4 sm:px-6 lg:px-8">
+      <div className="container lg:backdrop-blur-3xl mx-auto lg:w-2/4 flex rounded-2xl justify-between items-center  px-4 sm:px-6 lg:px-8">
         {/* Logo Section */}
 
         {/* Navigation Links for Larger Screens */}
-        <ul className="hidden  justify-center w-full py-2  items-center sm:flex space-x-6">
+        <ul className="hidden  justify-center w-full py-2  ml-7 items-center sm:flex space-x-6">
           <li>
             <Link to="" className="hover:text-pink-400 cursor-pointer transition font-squid">Home</Link>
           </li>
           <li>
             <Link to="/sponsors" className="hover:text-pink-400 cursor-pointer transition font-squid">Sponsors</Link>
           </li>
-          <img src={trisqc} className="w-auto h-[45px]" />
+          <img src={trisqc} className="w-auto h-[45px] " />
           <li>
             <Link to="/schedule" className="hover:text-pink-400 cursor-pointer transition font-squid">Schedule</Link>
           </li>
