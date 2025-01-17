@@ -221,13 +221,13 @@ function Home() {
             <p className="text-lg italic mb-6 font-squid" data-aos="fade-right">"Code, Compete, Survive"</p>
 
             {/* Registration Button */}
-            {/* <Link to={"/registration"} >
+            <Link to={"/registration"} >
               <button className="bg-pink-500 py-2 px-6 rounded-full shadow-lg hover:bg-pink-600 transition duration-300 font-squid cursor-pointer" data-aos="fade-right">
                 Register Now
               </button>
-            </Link> */}
+            </Link>
 
-            <button
+            {/* <button
               className="bg-pink-500 py-2 px-6 rounded-full shadow-lg hover:bg-pink-600 transition duration-300 font-squid cursor-pointer"
               data-aos="fade-right"
               onClick={(event) => {
@@ -236,7 +236,7 @@ function Home() {
               }}
             >
               Register Now
-            </button>
+            </button> */}
 
             {/* Countdown Timer */}
             <CountdownTimer targetDate="2025-02-21T00:00:00" />
@@ -448,16 +448,16 @@ function Home() {
               </ul>
               {/* Button */}
               <div className="text-center mt-6">
-                {/* <Link
+                <Link
                   to="/registration"
                   className="font-squid bg-pink-600 text-white py-2 px-6 rounded-full shadow-lg hover:bg-pink-700 transition duration-300"
                 >
                   Register Now
-                </Link> */}
+                </Link>
 
                 {/* ///////////////////////////////////////////////// */}
 
-                <Link
+                {/* <Link
                   to="/registration"
                   className="font-squid bg-pink-600 text-white py-2 px-6 rounded-full shadow-lg hover:bg-pink-700 transition duration-300"
                   onClick={(event) => {
@@ -466,7 +466,7 @@ function Home() {
                   }}
                 >
                   Register Now
-                </Link>
+                </Link> */}
               </div>
             </div>
           </div>
