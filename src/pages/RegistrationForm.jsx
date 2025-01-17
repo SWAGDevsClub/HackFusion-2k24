@@ -696,7 +696,7 @@ const RegistrationForm = () => {
                         <span className="flex flex-row w-full items-center justify-between gap-10">
                           <span className="flex flex-row ">
                             <h3 className="font-squid  tracking-wider  max-sm:text-xs">AMOUNT: </h3>
-                            <p className="font-outfit tracking-wide font-bold max-sm:text-xs text-gray-800">&ensp; ₹749/-</p>
+                            <p className="font-outfit tracking-wide font-bold max-sm:text-xs text-gray-800">&ensp; ₹749/- (Non-Refundable)</p>
                           </span>
                           <img src="/scroll.gif" className="h-[50px] w-auto cursor-pointer" />
                         </span>
