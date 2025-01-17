@@ -221,11 +221,22 @@ function Home() {
             <p className="text-lg italic mb-6 font-squid" data-aos="fade-right">"Code, Compete, Survive"</p>
 
             {/* Registration Button */}
-            <Link to={"/registration"} >
+            {/* <Link to={"/registration"} >
               <button className="bg-pink-500 py-2 px-6 rounded-full shadow-lg hover:bg-pink-600 transition duration-300 font-squid cursor-pointer" data-aos="fade-right">
                 Register Now
               </button>
-            </Link>
+            </Link> */}
+
+            <button
+              className="bg-pink-500 py-2 px-6 rounded-full shadow-lg hover:bg-pink-600 transition duration-300 font-squid cursor-pointer"
+              data-aos="fade-right"
+              onClick={(event) => {
+                event.preventDefault(); // Prevents default behavior, if needed
+                alert("Registration is temporarily unavailable due to maintenance. Please try after 3AM 18 Jan 2025.");
+              }}
+            >
+              Register Now
+            </button>
 
             {/* Countdown Timer */}
             <CountdownTimer targetDate="2025-02-21T00:00:00" />
@@ -262,7 +273,7 @@ function Home() {
                 className="object-cover object-center rounded h-720 w-600"
                 alt="hero"
                 src="/replaace.png"
-                
+
               />
             </div>
             <div className="lg:flex-grow md:w-1/2 lg:pl-24 md:pl-16 flex flex-col md:items-start md:text-left items-center text-center">
@@ -426,6 +437,7 @@ function Home() {
               <ul className="list-none text-white text-sm space-y-2 text-center font-outfit tracking-wide ">
                 <li>₹2,00,000 Prize pool</li>
                 <li>Certificate of participation </li>
+                <li>Free Accommodation</li>
                 <li>Skill Development  </li>
                 <li>Networking Opportunities        </li>
                 <li>Portfolio Enhancement </li>
@@ -436,9 +448,22 @@ function Home() {
               </ul>
               {/* Button */}
               <div className="text-center mt-6">
+                {/* <Link
+                  to="/registration"
+                  className="font-squid bg-pink-600 text-white py-2 px-6 rounded-full shadow-lg hover:bg-pink-700 transition duration-300"
+                >
+                  Register Now
+                </Link> */}
+
+                {/* ///////////////////////////////////////////////// */}
+
                 <Link
                   to="/registration"
                   className="font-squid bg-pink-600 text-white py-2 px-6 rounded-full shadow-lg hover:bg-pink-700 transition duration-300"
+                  onClick={(event) => {
+                    event.preventDefault(); // Prevents navigation to the /registration route
+                    alert("Registration is temporarily unavailable due to maintenance. Please try after 3AM 18 Jan 2025.");
+                  }}
                 >
                   Register Now
                 </Link>
