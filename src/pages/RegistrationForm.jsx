@@ -393,7 +393,7 @@ const RegistrationForm = () => {
           <h2 style="color: #0056b3;">Your One Time Password (OTP)</h2>
           <p>Hi,</p>
           <p>Thank you for initiating your registration for <strong>HackFusion 2.O</strong>. Please use the OTP below to verify your email address:</p>
-          <p>Note: This OTP will be valid for only 30 seconds.</p>
+          <p>Note: This OTP will be valid for only 60 seconds.</p>
           <div style="margin: 20px 0; text-align: center;">
             <span style="font-size: 24px; font-weight: bold; color: #0056b3; border: 1px solid #ccc; padding: 10px 20px; display: inline-block;">
               <strong>${otpCode}</strong>
