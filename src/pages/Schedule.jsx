@@ -138,7 +138,7 @@ function Schedule() {
     <>
       <div className="absolute z-30 inset-0 overflow-y-scroll hide py-32" data-aos="fade-up-left">
 
-        <h1 className="text-4xl font-bold title-font mb-10 text-center text-white font-squid transition-all ease-in-out hover:drop-shadow-[0_0_10px_#ff69b4]">Schedule</h1>
+        <h1 className="text-4xl font-bold title-font mb-10 text-center text-white font-squid transition-all ease-in-out drop-shadow-[0_0_10px_#ff69b4]">Schedule</h1>
 
         <div className=" container lg:mx-auto mt-32 md:p-16  max-sm:p-6 ">
           <div className="flex flex-col ">
@@ -166,7 +166,7 @@ function Schedule() {
                   <li key={index} className="flex items-center justify-center gap-10 bg-gray-100 p-4 rounded-lg shadow-lg">
                     <h4 className="text-pink-500 font-bold">{item.time}</h4>
                     <div className="flex-1 px-4 items-center justify-center">
-                      <h3 className="text-lg font-bold mb-2">{item.title}</h3>
+                      <h3 className="text-lg font-bold mb-2 max-sm:text-sm">{item.title}</h3>
                       {/* {item.speaker && (
                   <>
                     <span className="text-sm font-semibold">By {item.speaker}</span>

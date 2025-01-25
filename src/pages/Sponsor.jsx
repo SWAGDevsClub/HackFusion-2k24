@@ -17,7 +17,7 @@ export default function Sponsor() {
             <div className='absolute z-30 inset-0 overflow-y-scroll hide py-32' data-aos="fade-up-right">
                 <section className="text-gray-600 body-font" id="sponsor" >
 
-                    <h1 className="text-4xl font-bold title-font mb-10 text-center text-white font-squid transition-all ease-in-out hover:drop-shadow-[0_0_10px_#ff69b4]">Sponsers</h1>
+                    <h1 className="text-4xl font-bold title-font mb-10 text-center text-white font-squid transition-all ease-in-out drop-shadow-[0_0_10px_#ff69b4]">Sponsers</h1>
                     <div className="container px-4 py-24 mx-auto mb-0 max-sm:p-7">
 
                         <h1 className="lg:text-xl max-sm:text-base font-bold title-font mb-2 text-white font-squid">Title Sponser</h1>

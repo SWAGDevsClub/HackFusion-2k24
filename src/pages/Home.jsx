@@ -282,7 +282,7 @@ function Home() {
                 <br className="hidden lg:inline-block font-squid" />
                 and Excitement!
               </h1>
-              <p className="mb-8 leading-relaxed font-outfit tracking-wide lg:w-2/3">
+              <p className="mb-8 leading-relaxed font-outfit tracking-wide lg:w-2/3 md:text-sm lg:text-lg">
                 Join us for a thriling Natinal Level Hackathon - HACKFUSION 2.0 !
                 Immerse yourselves in the vibrant atmosphere of the SGGSIEST as you compete alongside 100+ teams. This isn't just about coding; it's a fusion of ideas, code, and excitement. Hackfusion 2.0 offers an incredible opportunity to connect with like-minded developers, mentors, and sponsors!
               </p>
@@ -304,7 +304,7 @@ function Home() {
                 <br className="hidden lg:inline-block font-squid" />
 
               </h1>
-              <p className="mb-4 leading-relaxed font-outfit tracking-wide lg:w-2/3">
+              <p className="mb-4 leading-relaxed font-outfit tracking-wide lg:w-2/3 md:text-sm lg:text-lg">
                 Prepare to be captivated by a ₹2,00,000 prize pool! This isn't just about the competition; it's about the journey. Embrace the challenge, collaborate with your team, and let your creativity soar. Hackfusion 2.0 promises an unforgettable experience filled with fun, engagement, and the thrill of innovation. So, are you ready to code your way to success? Join us for Hackfusion 2.0 and let the coding begin!
               </p>
 
@@ -323,7 +323,35 @@ function Home() {
             </div>
           </div>
         </section>
+        <section className="text-white body-font mt-10">
+          <div className="container mx-auto flex px-5 py-24 md:flex-row flex-col items-center">
+            <div className="lg:max-w-lg lg:w-full md:w-1/2 w-5/6 mb-10 md:mb-0">
+              <img
+                className="object-cover object-center lg:ml-4 rounded h-[500px] sm:h-[400px] max-sm:h[300px] w-auto"
+                alt="hero"
+                src="/man.png"
 
+              />
+            </div>
+            <div className="lg:flex-grow md:w-1/2 lg:pl-24 md:pl-16 flex flex-col md:items-start md:text-left items-center text-center">
+              <h1 className="title-font sm:text-4xl text-3xl mb-4 font-medium text-white font-squid drop-shadow-[0_0_10px_#ff69b4]">
+                Having Any Questions ?
+              </h1>
+              <p className="mb-8 leading-relaxed font-outfit tracking-wide lg:w-2/3 md:text-sm lg:text-lg">
+                Confused about how the hackathon works? Check out our FAQs for quick answers to common questions about registration, participation, and submissions. Still unsure? Contact us for more clarity!
+                <br />
+                ( Please keep checking out this page for updated FAQs! )
+              </p>
+              <div className="flex justify-center">
+                <a href="/FAQs.pdf" target="_blank">
+                  <button className="font-squid inline-flex text-white bg-pink-500  py-2 px-6 focus:outline-none hover:bg-pink-600 rounded text-lg border-0 hover:shadow-[0_0_20px_5px] hover:shadow-pink-800">
+                    FAQs
+                  </button>
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
         <section className="text-white body-font">
           <div className="container px-5 py-24 mx-auto">
             <div className="flex flex-wrap -m-4">
@@ -334,7 +362,7 @@ function Home() {
                   <h1 className="title-font sm:text-2xl text-xl font-medium text-white mb-3  font-squid">
                     ₹2,00,000 Prize Pool
                   </h1>
-                  <p className="leading-relaxed mb-3 font-outfit tracking-wide max-sm:text-sm">
+                  <p className="leading-relaxed mb-3 font-outfit tracking-wide max-sm:text-sm ">
                     Exciting awards and gifts for the best solutions of problem
                     statement!! Don't miss this chance to showcase your talents
                     and be recognized for the best solutions.
@@ -380,21 +408,23 @@ function Home() {
           </div>
         </section>
 
-        <div className="flex flex-wrap justify-center items-center gap-6">
+        <div className="flex flex-wrap justify-center items-center gap-6 lg:flex-row md:flex-col">
 
 
 
           {/* Floating Images */}
-          <div className=" top-10 left-10 z-10" style={{ animation: "float2 4s ease-in-out infinite" }}>
-            <img src="/triangle.png" alt="Floating 1" style={{ width: "80px", height: "80px" }} />
-          </div>
-          <div className=" top-20 right-10 z-10" style={{ animation: "float 5s ease-in-out infinite" }}>
-            <img src="/circle.png" alt="Floating 2" style={{ width: "96px", height: "96px" }} />
-          </div>
-          <div className=" bottom-10 left-20 z-10" style={{ animation: "float2 6s ease-in-out infinite" }}>
-            <img src="/square.png" alt="Floating 3" style={{ width: "64px", height: "64px" }} />
-          </div>
 
+          <div className="flex flex-wrap md:flex-row">
+            <div className=" top-10 left-10 z-10" style={{ animation: "float2 4s ease-in-out infinite" }}>
+              <img src="/triangle.png" alt="Floating 1" style={{ width: "80px", height: "80px" }} />
+            </div>
+            <div className=" top-20 right-10 z-10" style={{ animation: "float 5s ease-in-out infinite" }}>
+              <img src="/circle.png" alt="Floating 2" style={{ width: "96px", height: "96px" }} />
+            </div>
+            <div className=" bottom-10 left-20 z-10" style={{ animation: "float2 6s ease-in-out infinite" }}>
+              <img src="/square.png" alt="Floating 3" style={{ width: "64px", height: "64px" }} />
+            </div>
+          </div>
           {/* Inline Keyframes */}
           <style>
             {`
@@ -473,14 +503,16 @@ function Home() {
 
 
           {/* Floating Images */}
-          <div className=" top-10 left-10 z-10" style={{ animation: "float 4s ease-in-out infinite" }}>
-            <img src="/triangle.png" alt="Floating 1" style={{ width: "80px", height: "80px" }} />
-          </div>
-          <div className=" top-20 right-10 z-10" style={{ animation: "float2 5s ease-in-out infinite" }}>
-            <img src="/circle.png" alt="Floating 2" style={{ width: "96px", height: "96px" }} />
-          </div>
-          <div className=" bottom-10 left-20 z-10" style={{ animation: "float 6s ease-in-out infinite" }}>
-            <img src="/square.png" alt="Floating 3" style={{ width: "64px", height: "64px" }} />
+          <div  className="flex flex-wrap md:flex-row mt-4">
+            <div className=" top-10 left-10 z-10" style={{ animation: "float 4s ease-in-out infinite" }}>
+              <img src="/triangle.png" alt="Floating 1" style={{ width: "80px", height: "80px" }} />
+            </div>
+            <div className=" top-20 right-10 z-10" style={{ animation: "float2 5s ease-in-out infinite" }}>
+              <img src="/circle.png" alt="Floating 2" style={{ width: "96px", height: "96px" }} />
+            </div>
+            <div className=" bottom-10 left-20 z-10" style={{ animation: "float 6s ease-in-out infinite" }}>
+              <img src="/square.png" alt="Floating 3" style={{ width: "64px", height: "64px" }} />
+            </div>
           </div>
 
           {/* Inline Keyframes */}
@@ -556,9 +588,9 @@ function Home() {
         <section className="text-white body-font">
 
           <div className="container px-5 py-24 mx-auto">
-            <h1 className="text-4xl font-bold title-font mb-4 text-center font-squid transition-all ease-in-out hover:drop-shadow-[0_0_10px_#ff69b4]">Winners</h1>
-            <p className="text-2xl text-white mb-8 text-center font-squid">Previous Year</p>
-            <div className="flex flex-wrap md:ml-10">
+            <h1 className="text-4xl font-bold title-font mb-4 text-center  md:ml-6 font-squid transition-all ease-in-out drop-shadow-[0_0_10px_#ff69b4]">Winners</h1>
+            <p className="text-2xl text-white mb-8 text-center md:ml-6 font-squid">Previous Year</p>
+            <div className="flex flex-wrap justify-center md:ml-10">
               {/* Card 1 */}
               <div className="lg:p-4 lg:mx-0 sm:p-2 max-sm:p-2 md:mx-16 lg:w-1/3" >
 
@@ -584,13 +616,13 @@ function Home() {
               </div>
               {/* Card 2 */}
               <div className="lg:p-4 lg:mx-0 sm:p-2 max-sm:p-2 md:mx-16 lg:w-1/3">
-                <div className=" rounded-lg overflow-hidden transform transition-transform duration-300 hover:scale-105 hover:shadow-[0_0_30px_10px_rgba(0,150,255,0.5)] font-outfit tracking-wide">
+                <div className=" rounded-lg overflow-hidden transform transition-transform duration-300 hover:scale-105  hover:shadow-[0_0_30px_10px_rgba(0,150,255,0.5)] font-outfit tracking-wide">
                   <img
-                    className="object-fill object-center rounded h-64 sm:h-72 md:h-80 lg:h-80 w-full"
+                    className="object-fill object-center rounded h-64 sm:h-72 md:h-80  lg:h-80 w-full"
                     src="/second.jpeg"
                     alt="blog"
                   />
-                  <div className="p-6 bg-[#000957] bg-opacity-75">
+                  <div className="p-6 bg-[#000957] bg-opacity-75 md:px-4">
                     <h2 className="tracking-widest text-lg title-font font-medium text-white-400 mb-1">
                       Team Loosers
                     </h2>
@@ -608,7 +640,7 @@ function Home() {
               <div className="lg:p-4 lg:mx-0 sm:p-2 max-sm:p-2 md:mx-16 lg:w-1/3 ">
                 <div className=" rounded-lg overflow-hidden transform transition-transform duration-300 hover:scale-105 hover:shadow-[0_0_30px_10px_rgba(0,255,150,0.5)] font-outfit tracking-wide">
                   <img
-                    className="object-fill object-center rounded  w-full h-64  sm:h-72 md:h-80 lg:h-80"
+                    className="object-fill object-center rounded h-64 sm:h-72 md:h-80 lg:h-80 w-full"
                     src="/third.jpeg"
                     alt="blog"
                   />
@@ -632,7 +664,7 @@ function Home() {
 
         <section className="text-gray-600 body-font" id="sponsor" >
 
-          <h1 className="text-4xl font-bold title-font mb-10 text-center text-white font-squid transition-all ease-in-out hover:drop-shadow-[0_0_10px_#ff69b4]">Sponsers</h1>
+          <h1 className="text-4xl font-bold title-font mb-10 text-center text-white font-squid transition-all ease-in-out drop-shadow-[0_0_10px_#ff69b4]">Sponsers</h1>
           <div className="container px-4 py-24 mx-auto mb-0 max-sm:p-7">
 
             <h1 className="lg:text-xl max-sm:text-base font-bold title-font mb-2 text-white font-squid">Title Sponser</h1>
