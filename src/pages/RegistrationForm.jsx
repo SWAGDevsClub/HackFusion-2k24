@@ -458,7 +458,8 @@ const RegistrationForm = () => {
                 src={cardBoard}
                 className="rounded-md lg:w-[600px] lg:h-[700px] md:w-[550px] md:h-[600px] sm:w-[450px] sm:h-[550px] max-sm:px-6 max-sm:rounded-lg max-sm:h-[450px]"
               />
-              <h1 className=" absolute lg:text-lg font-squid tracking-wide max-sm:text-xs z-30"> Registration Sucessfull !!</h1>
+              <h1 className=" absolute mb-16 lg:text-lg font-squid tracking-wide max-sm:text-xs z-30"> Registration Sucessfull !!</h1>
+              <h3 className="absolute lg:text-base font-outfit tracking-wide max-sm:text-xs z-30 "> (Check mail box for confirmation mail)</h3>
             </div>
           </div>
         )
