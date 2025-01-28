@@ -22,7 +22,7 @@ const RegistrationForm = () => {
   const [isTeamLeadSubmitted, setIsTeamLeadSubmitted] = useState(false);
   const [isTeamMemberSubmitted, setisTeamMemberSubmitted] = useState(false);
   const [isOtpSent, setIsOtpSent] = useState(false);
-  const [otpVerified, setOtpVerified] = useState(false);
+  const [otpVerified, setOtpVerified] = useState(true);
   const [emailVerified, setEmailVerified] = useState(false);
   const [next, setNext] = useState(false);
   const [file, setFile] = useState(null);
