@@ -221,9 +221,9 @@ function Home() {
             <p className="text-lg italic mb-6 font-squid" data-aos="fade-right">"Code, Compete, Survive"</p>
 
             {/* Registration Button */}
-            <Link to={"/registration"} >
-              <button className="bg-pink-500 py-2 px-6 rounded-full shadow-lg hover:bg-pink-600 transition duration-300 font-squid cursor-pointer" data-aos="fade-right">
-                Register Now
+            <Link to={"/"} >
+              <button className="bg-red-600 py-2 px-6 rounded-full shadow-lg  transition duration-300 font-squid cursor-pointer text-xs tracking-wider" data-aos="fade-right">
+                 Registrations are currently stopped due to techinical issue!
               </button>
             </Link>
 

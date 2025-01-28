@@ -23,7 +23,7 @@ function App() {
           <Navbar />
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/registration" element={<RegistrationForm />} />
+            {/* <Route path="/registration" element={<RegistrationForm />} /> */}
             <Route path="/sponsors" element={<Sponsor />} />
             <Route path="/schedule" element={<Schedule />} />
             <Route path="/contact" element={<Contact />} />
