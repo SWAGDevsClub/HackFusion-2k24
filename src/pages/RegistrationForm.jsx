@@ -482,45 +482,69 @@ const RegistrationForm = () => {
                   <>
                     {!emailVerified ? (
                       <span className="flex flex-col w-full mt-10">
-                        <label
-                          htmlFor="leadEmail"
-                          className="font-squid text-base text-black mb-4"
-                        >
-                          Lead Email
-                        </label>
-                        <span className="flex flex-row gap-4 items-center">
-                          <input
-                            type="email"
-                            required
-                            className="bg-transparent w-full h-10 indent-1 border-2 border-fuchsia-300 placeholder:text-slate-200 font-outfit  text-sm px-4 py-2 rounded-md focus:bg-neutral-400 focus:bg-opacity-50 focus:outline-none focus:border-emerald-500 transition-all ease-in-out"
-                            autoComplete="true"
-                            name="leadEmail"
-                            value={formData.leadEmail}
-                            onChange={handleChange}
-                            placeholder=" Lead Email"
-                          />
-
-
-                          {
-                            isOtpSent ? ("") :
-                              (<button
-                                className="bg-green-500 font-squid px-2 py-2 rounded-md disabled:bg-red-600 disabled:cursor-not-allowed hover:bg-green-400 text-sm text-black focus:bg-neutral-400 focus:bg-opacity-50"
-                                disabled={
-                                  formData.leadEmail === "" || isOtpSent || loading
-                                }
-                                onClick={() => validateEmail(formData.leadEmail)}
-                              >
-
-                                {loading ? "Wait..." : "Verify"}
-                              </button>
-                              )
-                          }
-
-                        </span>
-                        {/* <p className="text-green-600 font-squid text-sm px-2 py-2">
-                    {msg}
-                  </p> */}
+                      <label
+                        htmlFor="leadEmail"
+                        className="font-squid text-base text-black mb-4"
+                      >
+                        Lead Email
+                      </label>
+                      <span className="flex flex-row gap-4 items-center">
+                        {/* Input for the first email */}
+                        <input
+                          type="email"
+                          required
+                          className="bg-transparent w-full h-10 indent-1 border-2 border-fuchsia-300 placeholder:text-slate-200 font-outfit text-sm px-4 py-2 rounded-md focus:bg-neutral-400 focus:bg-opacity-50 focus:outline-none focus:border-emerald-500 transition-all ease-in-out"
+                          autoComplete="true"
+                          name="leadEmail"
+                          value={formData.leadEmail}
+                          onChange={handleChange}
+                          placeholder="Enter Lead Email"
+                        />
                       </span>
+                    
+                      <span className="flex flex-row gap-4 items-center mt-4">
+                        {/* Input for confirming the email */}
+                        <input
+                          type="email"
+                          required
+                          className="bg-transparent w-full h-10 indent-1 border-2 border-fuchsia-300 placeholder:text-slate-200 font-outfit text-sm px-4 py-2 rounded-md focus:bg-neutral-400 focus:bg-opacity-50 focus:outline-none focus:border-emerald-500 transition-all ease-in-out"
+                          name="confirmEmail"
+                          value={formData.confirmEmail}
+                          onChange={handleChange}
+                          onPaste={(e) => e.preventDefault()} 
+                          placeholder="Confirm Lead Email"
+                        />
+                      </span>
+                    
+                      {/* Display error if emails do not match */}
+                      {formData.leadEmail &&
+                        formData.confirmEmail &&
+                        formData.leadEmail !== formData.confirmEmail && (
+                          <p className="text-red-500 text-sm mt-2">Emails do not match</p>
+                        )}
+                    
+                      <span className="flex flex-row gap-4 items-center mt-4">
+                        {/* Verify button */}
+                        {isOtpSent ? (
+                          ""
+                        ) : (
+                          <button
+                            className="bg-green-500 font-squid px-2 py-2 rounded-md disabled:bg-red-600 disabled:cursor-not-allowed hover:bg-green-400 text-sm text-black focus:bg-neutral-400 focus:bg-opacity-50"
+                            disabled={
+                              formData.leadEmail === "" ||
+                              formData.confirmEmail === "" ||
+                              formData.leadEmail !== formData.confirmEmail ||
+                              isOtpSent ||
+                              loading
+                            }
+                            onClick={() => validateEmail(formData.leadEmail)}
+                          >
+                            {loading ? "Wait..." : "Verify"}
+                          </button>
+                        )}
+                      </span>
+                    </span>
+                    
                     ) : (
                       ""
                     )}
