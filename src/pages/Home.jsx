@@ -458,7 +458,7 @@ function Home() {
                 <div className="text-pink-500 text-5xl ">
                   <img src="/pep.png" alt="" className="h-20" />
                 </div>
-                <h2 className="text-4xl font-bold text-white mt-4 font-squid">₹749/-</h2>
+                <h2 className="text-4xl font-bold text-white mt-4 font-squid">₹1000/-</h2>
                 <p className="text-xs mt-2 font-squid font-bold tracking-wider">( Non-Refundable )</p>
               </div>
               {/* Package Name */}
