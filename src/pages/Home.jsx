@@ -221,12 +221,18 @@ function Home() {
             <p className="text-lg italic mb-6 font-squid" data-aos="fade-right">"Code, Compete, Survive"</p>
 
             {/* Registration Button */}
-            <Link to={"/registration"} >
-              <button className="bg-pink-500 py-2 px-6 rounded-full shadow-lg hover:bg-pink-600 transition duration-300 font-squid cursor-pointer" data-aos="fade-right">
-                 Register Now
-              </button>
-            </Link>
+            <div className="flex flex-col items-center gap-4 justify-center">
 
+              <button className="bg-red-500 py-2  px-6 rounded-full shadow-lg hover:bg-red-600 transition duration-300 font-squid cursor-pointer tracking-wide" data-aos="fade-right">
+                Registrations Closed
+              </button>
+
+              <a className="outline-none" href="https://docs.google.com/document/d/1KsOGCSk-buQ7ewl6Z1viC847XhHBDl3HmceKTGFhMxU/edit?usp=sharing" target="_blank">
+                <button className="bg-pink-500 py-2 px-6 rounded-full shadow-lg hover:bg-pink-600 transition duration-300 font-squid cursor-pointer tracking-wide" data-aos="fade-right">
+                  View Problem Statement
+                </button>
+              </a>
+            </div>
             {/* <button
               className="bg-pink-500 py-2 px-6 rounded-full shadow-lg hover:bg-pink-600 transition duration-300 font-squid cursor-pointer"
               data-aos="fade-right"
@@ -478,12 +484,12 @@ function Home() {
               </ul>
               {/* Button */}
               <div className="text-center mt-6">
-                <Link
+                {/* <Link
                   to="/registration"
                   className="font-squid bg-pink-600 text-white py-2 px-6 rounded-full shadow-lg hover:bg-pink-700 transition duration-300"
                 >
                   Register Now
-                </Link>
+                </Link> */}
 
                 {/* ///////////////////////////////////////////////// */}
 
@@ -503,7 +509,7 @@ function Home() {
 
 
           {/* Floating Images */}
-          <div  className="flex flex-wrap md:flex-row mt-4">
+          <div className="flex flex-wrap md:flex-row mt-4">
             <div className=" top-10 left-10 z-10" style={{ animation: "float 4s ease-in-out infinite" }}>
               <img src="/triangle.png" alt="Floating 1" style={{ width: "80px", height: "80px" }} />
             </div>
