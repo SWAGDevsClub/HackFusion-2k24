@@ -232,6 +232,11 @@ function Home() {
                   View Problem Statement
                 </button>
               </a>
+              <a className="outline-none" href="https://docs.google.com/document/d/1gOltYvRzzqnFfO9jaJuGtuucVhDzi4f3dwBBWwF7PpI/edit?usp=sharing" target="_blank">
+                <button className="bg-green-500 py-2 px-6 rounded-full shadow-lg hover:bg-green-600 transition duration-300 font-squid cursor-pointer tracking-wide" data-aos="fade-right">
+                  Code of Conduct
+                </button>
+              </a>
             </div>
             {/* <button
               className="bg-pink-500 py-2 px-6 rounded-full shadow-lg hover:bg-pink-600 transition duration-300 font-squid cursor-pointer"
