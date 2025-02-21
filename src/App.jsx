@@ -9,6 +9,8 @@ import Sponsor from "./pages/Sponsor";
 import Contact from "./pages/Contact";
 import SplashScreen from "./components/SplashScreen";
 import FirebaseStats from "./pages/FirebaseStats";
+// import MaleParticipantsOutsideCampus from "./pages/Male";
+import CountDown from "./pages/CountDown";
 
 function App() {
   const [splashScreen, setSplashScreen] = useState(true);
@@ -21,19 +23,19 @@ function App() {
         <SplashScreen onEnd={handleSplashEnd} />
         :
         <BackgroundGradientAnimation>
-          <Navbar />
+          {/* <Navbar /> */}
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/registration" element={<RegistrationForm />} />
-            <Route path="/sponsors" element={<Sponsor />} />
-            <Route path="/schedule" element={<Schedule />} />
-            <Route path="/contact" element={<Contact />} />
+            <Route path="/registration" element={<RegistrationForm/>} />
+            <Route path="/sponsors" element={<Sponsor/>} />
+            <Route path="/schedule" element={<Schedule/>} />
+            <Route path="/contact" element={<Contact/>} />
             <Route path="/admin" element={<FirebaseStats/>} />
+            {/* <Route path="/male" element={<MaleParticipantsOutsideCampus/>}/> */}
+            <Route path="/CountDown" element={<CountDown/>}/>
           </Routes>
         </BackgroundGradientAnimation>
       }
-
-
     </Router>
   );
 }

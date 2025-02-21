@@ -8,7 +8,8 @@ export default {
     extend: {
       fontFamily: {
         squid: ['GameOfSquids', 'sans-serif'], // Add the custom font
-        outfit:['Outfit','sans-serif']
+        outfit:['Outfit','sans-serif'],
+        prize:["squid-prize-money", 'sans-serif']
       },
       colors: {
         // Gradient Colors

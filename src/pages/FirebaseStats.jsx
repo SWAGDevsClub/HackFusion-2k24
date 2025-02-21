@@ -108,7 +108,7 @@ const FirebaseStats = () => {
   }, []);
 
   return (
-    <div className="absolute z-50 w-full h-full hide p-10 bg-white overflow-x-auto">
+    <div className="absolute z-50 w-full h-full hide overflow-scroll p-10 bg-white ">
       <h2 className="text-2xl text-center font-bold mb-6 font-squid tracking-wider">HackFusion Statistics</h2>
       <div className="mb-4">
         <p className="font-outfit">Total Teams: {stats.totalTeams}</p>
