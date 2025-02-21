@@ -17,7 +17,7 @@ export default function Sponsor() {
             <div className='absolute z-30 inset-0 overflow-y-scroll hide py-32' data-aos="fade-up-right">
                 <section className="text-gray-600 body-font" id="sponsor" >
 
-                    <h1 className="text-4xl font-bold title-font mb-10 text-center text-white font-squid transition-all ease-in-out hover:drop-shadow-[0_0_10px_#ff69b4]">Sponsers</h1>
+                    <h1 className="text-4xl font-bold title-font mb-10 text-center text-white font-squid transition-all ease-in-out drop-shadow-[0_0_10px_#ff69b4]">Sponsers</h1>
                     <div className="container px-4 py-24 mx-auto mb-0 max-sm:p-7">
 
                         <h1 className="lg:text-xl max-sm:text-base font-bold title-font mb-2 text-white font-squid">Title Sponser</h1>
@@ -50,23 +50,21 @@ export default function Sponsor() {
                         </div>
                     </div>
                 </section>
-                {/* 
-<section className="text-gray-600 body-font">
 
-<div className="container px-4 mx-auto mb-20 max-sm:p-7">
-  <h1 className="lg:text-xl max-sm:text-base font-bold title-font mb-2 text-white font-squid">Web Hosting Partner</h1>
-  <div className="flex flex-wrap -m-4">
+                <section className="text-gray-600 body-font">
 
-
-    <div className="lg:w-1/4 md:w-1/2 p-4 w-full">
-      <a className="block relative h-50 rounded overflow-hidden">
-        <img alt="ecommerce" className="object-cover object-center w-full h-full block" src="https://dummyimage.com/423x263" />
-      </a>
-
-    </div>
-  </div>
-</div>
-</section> */}
+                    {/* Second Section without vertical gap */}
+                    <div className="container px-4 mx-auto mb-20 max-sm:p-7">
+                        <h1 className="lg:text-xl max-sm:text-base font-bold title-font mb-2 text-white font-squid">Hiring Partner</h1>
+                        <div className="flex flex-wrap -m-4">
+                            <div className="lg:w-1/4 md:w-1/2 p-4 w-full">
+                                <a className="block relative h-50 rounded overflow-hidden" >
+                                    <img alt="ecommerce" className="object-cover object-center w-full h-full block" src="/riskgaurd.png" />
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
 
 
                 {/* <section className="text-gray-600 body-font">
@@ -192,7 +190,7 @@ export default function Sponsor() {
 
                     </div>
                 </section>
-            </div>
+            </div >
             <Footer />
         </>
     )

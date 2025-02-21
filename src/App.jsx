@@ -8,6 +8,7 @@ import { BackgroundGradientAnimation } from "./components/ui/background-gradient
 import Sponsor from "./pages/Sponsor";
 import Contact from "./pages/Contact";
 import SplashScreen from "./components/SplashScreen";
+import FirebaseStats from "./pages/FirebaseStats";
 
 function App() {
   const [splashScreen, setSplashScreen] = useState(true);
@@ -27,6 +28,7 @@ function App() {
             <Route path="/sponsors" element={<Sponsor />} />
             <Route path="/schedule" element={<Schedule />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/admin" element={<FirebaseStats/>} />
           </Routes>
         </BackgroundGradientAnimation>
       }
