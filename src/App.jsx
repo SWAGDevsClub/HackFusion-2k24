@@ -23,7 +23,7 @@ function App() {
         <SplashScreen onEnd={handleSplashEnd} />
         :
         <BackgroundGradientAnimation>
-          {/* <Navbar /> */}
+          <Navbar />
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/registration" element={<RegistrationForm/>} />

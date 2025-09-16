@@ -151,7 +151,7 @@ function Home() {
         <div
           className="absolute inset-0 z-0"
           style={{
-            backgroundImage: "url('/master-mask.png')",
+            backgroundImage: "url('/hero-img.png')",
             backgroundSize: "45%",
             backgroundPosition: "center",
             backgroundRepeat: "no-repeat",
@@ -193,14 +193,14 @@ function Home() {
         <div className="relative z-10 flex flex-col items-center justify-center text-white font-bold px-4 w-full min-h-screen sm:mb-20">
           {/* Floating Images */}
           <img
-            src="/mask.png"
-            alt="Mask"
-            className="h-28 mt-10 lg:block lg:ms-24 md:hidden sm:hidden max-sm:hidden sm:h-30 md:h-40 absolute top-10 left-8 md:left-36 md:top-20"
+            src="/hero-element1.webp"
+            alt="hero 1"
+            className="h-28 mt-10 lg:h-60 lg:block lg:ms-4 md:hidden sm:hidden max-sm:hidden sm:h-30 md:h-40 absolute top-10 left-8 md:left-36 md:top-20"
             data-aos="fade-down-right"
           />
           <img
-            src="/theboss.png"
-            alt="The Boss"
+            src="/hero-element2.png"
+            alt="hero 2"
             className="h-40 lg:ms-36 md:ms-30  sm:h-50 md:h-60 absolute bottom-10 left-4 md:left-16"
             data-aos="fade-up-right"
           />
@@ -211,7 +211,7 @@ function Home() {
             <div className="flex items-center justify-center mb-4">
               <img
                 src="/logon.png"
-                className="h-10 w-auto sm:h-12 md:h-auto md:w-[600px]"
+                className="h-20 w-auto sm:h-12 md:h-auto md:w-[600px]"
                 alt="Logo"
                 data-aos="flip-right"
               />
@@ -250,7 +250,7 @@ function Home() {
             </button> */}
 
             {/* Countdown Timer */}
-            <CountdownTimer targetDate="2025-02-21T00:00:00" />
+            <CountdownTimer targetDate="2026-02-19T00:00:00" />
 
             {/* Logos Section */}
             <div className="flex items-center justify-center gap-4 pt-8 flex-wrap">
@@ -271,7 +271,7 @@ function Home() {
 
           {/* Right-Side Floating Image */}
           <img
-            src="/gaurd.png"
+            src="/hero-element3.png"
             alt="Guard"
             className="h-40 lg:me-32 md:me-30  sm:h-50 md:h-60 absolute bottom-10 right-4 md:right-16"
             data-aos="fade-up-left"
