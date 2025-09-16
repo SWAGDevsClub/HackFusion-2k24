@@ -153,7 +153,7 @@ function Home() {
           style={{
             backgroundImage: "url('/hero-img.png')",
             backgroundSize: "45%",
-            backgroundPosition: "center",
+            backgroundPosition: "48% center",
             backgroundRepeat: "no-repeat",
             opacity: "0.15",
           }}
@@ -283,12 +283,12 @@ function Home() {
               <img
                 className="object-cover object-center rounded h-720 w-600"
                 alt="hero"
-                src="/replaace.png"
+                src="/hero.png"
 
               />
             </div>
             <div className="lg:flex-grow md:w-1/2 lg:pl-24 md:pl-16 flex flex-col md:items-start md:text-left items-center text-center">
-              <h1 className="title-font sm:text-4xl text-3xl mb-4 font-medium text-white font-squid drop-shadow-[0_0_10px_#ff69b4]">
+              <h1 className="title-font sm:text-4xl text-3xl mb-4 font-medium text-white font-squid drop-shadow-[0_0_10px_#ffd700]">
                 A Fusion of Ideas, Code,
                 <br className="hidden lg:inline-block font-squid" />
                 and Excitement!
@@ -299,7 +299,7 @@ function Home() {
               </p>
               <div className="flex justify-center">
                 <a href="/rulebook2025.pdf" target="_blank">
-                  <button className="font-squid inline-flex text-white bg-pink-500  py-2 px-6 focus:outline-none hover:bg-pink-600 rounded text-lg border-0 hover:shadow-[0_0_20px_5px] hover:shadow-pink-800">
+                  <button className="font-squid inline-flex text-[#2a75bb] bg-yellow-500  py-2 px-6 focus:outline-none hover:yellow-400 rounded text-lg border-0 hover:shadow-[0_0_20px_5px] hover:shadow-yellow-400">
                     Rule Book
                   </button>
                 </a>
@@ -310,7 +310,7 @@ function Home() {
         <section className="text-white body-font">
           <div className="container mx-auto flex px-5 py-24 md:flex-row flex-col items-center">
             <div className="lg:flex-grow md:w-1/2 lg:pl-24 md:pl-16 flex flex-col md:items-start md:text-left items-center text-center">
-              <h1 className="title-font sm:text-4xl text-3xl mb-4 font-medium text-white font-squid drop-shadow-[0_0_10px_#ff69b4]">
+              <h1 className="title-font sm:text-4xl text-3xl mb-4 font-medium text-white font-squid drop-shadow-[0_0_10px_#ffd700]">
                 ₹2,00,000 Prize Pool!
                 <br className="hidden lg:inline-block font-squid" />
 
@@ -320,7 +320,7 @@ function Home() {
               </p>
 
               {/* <div className="flex justify-center">
-                <button className="font-squid inline-flex text-white bg-pink-500  py-2 px-6 focus:outline-none hover:bg-pink-600 rounded text-lg border-0 hover:shadow-[0_0_20px_5px] hover:shadow-pink-800">
+                <button className="font-squid inline-flex text-[#2a75bb] bg-yellow-500  py-2 px-6 focus:outline-none hover:yellow-400 rounded text-lg border-0 hover:shadow-[0_0_20px_5px] hover:shadow-yellow-400">
                   Watch here
                 </button>
               </div> */}
@@ -329,7 +329,7 @@ function Home() {
               <img
                 className="object-cover object-center rounded h-720 w-auto"
                 alt="hero"
-                src="/hero.png"
+                src="/hero-img2.png"
               />
             </div>
           </div>
@@ -340,12 +340,12 @@ function Home() {
               <img
                 className="object-cover object-center lg:ml-4 rounded h-[500px] sm:h-[400px] max-sm:h[300px] w-auto"
                 alt="hero"
-                src="/man.png"
+                src="/hero-img3.png"
 
               />
             </div>
             <div className="lg:flex-grow md:w-1/2 lg:pl-24 md:pl-16 flex flex-col md:items-start md:text-left items-center text-center">
-              <h1 className="title-font sm:text-4xl text-3xl mb-4 font-medium text-white font-squid drop-shadow-[0_0_10px_#ff69b4]">
+              <h1 className="title-font sm:text-4xl text-3xl mb-4 font-medium text-white font-squid drop-shadow-[0_0_10px_#ffd700]">
                 Having Any Questions ?
               </h1>
               <p className="mb-8 leading-relaxed font-outfit tracking-wide lg:w-2/3 md:text-sm lg:text-lg">
@@ -355,7 +355,7 @@ function Home() {
               </p>
               <div className="flex justify-center">
                 <a href="/FAQs.pdf" target="_blank">
-                  <button className="font-squid inline-flex text-white bg-pink-500  py-2 px-6 focus:outline-none hover:bg-pink-600 rounded text-lg border-0 hover:shadow-[0_0_20px_5px] hover:shadow-pink-800">
+                  <button className="font-squid inline-flex text-[#2a75bb] bg-yellow-500  py-2 px-6 focus:outline-none hover:yellow-400 rounded text-lg border-0 hover:shadow-[0_0_20px_5px] hover:shadow-yellow-400">
                     FAQs
                   </button>
                 </a>
@@ -368,7 +368,7 @@ function Home() {
             <div className="flex flex-wrap -m-4">
               {/* Card 1 */}
               <div className="lg:p-4 lg:mx-0 sm:p-2 max-sm:p-6 md:mx-16 lg:w-1/3 " >
-                <div className="h-60 bg-[#000957] bg-opacity-75 px-8 pt-8 pb-24 rounded-lg overflow-hidden text-center relative transform transition-transform duration-300 hover:scale-110 hover:shadow-[0_0_30px_10px_rgba(255,105,180,0.8)]">
+                <div className="h-60 bg-[#000957] bg-opacity-75 px-8 pt-8 pb-24 rounded-lg overflow-hidden text-center relative transform transition-transform duration-300 hover:scale-110 hover:shadow-[0_0_30px_10px_rgba(255,203,5,0.5)]">
 
                   <h1 className="title-font sm:text-2xl text-xl font-medium text-white mb-3  font-squid">
                     ₹2,00,000 Prize Pool
@@ -383,7 +383,7 @@ function Home() {
               </div>
               {/* Card 2 */}
               <div className="lg:p-4 lg:mx-0 sm:p-2 max-sm:p-6 md:mx-16 lg:w-1/3 " >
-                <div className="h-60 bg-[#000957] bg-opacity-75 px-4 pt-8 pb-24 rounded-lg overflow-hidden text-center relative transform transition-transform duration-300 hover:scale-110 hover:shadow-[0_0_30px_10px_rgba(255,105,180,0.8)]">
+                <div className="h-60 bg-[#000957] bg-opacity-75 px-4 pt-8 pb-24 rounded-lg overflow-hidden text-center relative transform transition-transform duration-300 hover:scale-110 hover:shadow-[0_0_30px_10px_rgba(255,203,5,0.5)]">
 
                   <h1 className="title-font sm:text-2xl text-xl font-medium text-white mb-3  font-squid">
                     Great Community
@@ -400,7 +400,7 @@ function Home() {
               </div>
               {/* Card 3 */}
               <div className="lg:p-4 lg:mx-0 sm:p-2 max-sm:p-6 md:mx-16 lg:w-1/3 " >
-                <div className="h-60 bg-[#000957] bg-opacity-75 px-8 pt-8 pb-24 rounded-lg overflow-hidden text-center relative transform transition-transform duration-300 hover:scale-110 hover:shadow-[0_0_30px_10px_rgba(255,105,180,0.8)]">
+                <div className="h-60 bg-[#000957] bg-opacity-75 px-8 pt-8 pb-24 rounded-lg overflow-hidden text-center relative transform transition-transform duration-300 hover:scale-110 hover:shadow-[0_0_30px_10px_rgba(255,203,5,0.5)]">
 
                   <h1 className="title-font sm:text-2xl text-xl font-medium text-white mb-3  font-squid">
                     36+ Hours
@@ -559,7 +559,7 @@ function Home() {
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
                   className={`w-1/3 text-center px-6 py-4 font-bold rounded-md shadow-md transition duration-300 ${activeTab === tab.id
-                    ? 'bg-pink-500 text-white'
+                    ? 'bg-yellow-500 text-[#2a75bb]'
                     : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                     }`}
                   role="tab"
@@ -575,7 +575,7 @@ function Home() {
               <ul className="space-y-4 font-outfit tracking-wide ">
                 {scheduleData[activeTab].map((item, index) => (
                   <li key={index} className="flex items-center justify-center gap-10 bg-gray-100 p-4 rounded-lg shadow-lg">
-                    <h4 className="text-pink-500 font-bold">{item.time}</h4>
+                    <h4 className="text-[#2a75bb] font-bold">{item.time}</h4>
                     <div className="flex-1 px-4 items-center justify-center">
                       <h3 className="text-lg font-bold mb-2 max-sm:text-sm">{item.title}</h3>
                       {/* {item.speaker && (
@@ -599,13 +599,13 @@ function Home() {
         <section className="text-white body-font">
 
           <div className="container px-5 py-24 mx-auto">
-            <h1 className="text-4xl font-bold title-font mb-4 text-center  md:ml-6 font-squid transition-all ease-in-out drop-shadow-[0_0_10px_#ff69b4]">Winners</h1>
+            <h1 className="text-4xl font-bold title-font mb-4 text-center  md:ml-6 font-squid transition-all ease-in-out drop-shadow-[0_0_10px_#ffd700]">Winners</h1>
             <p className="text-2xl text-white mb-8 text-center md:ml-6 font-squid">Previous Year</p>
             <div className="flex flex-wrap justify-center md:ml-10">
               {/* Card 1 */}
               <div className="lg:p-4 lg:mx-0 sm:p-2 max-sm:p-2 md:mx-16 lg:w-1/3" >
 
-                <div className=" rounded-lg overflow-hidden transform transition-transform duration-300 hover:scale-105 hover:shadow-[0_0_30px_10px_rgba(255,105,180,0.5)] font-outfit tracking-wide">
+                <div className=" rounded-lg overflow-hidden transform transition-transform duration-300 hover:scale-105 hover:shadow-[0_0_30px_10px_rgba(255,203,5,0.5)] font-outfit tracking-wide">
                   <img
                     className="object-fill object-center rounded h-64 sm:h-72 md:h-80 lg:h-80 w-full"
                     src="/first.jpeg"
@@ -675,7 +675,7 @@ function Home() {
 
         <section className="text-gray-600 body-font" id="sponsor" >
 
-          <h1 className="text-4xl font-bold title-font mb-10 text-center text-white font-squid transition-all ease-in-out drop-shadow-[0_0_10px_#ff69b4]">Sponsers</h1>
+          <h1 className="text-4xl font-bold title-font mb-10 text-center text-white font-squid transition-all ease-in-out drop-shadow-[0_0_10px_#ffd700]">Sponsers</h1>
           <div className="container px-4 py-24 mx-auto mb-0 max-sm:p-7">
 
             <h1 className="lg:text-xl max-sm:text-base font-bold title-font mb-2 text-white font-squid">Title Sponser</h1>
@@ -845,15 +845,15 @@ function Home() {
           </div>
         </section>
         <section className="cta-2 py-12 z-40" >
-          <div className="container mx-auto px-4" >
+          <div className="container mx-auto px-4 pb-10" >
             <div className="flex flex-col md:flex-row justify-center items-center space-y-6 md:space-y-0 md:space-x-8">
 
 
               <div className="w-auto flex justify-center z-40" >
                 <img
-                  src="/dolls.png"
+                  src="/footer-img.png"
                   alt="Rotating Image"
-                  className="shadow-lg h-40 w-40 sm:h-50 sm:w-50 md:h-2/3 md:w-2/3 rounded-full transform transition-transform duration-700 ease-in-out hover:rotate-[360deg] hover:scale-50 hover:shadow-2xl"
+                  className="shadow-lg h-40 w-40 sm:h-50 sm:w-50 md:h-1/3 md:w-1/3 rounded-full transform transition-transform duration-700 ease-in-out hover:rotate-[360deg] hover:scale-50 hover:shadow-2xl"
                 />
               </div>
 
