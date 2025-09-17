@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
@@ -11,6 +11,7 @@ import SplashScreen from "./components/SplashScreen";
 import FirebaseStats from "./pages/FirebaseStats";
 // import MaleParticipantsOutsideCampus from "./pages/Male";
 import CountDown from "./pages/CountDown";
+import Register from "./pages/Register";
 
 function App() {
   const [splashScreen, setSplashScreen] = useState(true);
@@ -27,6 +28,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/registration" element={<RegistrationForm/>} />
+            <Route path="/register" element={<Register/>} />
             <Route path="/sponsors" element={<Sponsor/>} />
             <Route path="/schedule" element={<Schedule/>} />
             <Route path="/contact" element={<Contact/>} />

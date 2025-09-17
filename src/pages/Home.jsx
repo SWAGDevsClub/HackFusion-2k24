@@ -1,6 +1,4 @@
-import React from "react";
 import { useState, useEffect } from 'react';
-import { Link } from "react-router-dom";
 import CountdownTimer from "../components/CountdownTimer";
 import askmeidentity from "/askmeidentity.png"
 import github from "/github.png"
@@ -218,7 +216,7 @@ function Home() {
             </div>
 
             {/* Subtitle */}
-            <p className="text-lg italic mb-6 font-squid" data-aos="fade-right">"Code, Compete, Survive"</p>
+            <p className="text-lg italic mb-6 font-squid" data-aos="fade-right">&quot;Code, Compete, Survive&quot;</p>
 
             {/* Registration Button */}
             <div className="flex flex-col items-center gap-4 justify-center">
@@ -295,7 +293,7 @@ function Home() {
               </h1>
               <p className="mb-8 leading-relaxed font-outfit tracking-wide lg:w-2/3 md:text-sm lg:text-lg">
                 Join us for a thriling Natinal Level Hackathon - HACKFUSION 2.0 !
-                Immerse yourselves in the vibrant atmosphere of the SGGSIEST as you compete alongside 100+ teams. This isn't just about coding; it's a fusion of ideas, code, and excitement. Hackfusion 2.0 offers an incredible opportunity to connect with like-minded developers, mentors, and sponsors!
+                Immerse yourselves in the vibrant atmosphere of the SGGSIEST as you compete alongside 100+ teams. This isn&apos;t just about coding; it&apos;s a fusion of ideas, code, and excitement. Hackfusion 2.0 offers an incredible opportunity to connect with like-minded developers, mentors, and sponsors!
               </p>
               <div className="flex justify-center">
                 <a href="/rulebook2025.pdf" target="_blank">
@@ -316,7 +314,7 @@ function Home() {
 
               </h1>
               <p className="mb-4 leading-relaxed font-outfit tracking-wide lg:w-2/3 md:text-sm lg:text-lg">
-                Prepare to be captivated by a ₹2,00,000 prize pool! This isn't just about the competition; it's about the journey. Embrace the challenge, collaborate with your team, and let your creativity soar. Hackfusion 2.0 promises an unforgettable experience filled with fun, engagement, and the thrill of innovation. So, are you ready to code your way to success? Join us for Hackfusion 2.0 and let the coding begin!
+                Prepare to be captivated by a ₹2,00,000 prize pool! This isn&apos;t just about the competition; it&apos;s about the journey. Embrace the challenge, collaborate with your team, and let your creativity soar. Hackfusion 2.0 promises an unforgettable experience filled with fun, engagement, and the thrill of innovation. So, are you ready to code your way to success? Join us for Hackfusion 2.0 and let the coding begin!
               </p>
 
               {/* <div className="flex justify-center">
@@ -375,7 +373,7 @@ function Home() {
                   </h1>
                   <p className="leading-relaxed mb-3 font-outfit tracking-wide max-sm:text-sm ">
                     Exciting awards and gifts for the best solutions of problem
-                    statement!! Don't miss this chance to showcase your talents
+                    statement!! Don&apos;t miss this chance to showcase your talents
                     and be recognized for the best solutions.
                   </p>
 
@@ -391,7 +389,7 @@ function Home() {
                   <p className="leading-relaxed mb-3 font-outfit tracking-wide max-sm:text-sm">
                     Embark on a journey of collaboration and knowledge exchange
                     as you seize networking opportunities with fellow
-                    enthusiasts and industry experts. Don't just win an award,
+                    enthusiasts and industry experts. Don&apos;t just win an award,
                     create lasting connections that propel your success to new
                     heights!
                   </p>
@@ -462,8 +460,7 @@ function Home() {
 
           {/* Package 1 */}
           <div className="w-full md:w-1/2 lg:w-1/3  max-sm:p-6" >
-            <div className=" shadow-lg rounded-lg p-6 bg-gradient-to-t from-purple-900 via-pink-800 to-pink-900 hover:shadow-[0_0_30px_10px_rgba(255,105,180,0.5)]"
-            >
+          <div className="shadow-lg rounded-lg p-6 bg-gradient-to-t from-yellow-700 via-yellow-600 to-yellow-500 hover:shadow-[0_0_30px_10px_rgba(255,255,0,0.5)]">
               {/* Price Header */}
               <div className="flex flex-col items-center mb-4 ">
                 <div className="text-pink-500 text-5xl ">
@@ -882,7 +879,7 @@ function Home() {
             </div>
           </div>
           <footer className="  z-20 inset-0 py-6 bg-transparent flex justify-center items-end text-center text-white">
-            <p className="text-sm font-squid">© 2025 HackFusion. All Rights Reserved.</p>
+            <p className="text-sm font-squid">© 2026 HackFusion. All Rights Reserved.</p>
           </footer>
         </section>
       </div>
