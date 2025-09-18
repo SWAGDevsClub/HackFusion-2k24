@@ -1,8 +1,10 @@
-import { useState } from 'react';
+import { useState } from "react";
 
 function Register() {
-  const [activeTab, setActiveTab] = useState('lead');
+  const [teamSize, setTeamSize] = useState(4); // Default to 4 members
+  const [activeTab, setActiveTab] = useState("teamSize");
   const [formData, setFormData] = useState({
+    teamSize: 4,
     abstract: "",
     city: "Gudivada ",
     college: "VKR VNB AGK COLLEGE OF ENGINEERING",
@@ -12,30 +14,42 @@ function Register() {
     leadGender: "F",
     leadMobile: "6302962225",
     leadName: "PARASU DHANA NAGA KRISHNA SRI",
+    leadPwd: "no",
     m1Email: "neelapalaharshamitra@gmail.com",
     m1Gender: "M",
     m1Mobile: "9704164951",
     m1Name: "NEELAPALA HARSHA MITRA",
+    m1Pwd: "no",
     m2Email: "jujjuvarapumahalakshmi471@gmail.com",
     m2Gender: "F",
     m2Mobile: "7330836782",
     m2Name: "JUJJUVARAPU MAHA LAKSHMI",
+    m2Pwd: "no",
     m3Email: "gunashekar3148@gmail.com",
     m3Gender: "M",
     m3Mobile: "7386402422",
+    m3Name: "",
+    m3Pwd: "no",
     leadImage: null,
     m1Image: null,
     m2Image: null,
-    m3Image: null
+    m3Image: null,
+    paymentScreenshot: null,
   });
 
   const handleInputChange = (e) => {
     const { name, value, files } = e.target;
     if (files) {
-      setFormData(prev => ({ ...prev, [name]: files[0] }));
+      setFormData((prev) => ({ ...prev, [name]: files[0] }));
     } else {
-      setFormData(prev => ({ ...prev, [name]: value }));
+      setFormData((prev) => ({ ...prev, [name]: value }));
     }
+  };
+
+  const handleTeamSizeChange = (size) => {
+    setTeamSize(size);
+    setFormData((prev) => ({ ...prev, teamSize: size }));
+    setActiveTab("lead");
   };
 
   const handleSubmit = (e) => {
@@ -45,35 +59,41 @@ function Register() {
   };
 
   const tabs = [
-    { id: 'lead', label: 'Team Lead', color: 'bg-red-600' },
-    { id: 'member1', label: 'Member 1', color: 'bg-blue-600' },
-    { id: 'member2', label: 'Member 2', color: 'bg-yellow-600' },
-    { id: 'member3', label: 'Member 3', color: 'bg-green-600' },
-    { id: 'team', label: 'Team Info', color: 'bg-purple-600' },
-    { id: 'abstract', label: 'Abstract', color: 'bg-orange-600' }
+    { id: "teamSize", label: "Team Size", color: "bg-gray-600" },
+    { id: "lead", label: "Team Lead", color: "bg-red-600" },
+    { id: "member1", label: "Member 1", color: "bg-blue-600" },
+    { id: "member2", label: "Member 2", color: "bg-yellow-600" },
+    ...(teamSize === 4
+      ? [{ id: "member3", label: "Member 3", color: "bg-green-600" }]
+      : []),
+    { id: "team", label: "Team Info", color: "bg-purple-600" },
+    { id: "abstract", label: "Abstract", color: "bg-orange-600" },
+    { id: "payment", label: "Payment", color: "bg-pink-600" },
   ];
 
+  const isLastTab = activeTab === tabs[tabs.length - 1].id;
+
   return (
-    <div className="absolute py-32 z-30 inset-0 pb-6">
+    <div className="fixed inset-0 z-30 overflow-y-auto py-32 pb-6 m-5 [&::-webkit-scrollbar]:hidden">
       <div className="max-w-4xl mx-auto bg-gray-800/70 rounded-xl shadow-2xl overflow-hidden border border-gray-700">
         {/* Header */}
         <div className="bg-gray-900/70 py-4 px-6 text-center relative border-b border-gray-700">
           <h1 className="text-3xl font-bold text-yellow-400 drop-shadow-md">
-            POKÉMON REGISTRATION
+            HACKFUSION REGISTRATION
           </h1>
           <p className="text-gray-300 mt-1">Gotta catch &apos;em all!</p>
         </div>
 
         {/* Tabs */}
-        <div className="flex flex-wrap bg-gray-900/70 border-b border-gray-700">
+        <div className="flex overflow-x-auto bg-gray-900/70 border-b border-gray-700 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
           {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`px-6 py-3 font-semibold transition-all duration-300 ${
+              className={`flex-shrink-0 px-6 py-3 font-semibold transition-all duration-300 ${
                 activeTab === tab.id
                   ? `${tab.color} text-white`
-                  : 'bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white'
+                  : "bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white"
               } rounded-t-lg mt-1 ms-1 me-1`}
             >
               {tab.label}
@@ -83,13 +103,55 @@ function Register() {
 
         {/* Form Content */}
         <form onSubmit={handleSubmit} className="p-6">
+          {/* Team Size Selection Tab */}
+          {activeTab === "teamSize" && (
+            <div className="space-y-6 text-center">
+              <h2 className="text-2xl font-bold text-gray-300 mb-6">
+                Select Team Size
+              </h2>
+              <div className="flex justify-center gap-8">
+                <button
+                  type="button"
+                  onClick={() => handleTeamSizeChange(3)}
+                  className={`px-8 py-4 rounded-lg transition-all duration-300 ${
+                    teamSize === 3
+                      ? "bg-blue-600 text-white shadow-lg"
+                      : "bg-gray-700 text-gray-300 hover:bg-gray-600"
+                  }`}
+                >
+                  <span className="text-xl font-bold">3 Members</span>
+                  <p className="text-sm mt-2">Team Lead + 2 Members</p>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleTeamSizeChange(4)}
+                  className={`px-8 py-4 rounded-lg transition-all duration-300 ${
+                    teamSize === 4
+                      ? "bg-blue-600 text-white shadow-lg"
+                      : "bg-gray-700 text-gray-300 hover:bg-gray-600"
+                  }`}
+                >
+                  <span className="text-xl font-bold">4 Members</span>
+                  <p className="text-sm mt-2">Team Lead + 3 Members</p>
+                </button>
+              </div>
+              <p className="text-gray-400 mt-6">
+                Select your team size to continue with registration
+              </p>
+            </div>
+          )}
+
           {/* Lead Tab */}
-          {activeTab === 'lead' && (
+          {activeTab === "lead" && (
             <div className="space-y-4">
-              <h2 className="text-2xl font-bold text-red-400 mb-4">Team Lead Information</h2>
+              <h2 className="text-2xl font-bold text-red-400 mb-4">
+                Team Lead Information
+              </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-1">Full Name</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">
+                    Full Name
+                  </label>
                   <input
                     type="text"
                     name="leadName"
@@ -99,7 +161,9 @@ function Register() {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-1">Email</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">
+                    Email
+                  </label>
                   <input
                     type="email"
                     name="leadEmail"
@@ -109,7 +173,9 @@ function Register() {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-1">Mobile</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">
+                    Mobile
+                  </label>
                   <input
                     type="tel"
                     name="leadMobile"
@@ -119,7 +185,9 @@ function Register() {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-1">Gender</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">
+                    Gender
+                  </label>
                   <select
                     name="leadGender"
                     value={formData.leadGender}
@@ -131,8 +199,24 @@ function Register() {
                     <option value="O">Other</option>
                   </select>
                 </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">
+                    PWD (Person with Disability)
+                  </label>
+                  <select
+                    name="leadPwd"
+                    value={formData.leadPwd}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                  >
+                    <option value="no">No</option>
+                    <option value="yes">Yes</option>
+                  </select>
+                </div>
                 <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-300 mb-1">Photo</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">
+                    Photo
+                  </label>
                   <input
                     type="file"
                     name="leadImage"
@@ -146,12 +230,16 @@ function Register() {
           )}
 
           {/* Member 1 Tab */}
-          {activeTab === 'member1' && (
+          {activeTab === "member1" && (
             <div className="space-y-4">
-              <h2 className="text-2xl font-bold text-blue-400 mb-4">Member 1 Information</h2>
+              <h2 className="text-2xl font-bold text-blue-400 mb-4">
+                Member 1 Information
+              </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-1">Full Name</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">
+                    Full Name
+                  </label>
                   <input
                     type="text"
                     name="m1Name"
@@ -161,7 +249,9 @@ function Register() {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-1">Email</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">
+                    Email
+                  </label>
                   <input
                     type="email"
                     name="m1Email"
@@ -171,7 +261,9 @@ function Register() {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-1">Mobile</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">
+                    Mobile
+                  </label>
                   <input
                     type="tel"
                     name="m1Mobile"
@@ -181,7 +273,9 @@ function Register() {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-1">Gender</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">
+                    Gender
+                  </label>
                   <select
                     name="m1Gender"
                     value={formData.m1Gender}
@@ -193,8 +287,24 @@ function Register() {
                     <option value="O">Other</option>
                   </select>
                 </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">
+                    PWD (Person with Disability)
+                  </label>
+                  <select
+                    name="m1Pwd"
+                    value={formData.m1Pwd}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  >
+                    <option value="no">No</option>
+                    <option value="yes">Yes</option>
+                  </select>
+                </div>
                 <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-300 mb-1">Photo</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">
+                    Photo
+                  </label>
                   <input
                     type="file"
                     name="m1Image"
@@ -208,12 +318,16 @@ function Register() {
           )}
 
           {/* Member 2 Tab */}
-          {activeTab === 'member2' && (
+          {activeTab === "member2" && (
             <div className="space-y-4">
-              <h2 className="text-2xl font-bold text-yellow-400 mb-4">Member 2 Information</h2>
+              <h2 className="text-2xl font-bold text-yellow-400 mb-4">
+                Member 2 Information
+              </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-1">Full Name</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">
+                    Full Name
+                  </label>
                   <input
                     type="text"
                     name="m2Name"
@@ -223,7 +337,9 @@ function Register() {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-1">Email</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">
+                    Email
+                  </label>
                   <input
                     type="email"
                     name="m2Email"
@@ -233,7 +349,9 @@ function Register() {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-1">Mobile</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">
+                    Mobile
+                  </label>
                   <input
                     type="tel"
                     name="m2Mobile"
@@ -243,7 +361,9 @@ function Register() {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-1">Gender</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">
+                    Gender
+                  </label>
                   <select
                     name="m2Gender"
                     value={formData.m2Gender}
@@ -255,8 +375,24 @@ function Register() {
                     <option value="O">Other</option>
                   </select>
                 </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">
+                    PWD (Person with Disability)
+                  </label>
+                  <select
+                    name="m2Pwd"
+                    value={formData.m2Pwd}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+                  >
+                    <option value="no">No</option>
+                    <option value="yes">Yes</option>
+                  </select>
+                </div>
                 <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-300 mb-1">Photo</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">
+                    Photo
+                  </label>
                   <input
                     type="file"
                     name="m2Image"
@@ -269,13 +405,17 @@ function Register() {
             </div>
           )}
 
-          {/* Member 3 Tab */}
-          {activeTab === 'member3' && (
+          {/* Member 3 Tab - only shown if team size is 4 */}
+          {activeTab === "member3" && teamSize === 4 && (
             <div className="space-y-4">
-              <h2 className="text-2xl font-bold text-green-400 mb-4">Member 3 Information</h2>
+              <h2 className="text-2xl font-bold text-green-400 mb-4">
+                Member 3 Information
+              </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-1">Full Name</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">
+                    Full Name
+                  </label>
                   <input
                     type="text"
                     name="m3Name"
@@ -285,7 +425,9 @@ function Register() {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-1">Email</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">
+                    Email
+                  </label>
                   <input
                     type="email"
                     name="m3Email"
@@ -295,7 +437,9 @@ function Register() {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-1">Mobile</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">
+                    Mobile
+                  </label>
                   <input
                     type="tel"
                     name="m3Mobile"
@@ -305,7 +449,9 @@ function Register() {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-1">Gender</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">
+                    Gender
+                  </label>
                   <select
                     name="m3Gender"
                     value={formData.m3Gender}
@@ -317,8 +463,24 @@ function Register() {
                     <option value="O">Other</option>
                   </select>
                 </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">
+                    PWD (Person with Disability)
+                  </label>
+                  <select
+                    name="m3Pwd"
+                    value={formData.m3Pwd}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  >
+                    <option value="no">No</option>
+                    <option value="yes">Yes</option>
+                  </select>
+                </div>
                 <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-300 mb-1">Photo</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">
+                    Photo
+                  </label>
                   <input
                     type="file"
                     name="m3Image"
@@ -332,12 +494,16 @@ function Register() {
           )}
 
           {/* Team Info Tab */}
-          {activeTab === 'team' && (
+          {activeTab === "team" && (
             <div className="space-y-4">
-              <h2 className="text-2xl font-bold text-purple-400 mb-4">Team Information</h2>
+              <h2 className="text-2xl font-bold text-purple-400 mb-4">
+                Team Information
+              </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-1">College</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">
+                    College
+                  </label>
                   <input
                     type="text"
                     name="college"
@@ -347,7 +513,9 @@ function Register() {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-1">City</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">
+                    City
+                  </label>
                   <input
                     type="text"
                     name="city"
@@ -357,7 +525,9 @@ function Register() {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-1">Confirm Email</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">
+                    Confirm Email
+                  </label>
                   <input
                     type="email"
                     name="confirmEmail"
@@ -367,7 +537,9 @@ function Register() {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-1">Coupon Code</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">
+                    Coupon Code
+                  </label>
                   <input
                     type="text"
                     name="coupon"
@@ -381,11 +553,15 @@ function Register() {
           )}
 
           {/* Abstract Tab */}
-          {activeTab === 'abstract' && (
+          {activeTab === "abstract" && (
             <div className="space-y-4">
-              <h2 className="text-2xl font-bold text-orange-400 mb-4">Abstract Submission</h2>
+              <h2 className="text-2xl font-bold text-orange-400 mb-4">
+                Abstract Submission
+              </h2>
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-1">Abstract</label>
+                <label className="block text-sm font-medium text-gray-300 mb-1">
+                  Abstract
+                </label>
                 <textarea
                   name="abstract"
                   value={formData.abstract}
@@ -398,46 +574,102 @@ function Register() {
             </div>
           )}
 
+          {/* Payment Tab */}
+          {activeTab === "payment" && (
+            <div className="space-y-6">
+              <h2 className="text-2xl font-bold text-pink-400 mb-4">
+                Payment Information
+              </h2>
+
+              <div className="bg-gray-900/70 p-6 rounded-lg border border-gray-700">
+                <h3 className="text-xl font-bold text-yellow-400 mb-4">
+                  Payment Instructions
+                </h3>
+                <div className="space-y-3 text-gray-300">
+                  <p>1. Scan the QR code below using your UPI payment app</p>
+                  <p>2. Pay the registration fee of ₹500 per team</p>
+                  <p>3. Take a screenshot of the successful payment</p>
+                  <p>4. Upload the screenshot below</p>
+                </div>
+
+                <div className="flex flex-col md:flex-row items-center justify-between mt-6 gap-6">
+                  <div className="bg-white p-4 rounded-lg shadow-lg">
+                    {/* Replace with your actual UPI QR code image */}
+                    <div className="w-48 h-48 bg-gray-300 flex items-center justify-center text-gray-600">
+                      UPI QR Code
+                    </div>
+                    <p className="text-center font-semibold mt-2 text-black">
+                      Scan to Pay
+                    </p>
+                  </div>
+
+                  <div className="flex-1">
+                    <label className="block text font-medium text-gray-300 mb-2">
+                      Payment Screenshot
+                    </label>
+                    <input
+                      type="file"
+                      name="paymentScreenshot"
+                      onChange={handleInputChange}
+                      accept="image/*"
+                      className="w-full px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent file:mr-4 file:py-2 file:px-4 file:rounded-full border-0 file:text-sm file:font-semibold file:bg-pink-500 file:text-white hover:file:bg-pink-600"
+                    />
+                    <p className="text-sm text-gray-400 mt-2">
+                      Upload a screenshot of your successful payment
+                    </p>
+
+                    {/* Submit Button */}
+                    {isLastTab && (
+                      <div className="text-center mt-6">
+                        <button
+                          type="submit"
+                          className="px-8 py-3 bg-gradient-to-r from-red-600 to-yellow-600 text-white font-bold rounded-lg hover:from-red-500 hover:to-yellow-500 transition-all"
+                        >
+                          Submit Registration
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Navigation Buttons */}
           <div className="flex justify-between mt-8">
             <button
               type="button"
               onClick={() => {
-                const currentIndex = tabs.findIndex(tab => tab.id === activeTab);
+                const currentIndex = tabs.findIndex(
+                  (tab) => tab.id === activeTab
+                );
                 if (currentIndex > 0) setActiveTab(tabs[currentIndex - 1].id);
               }}
               className="px-6 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-colors"
             >
               Previous
             </button>
-            
-            <button
-              type="button"
-              onClick={() => {
-                const currentIndex = tabs.findIndex(tab => tab.id === activeTab);
-                if (currentIndex < tabs.length - 1) setActiveTab(tabs[currentIndex + 1].id);
-              }}
-              className="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-500 transition-colors"
-            >
-              Next
-            </button>
-          </div>
 
-          {/* Submit Button */}
-          {activeTab === 'abstract' && (
-            <div className="text-center mt-6">
+            {!isLastTab && (
               <button
-                type="submit"
-                className="px-8 py-3 bg-gradient-to-r from-red-600 to-yellow-600 text-white font-bold rounded-lg hover:from-red-500 hover:to-yellow-500 transition-all"
+                type="button"
+                onClick={() => {
+                  const currentIndex = tabs.findIndex(
+                    (tab) => tab.id === activeTab
+                  );
+                  if (currentIndex < tabs.length - 1)
+                    setActiveTab(tabs[currentIndex + 1].id);
+                }}
+                className="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-500 transition-colors"
               >
-                Submit Registration
+                Next
               </button>
-            </div>
-          )}
+            )}
+          </div>
         </form>
       </div>
     </div>
   );
 }
 
-export default Register; 
+export default Register;

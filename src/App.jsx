@@ -12,6 +12,7 @@ import FirebaseStats from "./pages/FirebaseStats";
 // import MaleParticipantsOutsideCampus from "./pages/Male";
 import CountDown from "./pages/CountDown";
 import Register from "./pages/Register";
+import Dashboard from "./pages/Dashboard";
 
 function App() {
   const [splashScreen, setSplashScreen] = useState(true);
@@ -28,6 +29,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/registration" element={<RegistrationForm/>} />
+            <Route path="/dashboard" element={<Dashboard/>} />
             <Route path="/register" element={<Register/>} />
             <Route path="/sponsors" element={<Sponsor/>} />
             <Route path="/schedule" element={<Schedule/>} />
