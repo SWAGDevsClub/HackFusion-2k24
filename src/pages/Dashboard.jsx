@@ -2,7 +2,7 @@ import { useState } from "react";
 
 function Dashboard() {
   const [teamData, setTeamData] = useState({
-    teamSize: 4,
+    teamSize: 3,
     abstract: "Our project focuses on developing an AI-powered solution for sustainable agriculture...",
     city: "Gudivada",
     college: "VKR VNB AGK COLLEGE OF ENGINEERING",
@@ -62,7 +62,7 @@ function Dashboard() {
     <div className="fixed inset-0 z-30 overflow-y-auto py-32 pb-6 ms-5 me-5 [&::-webkit-scrollbar]:hidden">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
-        <div className="bg-gray-800/70 rounded-xl p-6 mb-6 border border-gray-700 shadow-lg">
+        <div className="bg-gray-800/70 rounded-xl p-6 mb-6 border border-gray-700 shadow-lg border-yellow-500 border-4">
           <h1 className="text-4xl font-bold text-yellow-400 text-center mb-2">TEAM DASHBOARD</h1>
           <div className="flex flex-wrap justify-between items-center mt-4">
             <div>
@@ -82,7 +82,7 @@ function Dashboard() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Team Information Card */}
-          <div className="bg-gray-800/70 rounded-xl p-6 border border-gray-700 shadow-lg">
+          <div className="bg-gray-800/70 rounded-xl p-6 border border-gray-700 shadow-lg border-yellow-500 border-4">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-bold text-white">Team Information</h2>
               <button
@@ -134,7 +134,7 @@ function Dashboard() {
           </div>
 
           {/* Team Lead Card */}
-          <div className="bg-gray-800/70 rounded-xl p-6 border border-gray-700 shadow-lg">
+          <div className="bg-gray-800/70 rounded-xl p-6 border border-gray-700 shadow-lg border-yellow-500 border-4">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-bold text-white">Team Lead</h2>
               <button
@@ -239,7 +239,7 @@ function Dashboard() {
           </div>
 
           {/* Member 1 Card */}
-          <div className="bg-gray-800/70 rounded-xl p-6 border border-gray-700 shadow-lg">
+          <div className="bg-gray-800/70 rounded-xl p-6 border border-gray-700 shadow-lg border-yellow-500 border-4">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-bold text-white">Member 1</h2>
               <button
@@ -344,7 +344,7 @@ function Dashboard() {
           </div>
 
           {/* Member 2 Card */}
-          <div className="bg-gray-800/70 rounded-xl p-6 border border-gray-700 shadow-lg">
+          <div className="bg-gray-800/70 rounded-xl p-6 border border-gray-700 shadow-lg border-yellow-500 border-4">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-bold text-white">Member 2</h2>
               <button
@@ -450,7 +450,7 @@ function Dashboard() {
 
           {/* Member 3 Card (if team size is 4) */}
           {teamData.teamSize === 4 && (
-            <div className="bg-gray-800/70 rounded-xl p-6 border border-gray-700 shadow-lg">
+            <div className="bg-gray-800/70 rounded-xl p-6 border border-gray-700 shadow-lg border-yellow-500 border-4">
               <div className="flex justify-between items-center mb-4">
                 <h2 className="text-xl font-bold text-white">Member 3</h2>
                 <button
@@ -556,7 +556,7 @@ function Dashboard() {
           )}
 
           {/* Abstract Card */}
-          <div className="bg-gray-800/70 rounded-xl p-6 border border-gray-700 shadow-lg lg:col-span-2">
+          <div className="bg-gray-800/70 rounded-xl p-6 border border-gray-700 shadow-lg lg:col-span-2  border-yellow-500 border-4">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-bold text-white">Project Abstract</h2>
               <button

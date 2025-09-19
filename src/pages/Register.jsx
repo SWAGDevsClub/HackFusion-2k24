@@ -75,13 +75,18 @@ function Register() {
 
   return (
     <div className="fixed inset-0 z-30 overflow-y-auto py-32 pb-6 m-5 [&::-webkit-scrollbar]:hidden">
-      <div className="max-w-4xl mx-auto bg-gray-800/70 rounded-xl shadow-2xl overflow-hidden border border-gray-700">
+      <div className="max-w-4xl mx-auto bg-gray-800/80 rounded-xl shadow-2xl overflow-hidden border border-gray-700 border-yellow-500 border-4 ">
         {/* Header */}
         <div className="bg-gray-900/70 py-4 px-6 text-center relative border-b border-gray-700">
-          <h1 className="text-3xl font-bold text-yellow-400 drop-shadow-md">
-            HACKFUSION REGISTRATION
-          </h1>
-          <p className="text-gray-300 mt-1">Gotta catch &apos;em all!</p>
+          {/* Decorative elements */}
+          <div className="absolute -top-4 -left-4 w-16 h-16 bg-red-600 rounded-full opacity-30"></div>
+          {/* <div className="absolute -bottom-4 -right-4 w-20 h-20 bg-blue-600 rounded-full opacity-30"></div> */}
+          <img
+              src="/logon.png"
+              className="h-10 w-auto sm:h-5 md:h-auto md:w-[250px] ms-auto  me-auto items-center justify-center"
+              alt="Logo"
+              data-aos="flip-right"
+            />
         </div>
 
         {/* Tabs */}

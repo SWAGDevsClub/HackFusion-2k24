@@ -13,6 +13,7 @@ import FirebaseStats from "./pages/FirebaseStats";
 import CountDown from "./pages/CountDown";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
+import Login from "./pages/Login";
 
 function App() {
   const [splashScreen, setSplashScreen] = useState(true);
@@ -29,6 +30,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/registration" element={<RegistrationForm/>} />
+            <Route path="/login" element={<Login/>} />
             <Route path="/dashboard" element={<Dashboard/>} />
             <Route path="/register" element={<Register/>} />
             <Route path="/sponsors" element={<Sponsor/>} />
