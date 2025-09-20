@@ -374,10 +374,7 @@ function Dashboard() {
     img.src = selectedImages[memberType];
   };
 
-  const handleCropMouseDown = (memberType, e, corner) => {
-    e.preventDefault();
-    e.stopPropagation();
-
+  const handleCropStart = (memberType, clientX, clientY, corner) => {
     setIsDragging((prev) => ({
       ...prev,
       [memberType]: corner,
@@ -386,8 +383,8 @@ function Dashboard() {
     setDragStart((prev) => ({
       ...prev,
       [memberType]: {
-        x: e.clientX,
-        y: e.clientY,
+        x: clientX,
+        y: clientY,
         // Store initial crop position and size for resize operations
         initialX: cropPosition[memberType].x,
         initialY: cropPosition[memberType].y,
@@ -396,17 +393,29 @@ function Dashboard() {
     }));
   };
 
-  const handleCropMouseMove = (memberType, e) => {
+  const handleCropMouseDown = (memberType, e, corner) => {
+    e.preventDefault();
+    e.stopPropagation();
+    handleCropStart(memberType, e.clientX, e.clientY, corner);
+  };
+
+  const handleCropTouchStart = (memberType, e, corner) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const touch = e.touches[0];
+    handleCropStart(memberType, touch.clientX, touch.clientY, corner);
+  };
+
+  const handleCropMove = (memberType, clientX, clientY) => {
     const corner = isDragging[memberType];
     if (!corner) return;
 
-    e.preventDefault();
     const container = cropContainerRefs[memberType].current;
     if (!container) return;
 
     const rect = container.getBoundingClientRect();
-    const deltaX = e.clientX - dragStart[memberType].x;
-    const deltaY = e.clientY - dragStart[memberType].y;
+    const deltaX = clientX - dragStart[memberType].x;
+    const deltaY = clientY - dragStart[memberType].y;
 
     if (corner === "move") {
       // Move the crop area
@@ -449,11 +458,34 @@ function Dashboard() {
     }
   };
 
-  const handleCropMouseUp = (memberType) => {
+  const handleCropMouseMove = (memberType, e) => {
+    const corner = isDragging[memberType];
+    if (!corner) return;
+    e.preventDefault();
+    handleCropMove(memberType, e.clientX, e.clientY);
+  };
+
+  const handleCropTouchMove = (memberType, e) => {
+    const corner = isDragging[memberType];
+    if (!corner) return;
+    e.preventDefault();
+    const touch = e.touches[0];
+    handleCropMove(memberType, touch.clientX, touch.clientY);
+  };
+
+  const handleCropEnd = (memberType) => {
     setIsDragging((prev) => ({
       ...prev,
       [memberType]: null,
     }));
+  };
+
+  const handleCropMouseUp = (memberType) => {
+    handleCropEnd(memberType);
+  };
+
+  const handleCropTouchEnd = (memberType) => {
+    handleCropEnd(memberType);
   };
 
   // Update the cropImageToSquare function to use manual crop data if available
@@ -747,20 +779,23 @@ function Dashboard() {
               <div className="space-y-3">
                 <div
                   ref={cropContainerRefs[memberType]}
-                  className="relative w-64 h-64 mx-auto border border-gray-600 overflow-hidden"
+                  className="relative w-64 h-64 mx-auto border border-gray-600 overflow-hidden select-none"
                   onMouseMove={(e) => handleCropMouseMove(memberType, e)}
                   onMouseUp={() => handleCropMouseUp(memberType)}
-                  onMouseLeave={() => handleCropMouseUp(memberType)} // Stop dragging when mouse leaves
+                  onMouseLeave={() => handleCropMouseUp(memberType)}
+                  onTouchMove={(e) => handleCropTouchMove(memberType, e)}
+                  onTouchEnd={() => handleCropTouchEnd(memberType)}
                 >
                   <img
                     src={selectedImage}
                     alt="Crop preview"
                     className="w-full h-full object-contain pointer-events-none"
+                    style={{ touchAction: 'none' }}
                   />
                   {/* Crop overlay */}
 
                   <div
-                    className="absolute border-2 border-white shadow-lg"
+                    className="absolute border-2 border-white shadow-lg select-none"
                     style={{
                       left: cropPosition[memberType].x,
                       top: cropPosition[memberType].y,
@@ -768,21 +803,30 @@ function Dashboard() {
                       height: cropSize[memberType],
                       boxShadow: "0 0 0 9999px rgba(0, 0, 0, 0.5)",
                       cursor: "move",
+                      touchAction: 'none'
                     }}
                     onMouseDown={(e) =>
                       handleCropMouseDown(memberType, e, "move")
                     }
+                    onTouchStart={(e) =>
+                      handleCropTouchStart(memberType, e, "move")
+                    }
                   >
                     {/* Resize handle in bottom-right corner - positioned inside the crop area */}
                     <div
-                      className="absolute bottom-0 right-0 w-4 h-4 bg-white cursor-nwse-resize"
+                      className="absolute bottom-0 right-0 w-6 h-6 bg-white cursor-nwse-resize select-none"
                       style={{
                         transform: "translate(25%, 25%)", // Position it slightly inside the corner
                         borderRadius: "2px",
+                        touchAction: 'none'
                       }}
                       onMouseDown={(e) => {
                         e.stopPropagation(); // Prevent triggering the move event
                         handleCropMouseDown(memberType, e, "resize");
+                      }}
+                      onTouchStart={(e) => {
+                        e.stopPropagation(); // Prevent triggering the move event
+                        handleCropTouchStart(memberType, e, "resize");
                       }}
                     ></div>
                   </div>
@@ -835,7 +879,7 @@ function Dashboard() {
       </div>
     );
   }
-  
+
   return (
     <div className="fixed inset-0 z-30 overflow-y-auto py-32 pb-6 ms-5 me-5 [&::-webkit-scrollbar]:hidden">
       {/* Hidden canvas for image processing */}
