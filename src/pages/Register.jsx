@@ -948,7 +948,7 @@ function Register() {
                 </h3>
                 <div className="space-y-3 text-gray-300">
                   <p>1. Scan the QR code below using your UPI payment app</p>
-                  <p>2. Pay the registration fee of ₹500 per team</p>
+                  <p>2. Pay the registration fee of ₹749 per team</p>
                   <p>3. Take a screenshot of the successful payment</p>
                   <p>4. Upload the screenshot below</p>
                 </div>
@@ -958,11 +958,11 @@ function Register() {
                     <div className="w-48 h-48 bg-gray-300 flex items-center justify-center text-gray-600 rounded-lg">
                       <div className="text-center">
                         <p className="font-bold">UPI QR Code</p>
-                        <p className="text-sm mt-2">Scan to Pay ₹500</p>
+                        <p className="text-sm mt-2">Scan to Pay ₹749</p>
                       </div>
                     </div>
                     <p className="text-center font-semibold mt-2 text-black">
-                      Registration Fee: ₹500
+                      Registration Fee: ₹749
                     </p>
                   </div>
 
