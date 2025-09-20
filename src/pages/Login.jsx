@@ -1,4 +1,6 @@
 import { useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
   const [loginData, setLoginData] = useState({
@@ -6,6 +8,10 @@ function Login() {
     password: "",
     rememberMe: false,
   });
+  const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+
+  const navigate = useNavigate();
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -15,33 +21,58 @@ function Login() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle login logic here
-    console.log("Login attempted with:", loginData);
-    // In a real app, you would make an API call here
-    alert(`Login attempted with email: ${loginData.email}`);
+    setLoading(true);
+    setErrorMsg("");
+
+    try {
+      const formData = new FormData();
+      formData.append("email", loginData.email);
+      formData.append("password", loginData.password);
+
+      const response = await axios.post(
+        "https://swagserver.co.in/hackfusion/login.php",
+        formData,
+        { headers: { "Content-Type": "multipart/form-data" } }
+      );
+
+      if (response.data.success) {
+        // Save token & user data in localStorage/session
+        localStorage.setItem("user", JSON.stringify(response.data.data));
+        localStorage.setItem("authToken", response.data.data.token);
+      
+
+        alert("Login successful!");
+        navigate("/dashboard");
+      } else {
+        setErrorMsg(response.data.message || "Login failed");
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      setErrorMsg("Something went wrong. Try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleForgotPassword = (e) => {
     e.preventDefault();
-    // Handle forgot password logic
     alert("Forgot password functionality would go here");
   };
 
   const handleRegister = (e) => {
     e.preventDefault();
-    // Handle registration redirect
     alert("Registration functionality would go here");
   };
 
   return (
     <div className="fixed inset-0 z-30 min-h-screen flex items-center justify-center p-4">
       <div className="relative w-full max-w-md">
-        {/* Pokeball decoration - adjusted for dark theme */}
+        {/* Pokeball decoration */}
         <div className="absolute -bottom-20 -left-10 w-24 h-24">
           <div className="relative w-full h-full">
-            <div className="absolute w-full h-full bg-white rounded-full border-4 border-black" ></div>
+            <div className="absolute w-full h-full bg-white rounded-full border-4 border-black"></div>
             <div className="absolute top-1/2 w-full h-4 bg-black -translate-y-1/2"></div>
             <div className="absolute top-1/2 left-1/2 w-8 h-8 bg-white rounded-full border-4 border-black -translate-x-1/2 -translate-y-1/2"></div>
           </div>
@@ -145,28 +176,35 @@ function Login() {
               </label>
             </div>
 
+            {errorMsg && (
+              <p className="text-red-400 text-sm text-center">{errorMsg}</p>
+            )}
+
             <div>
               <button
                 type="submit"
+                disabled={loading}
                 className="w-full flex justify-center py-2 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition transform hover:scale-105"
               >
-                <span className="flex items-center">
-                  <svg
-                    className="w-5 h-5 mr-2"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"
-                    ></path>
-                  </svg>
-                  Login to Dashboard
-                </span>
+                {loading ? "Logging in..." : (
+                  <span className="flex items-center">
+                    <svg
+                      className="w-5 h-5 mr-2"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"
+                      ></path>
+                    </svg>
+                    Login to Dashboard
+                  </span>
+                )}
               </button>
             </div>
           </form>
