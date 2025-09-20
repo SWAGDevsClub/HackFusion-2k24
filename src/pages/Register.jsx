@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 
 function Register() {
   const [teamSize, setTeamSize] = useState(4); // Default to 4 members
@@ -40,6 +41,9 @@ function Register() {
   });
 
   const [errors, setErrors] = useState({});
+  const tabsRef = useRef(null);
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value, files } = e.target;
@@ -61,76 +65,91 @@ function Register() {
     setActiveTab("lead");
   };
 
-  const validateCurrentTab = () => {
+  const validateAllTabs = () => {
     const newErrors = {};
+    let firstErrorTab = null;
 
-    switch (activeTab) {
-      case "lead":
-        if (!formData.leadName.trim()) newErrors.leadName = "Full name is required";
-        if (!formData.leadEmail.trim()) newErrors.leadEmail = "Email is required";
-        if (!formData.leadMobile.trim()) newErrors.leadMobile = "Mobile number is required";
-        if (!formData.password.trim()) newErrors.password = "Password is required";
-        if (formData.password.length < 6) newErrors.password = "Password must be at least 6 characters";
-        if (!formData.confirmPassword.trim()) newErrors.confirmPassword = "Please confirm your password";
-        if (formData.password !== formData.confirmPassword) newErrors.confirmPassword = "Passwords do not match";
-        break;
+    // Helper function to set error and track the first tab with error
+    const setErrorAndTrackTab = (fieldName, errorMsg, tabId) => {
+      if (!firstErrorTab && errorMsg) {
+        firstErrorTab = tabId;
+      }
+      newErrors[fieldName] = errorMsg;
+    };
 
-      case "member1":
-        if (!formData.m1Name.trim()) newErrors.m1Name = "Full name is required";
-        if (!formData.m1Email.trim()) newErrors.m1Email = "Email is required";
-        if (!formData.m1Mobile.trim()) newErrors.m1Mobile = "Mobile number is required";
-        break;
+    // Validate lead tab
+    if (!formData.leadName.trim()) setErrorAndTrackTab("leadName", "Full name is required", "lead");
+    if (!formData.leadEmail.trim()) setErrorAndTrackTab("leadEmail", "Email is required", "lead");
+    if (!formData.leadMobile.trim()) setErrorAndTrackTab("leadMobile", "Mobile number is required", "lead");
+    if (!formData.leadImage) setErrorAndTrackTab("leadImage", "Profile picture is required", "lead");
+    if (!formData.password.trim()) setErrorAndTrackTab("password", "Password is required", "lead");
+    if (formData.password.length < 6) setErrorAndTrackTab("password", "Password must be at least 6 characters", "lead");
+    if (!formData.confirmPassword.trim()) setErrorAndTrackTab("confirmPassword", "Please confirm your password", "lead");
+    if (formData.password !== formData.confirmPassword) setErrorAndTrackTab("confirmPassword", "Passwords do not match", "lead");
 
-      case "member2":
-        if (!formData.m2Name.trim()) newErrors.m2Name = "Full name is required";
-        if (!formData.m2Email.trim()) newErrors.m2Email = "Email is required";
-        if (!formData.m2Mobile.trim()) newErrors.m2Mobile = "Mobile number is required";
-        break;
+    // Validate member1 tab
+    if (!formData.m1Name.trim()) setErrorAndTrackTab("m1Name", "Full name is required", "member1");
+    if (!formData.m1Email.trim()) setErrorAndTrackTab("m1Email", "Email is required", "member1");
+    if (!formData.m1Image) setErrorAndTrackTab("m1Image", "Profile picture is required", "member1");
+    if (!formData.m1Mobile.trim()) setErrorAndTrackTab("m1Mobile", "Mobile number is required", "member1");
 
-      case "member3":
-        if (teamSize === 4) {
-          if (!formData.m3Name.trim()) newErrors.m3Name = "Full name is required";
-          if (!formData.m3Email.trim()) newErrors.m3Email = "Email is required";
-          if (!formData.m3Mobile.trim()) newErrors.m3Mobile = "Mobile number is required";
-        }
-        break;
+    // Validate member2 tab
+    if (!formData.m2Name.trim()) setErrorAndTrackTab("m2Name", "Full name is required", "member2");
+    if (!formData.m2Email.trim()) setErrorAndTrackTab("m2Email", "Email is required", "member2");
+    if (!formData.m2Image) setErrorAndTrackTab("m2Image", "Profile picture is required", "member2");
+    if (!formData.m2Mobile.trim()) setErrorAndTrackTab("m2Mobile", "Mobile number is required", "member2");
 
-      case "team":
-        if (!formData.college.trim()) newErrors.college = "College name is required";
-        if (!formData.city.trim()) newErrors.city = "City is required";
-        if (!formData.confirmEmail.trim()) newErrors.confirmEmail = "Confirm email is required";
-        if (formData.confirmEmail !== formData.leadEmail) {
-          newErrors.confirmEmail = "Email confirmation doesn't match lead email";
-        }
-        break;
-
-      case "abstract":
-        if (!formData.abstract.trim()) newErrors.abstract = "Abstract is required";
-        if (formData.abstract.trim().length < 100) {
-          newErrors.abstract = "Abstract must be at least 100 characters";
-        }
-        break;
-
-      case "payment":
-        if (!formData.paymentScreenshot) newErrors.paymentScreenshot = "Payment screenshot is required";
-        break;
+    // Validate member3 tab (if team size is 4)
+    if (teamSize === 4) {
+      if (!formData.m3Name.trim()) setErrorAndTrackTab("m3Name", "Full name is required", "member3");
+      if (!formData.m3Email.trim()) setErrorAndTrackTab("m3Email", "Email is required", "member3");
+      if (!formData.m3Image) setErrorAndTrackTab("m3Image", "Profile picture is required", "member3");
+      if (!formData.m3Mobile.trim()) setErrorAndTrackTab("m3Mobile", "Mobile number is required", "member3");
     }
 
+    // Validate team tab
+    if (!formData.college.trim()) setErrorAndTrackTab("college", "College name is required", "team");
+    if (!formData.city.trim()) setErrorAndTrackTab("city", "City is required", "team");
+    if (!formData.confirmEmail.trim()) setErrorAndTrackTab("confirmEmail", "Confirm email is required", "team");
+    if (formData.confirmEmail !== formData.leadEmail) {
+      setErrorAndTrackTab("confirmEmail", "Email confirmation doesn't match lead email", "team");
+    }
+
+    // Validate abstract tab
+    if (!formData.abstract.trim()) setErrorAndTrackTab("abstract", "Abstract is required", "abstract");
+    if (formData.abstract.trim().length < 100) {
+      setErrorAndTrackTab("abstract", "Abstract must be at least 100 characters", "abstract");
+    }
+
+    // Validate payment tab
+    if (!formData.paymentScreenshot) setErrorAndTrackTab("paymentScreenshot", "Payment screenshot is required", "payment");
+
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    
+    // Return both validation result and the first tab with error
+    return {
+      isValid: Object.keys(newErrors).length === 0,
+      firstErrorTab
+    };
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // Final validation before submission
-    if (!validateCurrentTab()) {
-      return;
-    }
+    setIsLoading(true);
+    // Validate all tabs
+    const validationResult = validateAllTabs();
     
-    // Additional check for password match
-    if (formData.password !== formData.confirmPassword) {
-      setErrors(prev => ({ ...prev, confirmPassword: "Passwords do not match" }));
+    // If there are errors, navigate to the first tab with an error
+    if (!validationResult.isValid && validationResult.firstErrorTab) {
+      setActiveTab(validationResult.firstErrorTab);
+      
+      // Scroll to the top of the form to ensure the error is visible
+      if (tabsRef.current) {
+        tabsRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+      setIsLoading(false);
+
       return;
     }
   
@@ -199,18 +218,73 @@ function Register() {
   
       if (result.success) {
         alert(`Registration successful! Team ID: ${result.data.team_id}`);
+        navigate("/login");
       } else {
         alert(`Registration failed: ${result.message}`);
       }
     } catch (error) {
       console.error("Error submitting form:", error);
       alert("Something went wrong while submitting the form.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleTabNavigation = (direction) => {
     if (direction === 'next') {
-      if (!validateCurrentTab()) {
+      // Validate current tab before proceeding
+      const newErrors = {};
+      
+      switch (activeTab) {
+        case "lead":
+          if (!formData.leadName.trim()) newErrors.leadName = "Full name is required";
+          if (!formData.leadEmail.trim()) newErrors.leadEmail = "Email is required";
+          if (!formData.leadMobile.trim()) newErrors.leadMobile = "Mobile number is required";
+          if (!formData.password.trim()) newErrors.password = "Password is required";
+          if (formData.password.length < 6) newErrors.password = "Password must be at least 6 characters";
+          if (!formData.confirmPassword.trim()) newErrors.confirmPassword = "Please confirm your password";
+          if (formData.password !== formData.confirmPassword) newErrors.confirmPassword = "Passwords do not match";
+          break;
+
+        case "member1":
+          if (!formData.m1Name.trim()) newErrors.m1Name = "Full name is required";
+          if (!formData.m1Email.trim()) newErrors.m1Email = "Email is required";
+          if (!formData.m1Mobile.trim()) newErrors.m1Mobile = "Mobile number is required";
+          break;
+
+        case "member2":
+          if (!formData.m2Name.trim()) newErrors.m2Name = "Full name is required";
+          if (!formData.m2Email.trim()) newErrors.m2Email = "Email is required";
+          if (!formData.m2Mobile.trim()) newErrors.m2Mobile = "Mobile number is required";
+          break;
+
+        case "member3":
+          if (teamSize === 4) {
+            if (!formData.m3Name.trim()) newErrors.m3Name = "Full name is required";
+            if (!formData.m3Email.trim()) newErrors.m3Email = "Email is required";
+            if (!formData.m3Mobile.trim()) newErrors.m3Mobile = "Mobile number is required";
+          }
+          break;
+
+        case "team":
+          if (!formData.college.trim()) newErrors.college = "College name is required";
+          if (!formData.city.trim()) newErrors.city = "City is required";
+          if (!formData.confirmEmail.trim()) newErrors.confirmEmail = "Confirm email is required";
+          if (formData.confirmEmail !== formData.leadEmail) {
+            newErrors.confirmEmail = "Email confirmation doesn't match lead email";
+          }
+          break;
+
+        case "abstract":
+          if (!formData.abstract.trim()) newErrors.abstract = "Abstract is required";
+          if (formData.abstract.trim().length < 100) {
+            newErrors.abstract = "Abstract must be at least 100 characters";
+          }
+          break;
+      }
+
+      if (Object.keys(newErrors).length > 0) {
+        setErrors(newErrors);
         return;
       }
     }
@@ -249,8 +323,8 @@ function Register() {
   const isLastTab = activeTab === tabs[tabs.length - 1].id;
 
   return (
-    <div className="fixed inset-0 z-30 overflow-y-auto py-32 pb-6 m-5 [&::-webkit-scrollbar]:hidden">
-      <div className="max-w-4xl mx-auto bg-gray-800/80 rounded-xl shadow-2xl overflow-hidden border border-gray-700 border-yellow-500 border-4 ">
+    <div className="fixed inset-0 z-30 overflow-y-auto py-32 pb-6 ms-5 me5 [&::-webkit-scrollbar]:hidden">
+      <div className="max-w-4xl mx-auto bg-gray-800/80 rounded-xl shadow-2xl overflow-hidden border border-gray-700 border-yellow-500 border-4 " ref={tabsRef}>
         {/* Header */}
         <div className="bg-gray-900/70 py-4 px-6 text-center relative border-b border-gray-700">
           {/* Decorative elements */}
@@ -440,7 +514,7 @@ function Register() {
                 </div>
                 <div className="md:col-span-2">
                   <label className="block text-sm font-medium text-gray-300 mb-1">
-                    Photo (Optional)
+                    Photo *(Dont upload passport style photo, upload a cool photo 😎)
                   </label>
                   <input
                     type="file"
@@ -541,7 +615,7 @@ function Register() {
                 </div>
                 <div className="md:col-span-2">
                   <label className="block text-sm font-medium text-gray-300 mb-1">
-                    Photo (Optional)
+                    Photo *(Dont upload passport style photo, upload a cool photo 😎)
                   </label>
                   <input
                     type="file"
@@ -642,7 +716,7 @@ function Register() {
                 </div>
                 <div className="md:col-span-2">
                   <label className="block text-sm font-medium text-gray-300 mb-1">
-                    Photo (Optional)
+                    Photo *(Dont upload passport style photo, upload a cool photo 😎)
                   </label>
                   <input
                     type="file"
@@ -743,7 +817,7 @@ function Register() {
                 </div>
                 <div className="md:col-span-2">
                   <label className="block text-sm font-medium text-gray-300 mb-1">
-                    Photo (Optional)
+                    Photo *(Dont upload passport style photo, upload a cool photo 😎)
                   </label>
                   <input
                     type="file"
@@ -904,7 +978,7 @@ function Register() {
                       className={`w-full px-4 py-2 bg-gray-700 text-white border rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-pink-500 file:text-white hover:file:bg-pink-600 ${
                         errors.paymentScreenshot ? 'border-red-500' : 'border-gray-600'
                       }`}
-                      required
+                      // required
                     />
                     {errors.paymentScreenshot && <p className="text-red-400 text-sm mt-1">{errors.paymentScreenshot}</p>}
                     {renderImagePreview("paymentScreenshot", formData.paymentScreenshot)}
@@ -917,9 +991,24 @@ function Register() {
                       <div className="text-center mt-6">
                         <button
                           type="submit"
-                          className="px-8 py-3 bg-gradient-to-r from-red-600 to-yellow-600 text-white font-bold rounded-lg hover:from-red-500 hover:to-yellow-500 transition-all shadow-lg"
+                          disabled={isLoading}
+                          className={`px-8 py-3 bg-gradient-to-r from-red-600 to-yellow-600 text-white font-bold rounded-lg transition-all shadow-lg ${
+                            isLoading 
+                              ? 'opacity-70 cursor-not-allowed' 
+                              : 'hover:from-red-500 hover:to-yellow-500'
+                          }`}
                         >
-                          Submit Registration
+                          {isLoading ? (
+                            <div className="flex items-center justify-center">
+                              <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                              </svg>
+                              Processing...
+                            </div>
+                          ) : (
+                            'Submit Registration'
+                          )}
                         </button>
                       </div>
                     )}

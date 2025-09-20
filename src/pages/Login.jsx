@@ -63,7 +63,7 @@ function Login() {
 
   const handleRegister = (e) => {
     e.preventDefault();
-    alert("Registration functionality would go here");
+    navigate("/register");
   };
 
   return (
