@@ -37,12 +37,19 @@ function Register() {
     paymentScreenshot: null,
   });
 
+  const [errors, setErrors] = useState({});
+
   const handleInputChange = (e) => {
     const { name, value, files } = e.target;
     if (files) {
       setFormData((prev) => ({ ...prev, [name]: files[0] }));
     } else {
       setFormData((prev) => ({ ...prev, [name]: value }));
+    }
+    
+    // Clear error when user starts typing
+    if (errors[name]) {
+      setErrors(prev => ({ ...prev, [name]: null }));
     }
   };
 
@@ -52,10 +59,167 @@ function Register() {
     setActiveTab("lead");
   };
 
-  const handleSubmit = (e) => {
+  const validateCurrentTab = () => {
+    const newErrors = {};
+
+    switch (activeTab) {
+      case "lead":
+        if (!formData.leadName.trim()) newErrors.leadName = "Full name is required";
+        if (!formData.leadEmail.trim()) newErrors.leadEmail = "Email is required";
+        if (!formData.leadMobile.trim()) newErrors.leadMobile = "Mobile number is required";
+        if (!formData.password.trim()) newErrors.password = "Password is required";
+        if (formData.password.length < 6) newErrors.password = "Password must be at least 6 characters";
+        break;
+
+      case "member1":
+        if (!formData.m1Name.trim()) newErrors.m1Name = "Full name is required";
+        if (!formData.m1Email.trim()) newErrors.m1Email = "Email is required";
+        if (!formData.m1Mobile.trim()) newErrors.m1Mobile = "Mobile number is required";
+        break;
+
+      case "member2":
+        if (!formData.m2Name.trim()) newErrors.m2Name = "Full name is required";
+        if (!formData.m2Email.trim()) newErrors.m2Email = "Email is required";
+        if (!formData.m2Mobile.trim()) newErrors.m2Mobile = "Mobile number is required";
+        break;
+
+      case "member3":
+        if (teamSize === 4) {
+          if (!formData.m3Name.trim()) newErrors.m3Name = "Full name is required";
+          if (!formData.m3Email.trim()) newErrors.m3Email = "Email is required";
+          if (!formData.m3Mobile.trim()) newErrors.m3Mobile = "Mobile number is required";
+        }
+        break;
+
+      case "team":
+        if (!formData.college.trim()) newErrors.college = "College name is required";
+        if (!formData.city.trim()) newErrors.city = "City is required";
+        if (!formData.confirmEmail.trim()) newErrors.confirmEmail = "Confirm email is required";
+        if (formData.confirmEmail !== formData.leadEmail) {
+          newErrors.confirmEmail = "Email confirmation doesn't match lead email";
+        }
+        break;
+
+      case "abstract":
+        if (!formData.abstract.trim()) newErrors.abstract = "Abstract is required";
+        if (formData.abstract.trim().length < 100) {
+          newErrors.abstract = "Abstract must be at least 100 characters";
+        }
+        break;
+
+      case "payment":
+        if (!formData.paymentScreenshot) newErrors.paymentScreenshot = "Payment screenshot is required";
+        break;
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
-    // Handle form submission here
+    
+    if (!validateCurrentTab()) {
+      return;
+    }
+  
+    try {
+      const formDataToSend = new FormData();
+  
+      // Append normal fields
+      formDataToSend.append("theme", "AI in Healthcare"); // Or bind from your UI if needed
+      formDataToSend.append("abstract", formData.abstract);
+      formDataToSend.append("city", formData.city);
+      formDataToSend.append("college", formData.college);
+      formDataToSend.append("coupon", formData.coupon);
+      formDataToSend.append("teamSize", formData.teamSize);
+      formDataToSend.append("password", formData.password);
+  
+      // Lead
+      formDataToSend.append("leadName", formData.leadName);
+      formDataToSend.append("leadEmail", formData.leadEmail);
+      formDataToSend.append("leadMobile", formData.leadMobile);
+      formDataToSend.append("leadGender", formData.leadGender);
+      formDataToSend.append("leadIsPwd", formData.leadPwd === "yes" ? 1 : 0);
+  
+      // Member 1
+      formDataToSend.append("m1Name", formData.m1Name);
+      formDataToSend.append("m1Email", formData.m1Email);
+      formDataToSend.append("m1Mobile", formData.m1Mobile);
+      formDataToSend.append("m1Gender", formData.m1Gender);
+      formDataToSend.append("m1IsPwd", formData.m1Pwd === "yes" ? 1 : 0);
+  
+      // Member 2
+      formDataToSend.append("m2Name", formData.m2Name);
+      formDataToSend.append("m2Email", formData.m2Email);
+      formDataToSend.append("m2Mobile", formData.m2Mobile);
+      formDataToSend.append("m2Gender", formData.m2Gender);
+      formDataToSend.append("m2IsPwd", formData.m2Pwd === "yes" ? 1 : 0);
+  
+      // Member 3 (only if teamSize === 4)
+      if (formData.teamSize === 4) {
+        formDataToSend.append("m3Name", formData.m3Name);
+        formDataToSend.append("m3Email", formData.m3Email);
+        formDataToSend.append("m3Mobile", formData.m3Mobile);
+        formDataToSend.append("m3Gender", formData.m3Gender);
+        formDataToSend.append("m3IsPwd", formData.m3Pwd === "yes" ? 1 : 0);
+      }
+  
+      // Files
+      if (formData.leadImage)
+        formDataToSend.append("leadProfilePic", formData.leadImage);
+      if (formData.m1Image)
+        formDataToSend.append("m1ProfilePic", formData.m1Image);
+      if (formData.m2Image)
+        formDataToSend.append("m2ProfilePic", formData.m2Image);
+      if (formData.m3Image)
+        formDataToSend.append("m3ProfilePic", formData.m3Image);
+      if (formData.paymentScreenshot)
+        formDataToSend.append("paymentProof", formData.paymentScreenshot);
+  
+      // API Request
+      const response = await fetch("https://swagserver.co.in/hackfusion/register.php", {
+        method: "POST",
+        body: formDataToSend,
+      });
+  
+      const result = await response.json();
+      console.log("Response:", result);
+  
+      if (result.success) {
+        alert(`Registration successful! Team ID: ${result.data.team_id}`);
+      } else {
+        alert(`Registration failed: ${result.message}`);
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      alert("Something went wrong while submitting the form.");
+    }
+  };
+
+  const handleTabNavigation = (direction) => {
+    if (direction === 'next') {
+      if (!validateCurrentTab()) {
+        return;
+      }
+    }
+
+    const currentIndex = tabs.findIndex((tab) => tab.id === activeTab);
+    if (direction === 'next' && currentIndex < tabs.length - 1) {
+      setActiveTab(tabs[currentIndex + 1].id);
+    } else if (direction === 'prev' && currentIndex > 0) {
+      setActiveTab(tabs[currentIndex - 1].id);
+    }
+  };
+
+  const renderImagePreview = (imageName, imageFile) => {
+    if (!imageFile) return null;
+    
+    return (
+      <div className="mt-2">
+        <p className="text-sm text-green-400">Selected: {imageFile.name}</p>
+      </div>
+    );
   };
 
   const tabs = [
@@ -80,7 +244,6 @@ function Register() {
         <div className="bg-gray-900/70 py-4 px-6 text-center relative border-b border-gray-700">
           {/* Decorative elements */}
           <div className="absolute -top-4 -left-4 w-16 h-16 bg-red-600 rounded-full opacity-30"></div>
-          {/* <div className="absolute -bottom-4 -right-4 w-20 h-20 bg-blue-600 rounded-full opacity-30"></div> */}
           <img
               src="/logon.png"
               className="h-10 w-auto sm:h-5 md:h-auto md:w-[250px] ms-auto  me-auto items-center justify-center"
@@ -155,39 +318,68 @@ function Register() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-1">
-                    Full Name
+                    Full Name *
                   </label>
                   <input
                     type="text"
                     name="leadName"
                     value={formData.leadName}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                    className={`w-full px-4 py-2 bg-gray-700 text-white border rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent ${
+                      errors.leadName ? 'border-red-500' : 'border-gray-600'
+                    }`}
+                    required
                   />
+                  {errors.leadName && <p className="text-red-400 text-sm mt-1">{errors.leadName}</p>}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-1">
-                    Email
+                    Email *
                   </label>
                   <input
                     type="email"
                     name="leadEmail"
                     value={formData.leadEmail}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                    className={`w-full px-4 py-2 bg-gray-700 text-white border rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent ${
+                      errors.leadEmail ? 'border-red-500' : 'border-gray-600'
+                    }`}
+                    required
                   />
+                  {errors.leadEmail && <p className="text-red-400 text-sm mt-1">{errors.leadEmail}</p>}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-1">
-                    Mobile
+                    Mobile *
                   </label>
                   <input
                     type="tel"
                     name="leadMobile"
                     value={formData.leadMobile}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                    className={`w-full px-4 py-2 bg-gray-700 text-white border rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent ${
+                      errors.leadMobile ? 'border-red-500' : 'border-gray-600'
+                    }`}
+                    required
                   />
+                  {errors.leadMobile && <p className="text-red-400 text-sm mt-1">{errors.leadMobile}</p>}
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">
+                    Password *
+                  </label>
+                  <input
+                    type="password"
+                    name="password"
+                    value={formData.password}
+                    onChange={handleInputChange}
+                    className={`w-full px-4 py-2 bg-gray-700 text-white border rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent ${
+                      errors.password ? 'border-red-500' : 'border-gray-600'
+                    }`}
+                    required
+                    minLength={6}
+                  />
+                  {errors.password && <p className="text-red-400 text-sm mt-1">{errors.password}</p>}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-1">
@@ -220,7 +412,7 @@ function Register() {
                 </div>
                 <div className="md:col-span-2">
                   <label className="block text-sm font-medium text-gray-300 mb-1">
-                    Photo
+                    Photo (Optional)
                   </label>
                   <input
                     type="file"
@@ -229,6 +421,7 @@ function Register() {
                     accept="image/*"
                     className="w-full px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-red-500 file:text-white hover:file:bg-red-600"
                   />
+                  {renderImagePreview("leadImage", formData.leadImage)}
                 </div>
               </div>
             </div>
@@ -243,39 +436,51 @@ function Register() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-1">
-                    Full Name
+                    Full Name *
                   </label>
                   <input
                     type="text"
                     name="m1Name"
                     value={formData.m1Name}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className={`w-full px-4 py-2 bg-gray-700 text-white border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+                      errors.m1Name ? 'border-red-500' : 'border-gray-600'
+                    }`}
+                    required
                   />
+                  {errors.m1Name && <p className="text-red-400 text-sm mt-1">{errors.m1Name}</p>}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-1">
-                    Email
+                    Email *
                   </label>
                   <input
                     type="email"
                     name="m1Email"
                     value={formData.m1Email}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className={`w-full px-4 py-2 bg-gray-700 text-white border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+                      errors.m1Email ? 'border-red-500' : 'border-gray-600'
+                    }`}
+                    required
                   />
+                  {errors.m1Email && <p className="text-red-400 text-sm mt-1">{errors.m1Email}</p>}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-1">
-                    Mobile
+                    Mobile *
                   </label>
                   <input
                     type="tel"
                     name="m1Mobile"
                     value={formData.m1Mobile}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className={`w-full px-4 py-2 bg-gray-700 text-white border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+                      errors.m1Mobile ? 'border-red-500' : 'border-gray-600'
+                    }`}
+                    required
                   />
+                  {errors.m1Mobile && <p className="text-red-400 text-sm mt-1">{errors.m1Mobile}</p>}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-1">
@@ -308,7 +513,7 @@ function Register() {
                 </div>
                 <div className="md:col-span-2">
                   <label className="block text-sm font-medium text-gray-300 mb-1">
-                    Photo
+                    Photo (Optional)
                   </label>
                   <input
                     type="file"
@@ -317,6 +522,7 @@ function Register() {
                     accept="image/*"
                     className="w-full px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-500 file:text-white hover:file:bg-blue-600"
                   />
+                  {renderImagePreview("m1Image", formData.m1Image)}
                 </div>
               </div>
             </div>
@@ -331,39 +537,51 @@ function Register() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-1">
-                    Full Name
+                    Full Name *
                   </label>
                   <input
                     type="text"
                     name="m2Name"
                     value={formData.m2Name}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+                    className={`w-full px-4 py-2 bg-gray-700 text-white border rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent ${
+                      errors.m2Name ? 'border-red-500' : 'border-gray-600'
+                    }`}
+                    required
                   />
+                  {errors.m2Name && <p className="text-red-400 text-sm mt-1">{errors.m2Name}</p>}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-1">
-                    Email
+                    Email *
                   </label>
                   <input
                     type="email"
                     name="m2Email"
                     value={formData.m2Email}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+                    className={`w-full px-4 py-2 bg-gray-700 text-white border rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent ${
+                      errors.m2Email ? 'border-red-500' : 'border-gray-600'
+                    }`}
+                    required
                   />
+                  {errors.m2Email && <p className="text-red-400 text-sm mt-1">{errors.m2Email}</p>}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-1">
-                    Mobile
+                    Mobile *
                   </label>
                   <input
                     type="tel"
                     name="m2Mobile"
                     value={formData.m2Mobile}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+                    className={`w-full px-4 py-2 bg-gray-700 text-white border rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent ${
+                      errors.m2Mobile ? 'border-red-500' : 'border-gray-600'
+                    }`}
+                    required
                   />
+                  {errors.m2Mobile && <p className="text-red-400 text-sm mt-1">{errors.m2Mobile}</p>}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-1">
@@ -396,7 +614,7 @@ function Register() {
                 </div>
                 <div className="md:col-span-2">
                   <label className="block text-sm font-medium text-gray-300 mb-1">
-                    Photo
+                    Photo (Optional)
                   </label>
                   <input
                     type="file"
@@ -405,6 +623,7 @@ function Register() {
                     accept="image/*"
                     className="w-full px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-yellow-500 file:text-gray-900 hover:file:bg-yellow-600"
                   />
+                  {renderImagePreview("m2Image", formData.m2Image)}
                 </div>
               </div>
             </div>
@@ -419,39 +638,51 @@ function Register() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-1">
-                    Full Name
+                    Full Name *
                   </label>
                   <input
                     type="text"
                     name="m3Name"
                     value={formData.m3Name}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                    className={`w-full px-4 py-2 bg-gray-700 text-white border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent ${
+                      errors.m3Name ? 'border-red-500' : 'border-gray-600'
+                    }`}
+                    required
                   />
+                  {errors.m3Name && <p className="text-red-400 text-sm mt-1">{errors.m3Name}</p>}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-1">
-                    Email
+                    Email *
                   </label>
                   <input
                     type="email"
                     name="m3Email"
                     value={formData.m3Email}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                    className={`w-full px-4 py-2 bg-gray-700 text-white border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent ${
+                      errors.m3Email ? 'border-red-500' : 'border-gray-600'
+                    }`}
+                    required
                   />
+                  {errors.m3Email && <p className="text-red-400 text-sm mt-1">{errors.m3Email}</p>}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-1">
-                    Mobile
+                    Mobile *
                   </label>
                   <input
                     type="tel"
                     name="m3Mobile"
                     value={formData.m3Mobile}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                    className={`w-full px-4 py-2 bg-gray-700 text-white border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent ${
+                      errors.m3Mobile ? 'border-red-500' : 'border-gray-600'
+                    }`}
+                    required
                   />
+                  {errors.m3Mobile && <p className="text-red-400 text-sm mt-1">{errors.m3Mobile}</p>}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-1">
@@ -484,7 +715,7 @@ function Register() {
                 </div>
                 <div className="md:col-span-2">
                   <label className="block text-sm font-medium text-gray-300 mb-1">
-                    Photo
+                    Photo (Optional)
                   </label>
                   <input
                     type="file"
@@ -493,6 +724,7 @@ function Register() {
                     accept="image/*"
                     className="w-full px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-500 file:text-white hover:file:bg-green-600"
                   />
+                  {renderImagePreview("m3Image", formData.m3Image)}
                 </div>
               </div>
             </div>
@@ -507,43 +739,56 @@ function Register() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-1">
-                    College
+                    College *
                   </label>
                   <input
                     type="text"
                     name="college"
                     value={formData.college}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    className={`w-full px-4 py-2 bg-gray-700 text-white border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent ${
+                      errors.college ? 'border-red-500' : 'border-gray-600'
+                    }`}
+                    required
                   />
+                  {errors.college && <p className="text-red-400 text-sm mt-1">{errors.college}</p>}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-1">
-                    City
+                    City *
                   </label>
                   <input
                     type="text"
                     name="city"
                     value={formData.city}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    className={`w-full px-4 py-2 bg-gray-700 text-white border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent ${
+                      errors.city ? 'border-red-500' : 'border-gray-600'
+                    }`}
+                    required
                   />
+                  {errors.city && <p className="text-red-400 text-sm mt-1">{errors.city}</p>}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-1">
-                    Confirm Email
+                    Confirm Email *
                   </label>
                   <input
                     type="email"
                     name="confirmEmail"
                     value={formData.confirmEmail}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    className={`w-full px-4 py-2 bg-gray-700 text-white border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent ${
+                      errors.confirmEmail ? 'border-red-500' : 'border-gray-600'
+                    }`}
+                    required
                   />
+                  {errors.confirmEmail && <p className="text-red-400 text-sm mt-1">{errors.confirmEmail}</p>}
+                  <p className="text-sm text-gray-400 mt-1">Must match team lead email</p>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-1">
-                    Coupon Code
+                    Coupon Code (Optional)
                   </label>
                   <input
                     type="text"
@@ -551,6 +796,7 @@ function Register() {
                     value={formData.coupon}
                     onChange={handleInputChange}
                     className="w-full px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    placeholder="Enter coupon code if available"
                   />
                 </div>
               </div>
@@ -565,16 +811,24 @@ function Register() {
               </h2>
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-1">
-                  Abstract
+                  Project Abstract * (Minimum 100 characters)
                 </label>
                 <textarea
                   name="abstract"
                   value={formData.abstract}
                   onChange={handleInputChange}
                   rows="8"
-                  className="w-full px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                  placeholder="Enter your abstract here..."
+                  className={`w-full px-4 py-2 bg-gray-700 text-white border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent ${
+                    errors.abstract ? 'border-red-500' : 'border-gray-600'
+                  }`}
+                  placeholder="Describe your project idea, approach, and expected outcomes..."
+                  required
+                  minLength={100}
                 />
+                {errors.abstract && <p className="text-red-400 text-sm mt-1">{errors.abstract}</p>}
+                <p className="text-sm text-gray-400 mt-1">
+                  Current length: {formData.abstract.length} characters
+                </p>
               </div>
             </div>
           )}
@@ -599,28 +853,35 @@ function Register() {
 
                 <div className="flex flex-col md:flex-row items-center justify-between mt-6 gap-6">
                   <div className="bg-white p-4 rounded-lg shadow-lg">
-                    {/* Replace with your actual UPI QR code image */}
-                    <div className="w-48 h-48 bg-gray-300 flex items-center justify-center text-gray-600">
-                      UPI QR Code
+                    <div className="w-48 h-48 bg-gray-300 flex items-center justify-center text-gray-600 rounded-lg">
+                      <div className="text-center">
+                        <p className="font-bold">UPI QR Code</p>
+                        <p className="text-sm mt-2">Scan to Pay ₹500</p>
+                      </div>
                     </div>
                     <p className="text-center font-semibold mt-2 text-black">
-                      Scan to Pay
+                      Registration Fee: ₹500
                     </p>
                   </div>
 
                   <div className="flex-1">
-                    <label className="block text font-medium text-gray-300 mb-2">
-                      Payment Screenshot
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      Payment Screenshot *
                     </label>
                     <input
                       type="file"
                       name="paymentScreenshot"
                       onChange={handleInputChange}
                       accept="image/*"
-                      className="w-full px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent file:mr-4 file:py-2 file:px-4 file:rounded-full border-0 file:text-sm file:font-semibold file:bg-pink-500 file:text-white hover:file:bg-pink-600"
+                      className={`w-full px-4 py-2 bg-gray-700 text-white border rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-pink-500 file:text-white hover:file:bg-pink-600 ${
+                        errors.paymentScreenshot ? 'border-red-500' : 'border-gray-600'
+                      }`}
+                      required
                     />
+                    {errors.paymentScreenshot && <p className="text-red-400 text-sm mt-1">{errors.paymentScreenshot}</p>}
+                    {renderImagePreview("paymentScreenshot", formData.paymentScreenshot)}
                     <p className="text-sm text-gray-400 mt-2">
-                      Upload a screenshot of your successful payment
+                      Upload a clear screenshot of your successful payment transaction
                     </p>
 
                     {/* Submit Button */}
@@ -628,7 +889,7 @@ function Register() {
                       <div className="text-center mt-6">
                         <button
                           type="submit"
-                          className="px-8 py-3 bg-gradient-to-r from-red-600 to-yellow-600 text-white font-bold rounded-lg hover:from-red-500 hover:to-yellow-500 transition-all"
+                          className="px-8 py-3 bg-gradient-to-r from-red-600 to-yellow-600 text-white font-bold rounded-lg hover:from-red-500 hover:to-yellow-500 transition-all shadow-lg"
                         >
                           Submit Registration
                         </button>
@@ -644,13 +905,13 @@ function Register() {
           <div className="flex justify-between mt-8">
             <button
               type="button"
-              onClick={() => {
-                const currentIndex = tabs.findIndex(
-                  (tab) => tab.id === activeTab
-                );
-                if (currentIndex > 0) setActiveTab(tabs[currentIndex - 1].id);
-              }}
-              className="px-6 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-colors"
+              onClick={() => handleTabNavigation('prev')}
+              disabled={activeTab === 'teamSize'}
+              className={`px-6 py-2 rounded-lg transition-colors ${
+                activeTab === 'teamSize'
+                  ? 'bg-gray-600 text-gray-400 cursor-not-allowed'
+                  : 'bg-gray-700 text-white hover:bg-gray-600'
+              }`}
             >
               Previous
             </button>
@@ -658,13 +919,7 @@ function Register() {
             {!isLastTab && (
               <button
                 type="button"
-                onClick={() => {
-                  const currentIndex = tabs.findIndex(
-                    (tab) => tab.id === activeTab
-                  );
-                  if (currentIndex < tabs.length - 1)
-                    setActiveTab(tabs[currentIndex + 1].id);
-                }}
+                onClick={() => handleTabNavigation('next')}
                 className="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-500 transition-colors"
               >
                 Next
