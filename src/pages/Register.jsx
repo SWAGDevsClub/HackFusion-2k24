@@ -30,6 +30,8 @@ function Register() {
     m3Mobile: "7386402422",
     m3Name: "",
     m3Pwd: "no",
+    password: "",
+    confirmPassword: "",
     leadImage: null,
     m1Image: null,
     m2Image: null,
@@ -69,6 +71,8 @@ function Register() {
         if (!formData.leadMobile.trim()) newErrors.leadMobile = "Mobile number is required";
         if (!formData.password.trim()) newErrors.password = "Password is required";
         if (formData.password.length < 6) newErrors.password = "Password must be at least 6 characters";
+        if (!formData.confirmPassword.trim()) newErrors.confirmPassword = "Please confirm your password";
+        if (formData.password !== formData.confirmPassword) newErrors.confirmPassword = "Passwords do not match";
         break;
 
       case "member1":
@@ -119,7 +123,14 @@ function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
+    // Final validation before submission
     if (!validateCurrentTab()) {
+      return;
+    }
+    
+    // Additional check for password match
+    if (formData.password !== formData.confirmPassword) {
+      setErrors(prev => ({ ...prev, confirmPassword: "Passwords do not match" }));
       return;
     }
   
@@ -380,6 +391,23 @@ function Register() {
                     minLength={6}
                   />
                   {errors.password && <p className="text-red-400 text-sm mt-1">{errors.password}</p>}
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">
+                    Confirm Password *
+                  </label>
+                  <input
+                    type="password"
+                    name="confirmPassword"
+                    value={formData.confirmPassword}
+                    onChange={handleInputChange}
+                    className={`w-full px-4 py-2 bg-gray-700 text-white border rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent ${
+                      errors.confirmPassword ? 'border-red-500' : 'border-gray-600'
+                    }`}
+                    required
+                    minLength={6}
+                  />
+                  {errors.confirmPassword && <p className="text-red-400 text-sm mt-1">{errors.confirmPassword}</p>}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-1">
