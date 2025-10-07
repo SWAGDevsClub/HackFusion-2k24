@@ -1,5 +1,5 @@
 @font-face {
-    font-family: 'GameOfSquids'; /* Name to reference the font */
+    font-family: 'MainFont'; /* Name to reference the font */
     src: url('./fonts/Game Of Squids.ttf') format('truetype'); /* Correct path to the font file */
     font-weight: normal;
     font-style: normal;

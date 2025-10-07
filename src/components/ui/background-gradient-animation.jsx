@@ -3,14 +3,15 @@ import { cn } from "../../../lib/utils";
 import { useEffect, useRef, useState } from "react";
 
 export const BackgroundGradientAnimation = ({
-  gradientBackgroundStart = "rgb(51,0,51)",
-  gradientBackgroundEnd = "rgb(74,48,71)",
-  firstColor = "15,181,136",
-  secondColor = "221, 74, 255",
-  thirdColor = "36,159,156",
-  fourthColor = "200, 50, 50",
-  fifthColor = "153,0 , 76",
-  pointerColor = "64,17,65",
+  // Dark Pokémon Theme 🎮
+  gradientBackgroundStart = "rgb(10, 5, 25)", // deep indigo black
+  gradientBackgroundEnd = "rgb(30, 15, 45)", // dark purple
+  firstColor = "255,0,0", // Pokéball red glow
+  secondColor = "255, 215, 0", // golden spark like Pikachu tail
+  thirdColor = "72,61,139", // dark slate purple (Umbreon vibe)
+  fourthColor = "138,43,226", // violet beam (Espeon/Gengar glow)
+  fifthColor = "0,191,255", // cyan aura (Articuno/Mystic aura)
+  pointerColor = "255,105,180", // neon pink cursor highlight (Fairy energy)
   size = "80%",
   blendingValue = "hard-light",
   children,

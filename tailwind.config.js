@@ -7,7 +7,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        squid: ['GameOfSquids', 'sans-serif'], // Add the custom font
+        squid: ['MainFont', 'sans-serif'], // Add the custom font
         outfit:['Outfit','sans-serif'],
         prize:["squid-prize-money", 'sans-serif']
       },
