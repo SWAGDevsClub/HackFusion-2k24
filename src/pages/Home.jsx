@@ -218,10 +218,10 @@ function Home() {
                 className="bg-red-500 py-2  px-6 rounded-full shadow-lg hover:bg-red-600 transition duration-300 font-squid cursor-pointer tracking-wide"
                 data-aos="fade-right"
               >
-                Registrations Closed
+                Coming Soon
               </button>
 
-              <a
+              {/* <a
                 className="outline-none"
                 href="https://docs.google.com/document/d/1KsOGCSk-buQ7ewl6Z1viC847XhHBDl3HmceKTGFhMxU/edit?usp=sharing"
                 target="_blank"
@@ -244,7 +244,7 @@ function Home() {
                 >
                   Code of Conduct
                 </button>
-              </a>
+              </a> */}
             </div>
             {/* <button
               className="bg-pink-500 py-2 px-6 rounded-full shadow-lg hover:bg-pink-600 transition duration-300 font-squid cursor-pointer"
