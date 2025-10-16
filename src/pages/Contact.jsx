@@ -8,32 +8,34 @@ export default function Contact() {
     },[])
     return (
         <>
-            <div className="absolute flex flex-col items-center justify-center  z-30 inset-0 overflow-y-scroll hide py-32" data-aos="fade-up-right">
-                <h1 className="text-4xl mt-6 font-bold title-font mb-10 text-center text-white font-squid transition-all ease-in-out drop-shadow-[0_0_10px_#ff69b4]">Contact Us</h1>
-                <img className='rounded-md lg:w-[600px] lg:h-[700px] md:w-[550px] md:h-[600px] sm:w-[450px] sm:h-[550px] max-sm:px-6 max-sm:rounded-lg max-sm:h-[550px]' src='/cardboard.jpeg' />
-                <div className='absolute flex flex-col gap-6 items-center justify-center text-start lg:w-[550px] lg:h-[600px] md:w-[450px] sm:w-[400px] max-sm:w-[375px] max-sm:mt-10  lg:px-4'>
-                    <span className='flex flex-col lg:mr-20 lg:pr-20 gap-6 md:mr-48 md:pr-28 max-sm:text-xs max-sm:mr-20  max-sm:pr-8'>
-                        <h2 className='font-squid tracking-wide  text-black'> Email &ensp;
-                            <i className="fa-solid fa-envelope"></i>
-                        </h2>
-                        <span className='font-outfit tracking-wide text-white ml-6 max-sm:ml-6  '>
-                            <p className='mb-4'>gdg@sggs.ac.in</p>
-                            <p className='mb-4'>swag@sggs.ac.in</p>
+            <div className="flex flex-col items-center justify-center z-3000 inset-0 overflow-y-scroll hide pt-28" data-aos="fade-up-right">
+                <h1 className="text-4xl font-bold title-font mb-2 text-center text-white font-squid transition-all ease-in-out drop-shadow-[0_0_10px_#ff69b4]">Contact Us</h1>
+                <div className="relative mt-4">
+                    <img className='rounded-md object-contain lg:w-[800px] lg:h-[450px] md:w-[700px] md:h-[410px] sm:w-[500px] sm:h-[450px] max-sm:w-[400px] max-sm:h-[500px] max-sm:px-4 max-sm:rounded-lg' src='/pokedex.png' />
+                    <div className='absolute top-[8%] left-[19%] flex flex-col gap-4 text-start lg:w-[500px] md:w-[400px] sm:w-[350px] max-sm:w-[250px] max-sm:left-[10%]'>
+                        <span className='flex flex-col gap-2'>
+                            <h2 className='font-squid tracking-wide text-center text-black lg:text-xl md:text-lg sm:text-base max-sm:text-sm'> Email &ensp;
+                                <i className="fa-solid fa-envelope"></i>
+                            </h2>
+                            <span className=' w-56 self-center font-outfit tracking-wide text-yellow-500 lg:text-base md:text-sm sm:text-sm max-sm:text-xs p-3 border-2 border-yellow-500 rounded-lg bg-black/20 backdrop-blur-sm'>
+                                <p className='mb-1 text-center'>gdg@sggs.ac.in</p>
+                                <p className='mb-1 text-center'>swag@sggs.ac.in</p>
+                            </span>
                         </span>
-                    </span>
-                    <span className='flex flex-col gap-6 max-sm:text-xs'>
-                        <h2 className='font-squid tracking-wide  text-black '>Contacts &ensp;
-                            <i className="fa-solid fa-tty"></i>
-                        </h2>
-                        <span className='font-outfit tracking-wide text-white ml-6 max-sm:ml-4'>
-                            <p className='mb-4'>GDG on Campus SGGSIE&T Organiser :</p>
-                            <p className='text-black mb-4'> Gajanan Palepwad (7757085531)</p>
-                            <p className='mb-4'>SWAG President: </p>
-                            <p className='text-black mb-4'>JayKumar Gupta (9322002291)</p>
-                            <p className='mb-4'>GDG on Campus SGGSIE&T Web Lead : </p>
-                            <p className='text-black mb-4'>Pranav Dhumale (8767293600)  </p>
+                        <span className='flex flex-col gap-2 mt-1'>
+                            <h2 className='font-squid tracking-wide text-center text-black lg:text-xl md:text-lg sm:text-base max-sm:text-sm'>Contacts &ensp;
+                                <i className="fa-solid fa-tty"></i>
+                            </h2>
+                            <span className='self-center w-[350px] font-outfit tracking-wide text-yellow-500 lg:text-base md:text-sm sm:text-sm max-sm:text-xs p-3 border-2 border-yellow-500 rounded-lg bg-black/20 backdrop-blur-sm'>
+                                <p className='mb-1 text-center'>GDG on Campus SGGSIE&T Organiser:</p>
+                                <p className='text-black mb-1 text-center'> Prachi Dafre (7057744394)</p>
+                                <p className='mb-1 text-center'>SWAG President: </p>
+                                <p className='text-black mb-1 text-center'>Yash Waghmare (9172858260)</p>
+                                <p className='mb-1 text-center'>SWAG Vice President: </p>
+                                <p className='text-black mb-1 text-center'>Khushwant Singh Mahajan (7020942799)  </p>
+                            </span>
                         </span>
-                    </span>
+                    </div>
                 </div>
 
             </div>
