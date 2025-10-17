@@ -13,13 +13,22 @@ export default function SplashScreen({onEnd}) {
         setIsVideoLoaded(true);
     };
     return (
-        <div className='bg-black  h-screen flex items-center justify-center hide'>
-            <div className=' h-screen flex items-center justify-center hide'>
-                <video src="/webintro.mp4" className='w-auto h-screen hide' onLoadedData={handleVideoLoad} autoPlay muted>
-                    Your browser does not support the video .
+        <div className='fixed inset-0 bg-black w-screen h-screen overflow-hidden'>
+            <div className='relative w-full h-full'>
+                <video 
+                    src="/webintro.mp4" 
+                    className='absolute top-0 left-0 w-full h-full object-cover'
+                    onLoadedData={handleVideoLoad} 
+                    autoPlay 
+                    muted
+                >
+                    Your browser does not support the video.
                 </video>
-                {!isVideoLoaded?
-                 <iframe src='/loading.gif'/>:""}
+                {!isVideoLoaded && 
+                    <div className="absolute inset-0 flex items-center justify-center">
+                        <iframe src='/loading.gif' className="w-24 h-24"/>
+                    </div>
+                }
             </div>
         </div>
     )
