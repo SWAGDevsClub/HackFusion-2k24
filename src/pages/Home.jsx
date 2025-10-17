@@ -742,7 +742,7 @@ function Home() {
                 <img
                   src="/footer-img.png"
                   alt="Rotating Image"
-                  className="shadow-lg h-40 w-40 sm:h-50 sm:w-50 md:h-1/3 md:w-1/3 rounded-full transform transition-transform duration-700 ease-in-out hover:rotate-[360deg] hover:scale-50 hover:shadow-2xl"
+                  className="h-40 w-40 sm:h-50 sm:w-50 md:h-1/3 md:w-1/3 rounded transform transition-transform duration-700 ease-in-out hover:rotate-[360deg] hover:scale-50"
                 />
               </div>
 

@@ -11,8 +11,8 @@ export default function Contact() {
             <div className="flex flex-col items-center justify-center z-3000 inset-0 overflow-y-scroll hide pt-28" data-aos="fade-up-right">
                 <h1 className="text-4xl font-bold title-font mb-2 text-center text-white font-squid transition-all ease-in-out drop-shadow-[0_0_10px_#ff69b4]">Contact Us</h1>
                 <div className="relative mt-4">
-                    <img className='rounded-md object-contain lg:w-[800px] lg:h-[450px] md:w-[700px] md:h-[410px] sm:w-[500px] sm:h-[450px] max-sm:w-[400px] max-sm:h-[500px] max-sm:px-4 max-sm:rounded-lg' src='/pokedex.png' />
-                    <div className='absolute top-[8%] left-[19%] flex flex-col gap-4 text-start lg:w-[500px] md:w-[400px] sm:w-[350px] max-sm:w-[250px] max-sm:left-[10%]'>
+                    <img className='rounded-md object-contain lg:w-[800px] lg:h-[450px] md:w-[750px] md:h-[410px] sm:w-[600px] sm:h-[400px] max-sm:w-[550px] max-sm:h-[400px] max-sm:px-4 max-sm:rounded-lg' src='/pokedex.png' />
+                    <div className='absolute top-[8%] left-[19%] flex flex-col gap-4 text-start lg:w-[500px] md:w-[400px] sm:w-[350px] max-sm:w-[250px] lg:left-[19%] md:left-[24%]'>
                         <span className='flex flex-col gap-2'>
                             <h2 className='font-squid tracking-wide text-center text-black lg:text-xl md:text-lg sm:text-base max-sm:text-sm'> Email &ensp;
                                 <i className="fa-solid fa-envelope"></i>
