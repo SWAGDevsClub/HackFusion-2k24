@@ -137,13 +137,19 @@ function Schedule() {
   ];
   return (
     <>
-      <div
-        className="absolute z-30 inset-0 overflow-y-scroll hide"
+    
+      <div className="flex items-center justify-center text-center min-h-[70vh]" data-aos="fade-down">
+        <span className="self-center font-outfit tracking-wide text-yellow-500 lg:text-6xl md:text-6xl sm:text-5xl max-sm:text-3xl p-3 border-2 border-yellow-500 rounded-lg bg-black/20 backdrop-blur-sm">
+                                <p className="mb-1 text-center">Coming Soon</p>
+                            </span>
+      </div>
+      {/* <div
+        className="absolute z-30 inset-0 overflow-y-auto"
         data-aos="fade-up-left"
       >
                 <div className="flex justify-center items-center min-h-screen">
           <div className=" container lg:mx-auto mt-8 max-sm:p-6 ">
-            <div className="flex flex-col ">
+            <div className="flex flex-col position-relative bg-opacity-90 rounded-2xl p-14 lg:p-16">
               <nav
                 className="flex justify-center space-x-4 mb-8 tracking-wide font-outfit"
                 role="tablist"
@@ -166,7 +172,7 @@ function Schedule() {
                 ))}
               </nav>
 
-              <div className="tab-content">
+              <div className="tab-content ">
                 <ul className="space-y-4 font-outfit tracking-wide ">
                   {scheduleData[activeTab].map((item, index) => (
                     <li
@@ -186,7 +192,7 @@ function Schedule() {
                       )} */}
                         {/* {item.description && (
                         <p className="text-sm text-gray-600">{item.description}</p>
-                      )} */}
+                      )} }
                       </div>
                     </li>
                   ))}
@@ -195,7 +201,7 @@ function Schedule() {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
       <Footer />
     </>
   );

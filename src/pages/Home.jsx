@@ -201,7 +201,7 @@ function Home() {
             <div className="flex items-center justify-center mb-4">
               <img
                 src="/logon.png"
-                className="h-20 w-auto sm:h-12 md:h-auto md:w-[600px]"
+                className="h-20 w-auto sm:h-20 md:h-auto md:w-[600px]"
                 alt="Logo"
                 data-aos="flip-right"
               />
@@ -215,10 +215,10 @@ function Home() {
             {/* Registration Button */}
             <div className="flex flex-col items-center gap-4 justify-center">
               <button
-                className="bg-red-500 py-2  px-6 rounded-full shadow-lg hover:bg-red-600 transition duration-300 font-squid cursor-pointer tracking-wide"
+                className="bg-green-500 py-2  px-6 rounded-full shadow-lg hover:bg-green-600 transition duration-300 font-squid cursor-pointer tracking-wide"
                 data-aos="fade-right"
               >
-                Coming Soon
+                Registration Starting Soon
               </button>
 
               {/* <a
@@ -322,11 +322,11 @@ function Home() {
           <div className="container mx-auto flex px-5 py-24 md:flex-row flex-col items-center">
             <div className="lg:flex-grow md:w-1/2 lg:pl-24 md:pl-16 flex flex-col md:items-start md:text-left items-center text-center">
               <h1 className="title-font sm:text-4xl text-3xl mb-4 font-medium text-white font-squid drop-shadow-[0_0_10px_#ffd700]">
-                ₹2,00,000 Prize Pool!
+                ₹2,30,000 Prize Pool!
                 <br className="hidden lg:inline-block font-squid" />
               </h1>
               <p className="mb-4 leading-relaxed font-outfit tracking-wide lg:w-2/3 md:text-sm lg:text-lg">
-                Prepare to be captivated by a ₹2,00,000 prize pool! This
+                Prepare to be captivated by a ₹2,30,000 prize pool! This
                 isn&apos;t just about the competition; it&apos;s about the
                 journey. Embrace the challenge, collaborate with your team, and
                 let your creativity soar. Hackfusion 3 promises an unforgettable
@@ -387,7 +387,7 @@ function Home() {
               <div className="lg:p-4 lg:mx-0 sm:p-2 max-sm:p-6 md:mx-16 lg:w-1/3 ">
                 <div className="bg-gray-800/70 rounded-xl p-6 mb-6 border border-gray-700 shadow-lg border-yellow-500 border-4">
                   <h1 className="title-font sm:text-2xl text-xl font-medium text-white mb-3  font-squid">
-                    ₹2,00,000 Prize Pool
+                    ₹2,30,000 Prize Pool
                   </h1>
                   <p className="leading-relaxed mb-3 font-outfit tracking-wide max-sm:text-sm ">
                     Exciting awards and gifts for the best solutions of problem
@@ -512,7 +512,7 @@ function Home() {
               </h6>
               {/* List */}
               <ul className="list-none text-white text-sm space-y-2 text-center font-outfit tracking-wide ">
-                <li>₹2,00,000 Prize pool</li>
+                <li>₹2,30,000 Prize pool</li>
                 <li>Certificate of participation </li>
                 <li>Free Accommodation</li>
                 <li>Skill Development </li>
@@ -604,7 +604,7 @@ function Home() {
            `}
           </style>
         </div>
-        <div className="flex justify-center items-center min-h-screen">
+        {/* <div className="flex justify-center items-center min-h-screen">
           <div className=" container lg:mx-auto mt-32 md:p-16  max-sm:p-6 ">
             <div className="flex flex-col ">
               <nav
@@ -649,7 +649,7 @@ function Home() {
                       )} */}
                         {/* {item.description && (
                         <p className="text-sm text-gray-600">{item.description}</p>
-                      )} */}
+                      )} }
                       </div>
                     </li>
                   ))}
@@ -657,7 +657,7 @@ function Home() {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
 
         <section className="text-white body-font">
           <div className="container px-5 py-24 mx-auto">
@@ -673,18 +673,18 @@ function Home() {
                 <div className=" rounded-lg overflow-hidden transform transition-transform duration-300 hover:scale-105 hover:shadow-[0_0_30px_10px_rgba(255,203,5,0.5)] font-outfit tracking-wide">
                   <img
                     className="object-fill object-center rounded h-64 sm:h-72 md:h-80 lg:h-80 w-full"
-                    src="/first.jpeg"
+                    src="/first.png"
                     alt="blog"
                   />
                   <div className="p-6 bg-gray-800/80">
                     <h2 className="tracking-widest text-lg title-font font-medium text-white mb-1">
-                      Team Never-Selected
+                      Syntax Squad
                     </h2>
                     <h1 className="title-font text-lg font-medium text-white mb-3">
                       Winners
                     </h1>
                     <p className="leading-relaxed mb-3">
-                      Experience the triumph of Never-Selected!
+                      Experience the triumph of Syantax Squad!
                     </p>
                   </div>
                 </div>
@@ -694,18 +694,18 @@ function Home() {
                 <div className=" rounded-lg overflow-hidden transform transition-transform duration-300 hover:scale-105  hover:shadow-[0_0_30px_10px_rgba(0,150,255,0.5)] font-outfit tracking-wide">
                   <img
                     className="object-fill object-center rounded h-64 sm:h-72 md:h-80 lg:h-80 w-full"
-                    src="/second.jpeg"
+                    src="/second.png"
                     alt="blog"
                   />
                   <div className="p-6 bg-gray-800/80">
                     <h2 className="tracking-widest text-lg title-font font-medium text-white mb-1">
-                      Team Loosers
+                      Shunya
                     </h2>
                     <h1 className="title-font text-lg font-medium text-white mb-3">
                       1st Runner Up
                     </h1>
                     <p className="leading-relaxed mb-3">
-                      Remarkable performance by Team Loosers!
+                      Remarkable performance by Shunya!
                     </p>
                   </div>
                 </div>
@@ -715,18 +715,18 @@ function Home() {
                 <div className=" rounded-lg overflow-hidden transform transition-transform duration-300 hover:scale-105 hover:shadow-[0_0_30px_10px_rgba(0,255,150,0.5)] font-outfit tracking-wide">
                   <img
                     className="object-fill object-center rounded h-64 sm:h-72 md:h-80 lg:h-80 w-full"
-                    src="/third.jpeg"
+                    src="/third.png"
                     alt="blog"
                   />
                   <div className="p-6 bg-gray-800/80">
                     <h2 className="tracking-widest text-lg title-font font-medium text-white-400 mb-1">
-                      Team Nextains
+                      Frontman 404
                     </h2>
                     <h1 className="title-font text-lg font-medium text-white mb-3">
                       2nd Runner Up
                     </h1>
                     <p className="leading-relaxed mb-3">
-                      Applaud the brilliance of Team Nextains!
+                      Applaud the brilliance of Frontman 404!
                     </p>
                   </div>
                 </div>
@@ -751,9 +751,9 @@ function Home() {
                   <h5 className="text-lg font-bold uppercase tracking-wide mb-4 text-gray-800 font-squid text-center md:text-left">
                     Venue Location
                   </h5>
-                  <h6 className="text-base text-pink-700 font-semibold mb-3 font-squid text-center md:text-left">
+                  {/* <h6 className="text-base text-pink-700 font-semibold mb-3 font-squid text-center md:text-left">
                     21 - 23 February, 2025
-                  </h6>
+                  </h6> */}
                   <p className="text-gray-800 leading-relaxed text-center md:text-left">
                     Shri Guru Gobind Singhji Institute of Engineering and
                     Technology <br /> Vishnupuri, Nanded 431-606
