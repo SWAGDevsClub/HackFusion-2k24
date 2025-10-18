@@ -11,7 +11,7 @@ function Navbar() {
   },[]) 
 
   return (
-    <div className={`absolute z-40  text-white py-4 w-full h-fit  `} data-aos="fade-down" id="abc">
+    <div className={`relative z-40  text-white py-4 w-full h-fit  `} data-aos="fade-down" id="abc">
       <div className="container sm:backdrop-blur-3xl mx-auto sm:w-3/4 flex flex-wrap rounded-2xl justify-between items-center px-4 sm:px-6 lg:px-8">
         {/* Logo Section */}
 
