@@ -677,12 +677,6 @@ function Home() {
                     alt="blog"
                   />
                   <div className="p-6 bg-gray-800/80">
-                    <h2 className="tracking-widest text-lg title-font font-medium text-white mb-1">
-                      Syntax Squad
-                    </h2>
-                    <h1 className="title-font text-lg font-medium text-white mb-3">
-                      Winners
-                    </h1>
                     <p className="leading-relaxed mb-3">
                       Experience the triumph of Syantax Squad!
                     </p>
@@ -698,12 +692,6 @@ function Home() {
                     alt="blog"
                   />
                   <div className="p-6 bg-gray-800/80">
-                    <h2 className="tracking-widest text-lg title-font font-medium text-white mb-1">
-                      Shunya
-                    </h2>
-                    <h1 className="title-font text-lg font-medium text-white mb-3">
-                      1st Runner Up
-                    </h1>
                     <p className="leading-relaxed mb-3">
                       Remarkable performance by Shunya!
                     </p>
@@ -719,12 +707,6 @@ function Home() {
                     alt="blog"
                   />
                   <div className="p-6 bg-gray-800/80">
-                    <h2 className="tracking-widest text-lg title-font font-medium text-white-400 mb-1">
-                      Frontman 404
-                    </h2>
-                    <h1 className="title-font text-lg font-medium text-white mb-3">
-                      2nd Runner Up
-                    </h1>
                     <p className="leading-relaxed mb-3">
                       Applaud the brilliance of Frontman 404!
                     </p>
