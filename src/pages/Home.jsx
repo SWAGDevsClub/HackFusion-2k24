@@ -152,7 +152,7 @@ function Home() {
         <div
           className="absolute"
           style={{
-            top: "95%", // Adjust the vertical position
+            top: "96%", // Adjust the vertical position
             left: "50%", // Adjust the horizontal position
             transform: "translate(-50%, -50%)", // Center the mouse image
             animation: "floatscroll 3s ease-in-out infinite", // Add floating animation
@@ -161,7 +161,7 @@ function Home() {
           <img
             src="/scroll.png" // Replace with the actual path to your mouse PNG
             alt="Floating Mouse"
-            className="w-16 h-16" // Adjust size as needed
+            className="w-12 h-12" // Adjust size as needed
           />
         </div>
 
@@ -180,7 +180,16 @@ function Home() {
         </style>
 
         {/* Main Banner Section */}
-        <div className="relative z-10 flex flex-col items-center justify-center text-white font-bold px-4 w-full min-h-screen sm:mb-20">
+        <div className="relative z-10 flex flex-col items-center justify-start sm:justify-center pt-6 sm:pt-0 text-white font-bold px-4 w-full min-h-screen sm:mb-20">
+          {/* <div className="hidden md:block absolute  right-10 z-20">
+            <div className="border-2 border-yellow-400 rounded-lg p-4 bg-gray-800 bg-opacity-70 max-h-48 max-w-xs mx-auto">
+              <h3 className="text-2xl text-yellow-400 mb-2" style={{ fontFamily: "' sans-serif" }}>Special Prizes</h3>
+              <ul className="text-white list-disc list-inside text-sm" style={{ fontFamily: "'Outfit', sans-serif" }}>
+                <li>A special prize is reserved for teams with specially-abled members. (Minimum 2 in a team with 50% disability)</li>
+                <li>A special prize reserved for all girls team.</li>
+              </ul>
+            </div>
+          </div> */}
           {/* Floating Images */}
           <img
             src="/hero-element1.webp"
@@ -198,17 +207,17 @@ function Home() {
           {/* Main Content */}
           <div className="p-4 text-center max-w-3xl w-full mx-4 sm:mx-8 max-sm:mb-20">
             {/* Logo */}
-            <div className="flex items-center justify-center mb-4">
+            <div className="flex items-center justify-center">
               <img
                 src="/logon.png"
-                className="h-20 w-auto sm:h-20 md:h-auto md:w-[600px]"
+                className="h-30 w-auto sm:h-auto md:h-auto md:w-[600px]"
                 alt="Logo"
                 data-aos="flip-right"
               />
             </div>
 
             {/* Subtitle */}
-            <p className="text-lg italic mb-6 font-squid" data-aos="fade-right">
+            <p className="text-xl italic mb-6 font-squid" data-aos="fade-right">
               &quot;Code, Compete, Survive&quot;
             </p>
 
@@ -261,7 +270,7 @@ function Home() {
             <CountdownTimer targetDate="2026-02-19T00:00:00" />
 
             {/* Logos Section */}
-            <div className="flex items-center justify-center gap-4 pt-8 flex-wrap">
+            <div className="flex items-center justify-center gap-4 pt-5 flex-wrap">
               <img
                 src="/swag_white.png"
                 alt="Swag Logo"
@@ -274,6 +283,15 @@ function Home() {
                 className="h-16 sm:h-20 w-auto"
                 data-aos="zoom-in-up"
               />
+            </div>
+            <div className="mt-2">
+              <div className="border-2 border-yellow-400 rounded-lg p-4 bg-gray-800 bg-opacity-70 max-w-md mx-auto">
+                <h3 className="text-2xl text-yellow-400 mb-2" style={{ fontFamily: " sans-serif" }}>Special Prizes</h3>
+                <ul className="text-white list-disc list-inside text-base" style={{ fontFamily: "'Outfit', sans-serif" }}>
+                  <li>A special prize is reserved for teams with specially-abled members. (Minimum 2 in a team with 50% disability)</li>
+                  <li>A special prize reserved for all girls team.</li>
+                </ul>
+              </div>
             </div>
           </div>
 
