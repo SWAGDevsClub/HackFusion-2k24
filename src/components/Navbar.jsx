@@ -11,7 +11,8 @@ function Navbar() {
   },[]) 
 
   return (
-    <div className={`relative z-40  text-white py-4 w-full h-fit  `} data-aos="fade-down" id="abc">
+    <>
+  <div className={`relative z-[9000]  text-white py-4 w-full h-fit  `} data-aos="fade-down" id="abc">
       <div className="container sm:backdrop-blur-3xl mx-auto sm:w-3/4 flex flex-wrap rounded-2xl justify-between items-center px-4 sm:px-6 lg:px-8">
         {/* Logo Section */}
 
@@ -78,7 +79,7 @@ function Navbar() {
 
       {/* Dropdown Menu for Small Screens */}
       {menuOpen && (
-        <div className="flex flex-col z-50 space-y-2 text-center  bg-black/75 p-4 absolute top-16 left-0 w-full sm:hidden">
+  <div className="flex flex-col absolute z-[9999] space-y-2 text-center  bg-black/75 p-4 top-16 left-0 w-full sm:hidden">
           <Link
             to="/"
             className="hover:text-pink-400 font-squid cursor-pointer transition"
@@ -111,6 +112,13 @@ function Navbar() {
 
       )}
     </div>
+    {menuOpen && (
+        <div
+          className="fixed inset-0 bg-black/20 backdrop-blur-md z-[8999]"
+          onClick={() => setMenuOpen(false)}
+        ></div>
+      )}
+    </>
   );
 }
 
