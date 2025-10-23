@@ -22,9 +22,9 @@ function App() {
   };
   return (
     <Router>
-      {/* {splashScreen ?
+       {splashScreen ?
         <SplashScreen onEnd={handleSplashEnd} />
-        : */
+        : 
         <BackgroundGradientAnimation>
           <Navbar />
           <Routes>
