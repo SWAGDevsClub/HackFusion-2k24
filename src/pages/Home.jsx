@@ -180,7 +180,7 @@ function Home() {
         </style>
 
         {/* Main Banner Section */}
-        <div className="relative z-10 flex flex-col items-center justify-start sm:justify-center pt-6 sm:pt-0 text-white font-bold px-4 w-full min-h-screen sm:mb-20">
+        <div className="relative z-10 flex flex-col items-center justify-start sm:justify-center pt-14 md:pt-0 lg:pt-0 text-white font-bold px-4 w-full min-h-screen sm:mb-20">
           {/* <div className="hidden md:block absolute  right-10 z-20">
             <div className="border-2 border-yellow-400 rounded-lg p-4 bg-gray-800 bg-opacity-70 max-h-48 max-w-xs mx-auto">
               <h3 className="text-2xl text-yellow-400 mb-2" style={{ fontFamily: "' sans-serif" }}>Special Prizes</h3>
@@ -409,14 +409,14 @@ function Home() {
                   </h1>
                   {/* <p className="leading-relaxed mb-3 font-outfit tracking-wide max-sm:text-sm "> */}
                     <div className="flex flex-col justify-center items-center space-y-1 lg:space-y-4 sm:mb-2 lg:mb-5">
-                      <div className="flex flex-row items-center text-left w-full p-1 bg-yellow-500 bg-opacity-20 rounded-lg border-yellow-400 border-2 shadow-lg">
+                      <div className="flex flex-row items-center text-left w-full p-1 rounded-lg border-yellow-400 border-2 shadow-lg">
                         <img src="/disable.png" alt="Specially-abled icon" className="w-16 h-16 lg:scale-100" />
                         <p className="text-sm font-semibold">
                           A special prize is reserved for teams with specially-abled members. (Minimum 2 in a team)
                         </p>
                       </div>
                      
-                      <div className="flex flex-row items-center text-left w-full p-1 bg-yellow-500 bg-opacity-20 rounded-lg border-yellow-400 border-2 shadow-lg">
+                      <div className="flex flex-row items-center text-left w-full p-1 rounded-lg border-yellow-400 border-2 shadow-lg">
                         <img src="/girls.png" alt="Girls team icon" className="w-16 h-16 lg:scale-100" />
                         <p className="text-sm font-semibold">
                           A special prize is reserved for all girls team. (100% girls Team)
@@ -701,7 +701,7 @@ function Home() {
               <div className="lg:p-4 lg:mx-0 sm:p-2 max-sm:p-2 md:mx-16 lg:w-1/3">
                 <div className=" rounded-lg overflow-hidden transform transition-transform duration-300 hover:scale-105 hover:shadow-[0_0_30px_10px_rgba(255,203,5,0.5)] font-outfit tracking-wide">
                   <img
-                    className="object-fill object-center rounded h-64 sm:h-72 md:h-80 lg:h-80 w-full"
+                    className="object-contain object-center rounded h-64 sm:h-72 md:h-80 lg:h-80 w-full"
                     src="/first.png"
                     alt="blog"
                   />
@@ -716,7 +716,7 @@ function Home() {
               <div className="lg:p-4 lg:mx-0 sm:p-2 max-sm:p-2 md:mx-16 lg:w-1/3">
                 <div className=" rounded-lg overflow-hidden transform transition-transform duration-300 hover:scale-105  hover:shadow-[0_0_30px_10px_rgba(0,150,255,0.5)] font-outfit tracking-wide">
                   <img
-                    className="object-fill object-center rounded h-64 sm:h-72 md:h-80 lg:h-80 w-full"
+                    className="object-contain object-center rounded h-64 sm:h-72 md:h-80 lg:h-80 w-full"
                     src="/second.png"
                     alt="blog"
                   />
@@ -731,7 +731,7 @@ function Home() {
               <div className="lg:p-4 lg:mx-0 sm:p-2 max-sm:p-2 md:mx-16 lg:w-1/3 ">
                 <div className=" rounded-lg overflow-hidden transform transition-transform duration-300 hover:scale-105 hover:shadow-[0_0_30px_10px_rgba(0,255,150,0.5)] font-outfit tracking-wide">
                   <img
-                    className="object-fill object-center rounded h-64 sm:h-72 md:h-80 lg:h-80 w-full"
+                    className="object-contain object-center rounded h-64 sm:h-72 md:h-80 lg:h-80 w-full"
                     src="/third.png"
                     alt="blog"
                   />
