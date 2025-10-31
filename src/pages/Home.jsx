@@ -192,16 +192,25 @@ function Home() {
           </div> */}
           {/* Floating Images */}
           <img
-            src="/hero-element1.webp"
+            src="/hero-element4.png"
             alt="hero 1"
-            className="h-28 mt-10 lg:h-60 lg:block lg:ms-4 md:hidden sm:hidden max-sm:hidden sm:h-30 md:h-40 absolute top-10 left-8 md:left-36 md:top-20"
+            className="h-28 mt-10 lg:h-60 lg:ms-4 custom-hide absolute top-10 left-8 md:left-36 md:top-20"
             data-aos="fade-down-right"
           />
+
           <img
             src="/hero-element2.png"
             alt="hero 2"
             className="h-40 lg:ms-36 md:ms-30  sm:h-50 md:h-60 absolute bottom-10 left-4 md:left-16"
             data-aos="fade-up-right"
+          />
+
+          {/* Right side image  */}
+          <img
+            src="/hero-element1.png"
+            alt="hero right"
+            className="h-28 mt-10 lg:h-60 lg:me-4 custom-hide absolute top-10 right-8 md:right-36 md:top-20 rotate-y-180"
+            data-aos="fade-down-left"
           />
 
           {/* Main Content */}
@@ -284,6 +293,34 @@ function Home() {
                 data-aos="zoom-in-up"
               />
             </div>
+            <div className="block sm:hidden">
+              <div className="flex flex-col justify-center items-center space-y-1 mb-2 mt-8">
+                <div className="bg-gray-800/80 flex flex-row items-center text-left w-full p-1 rounded-lg border-yellow-400 border-2 shadow-lg mb-3">
+                  <img
+                    src="/disable.png"
+                    alt="Specially-abled icon"
+                    className="w-16 h-16 me-4"
+                  />
+                  <p className="text-sm font-semibold">
+                    A special prize is reserved for teams with specially-abled
+                    members. (Minimum 2 in a team)
+                  </p>
+                </div>
+
+                <div className="bg-gray-800/80 flex flex-row items-center text-left w-full p-1 rounded-lg border-yellow-400 border-2 shadow-lg">
+                  <img
+                    src="/girls.png"
+                    alt="Girls team icon"
+                    className="w-16 h-16 me-4"
+                  />
+                  <p className="text-sm font-semibold">
+                    A special prize is reserved for all girls team. (100% girls
+                    Team)
+                  </p>
+                </div>
+              </div>
+            </div>
+
             {/* <div className="mt-2">
               <div className="border-2 border-yellow-400 rounded-lg p-4 bg-gray-800 bg-opacity-70 max-w-md mx-auto">
                 <h3 className="text-2xl text-yellow-400 mb-2" style={{ fontFamily: " sans-serif" }}>Special Prizes</h3>
@@ -404,27 +441,38 @@ function Home() {
               {/* Card 1 */}
               <div className="lg:p-4 lg:mx-0 sm:p-2 max-sm:p-6 md:mx-16 lg:w-1/3">
                 <div className="bg-gray-800/70 rounded-xl p-6 pb-1 mb-6 sm:max-h-60 md:max-h-80 border border-gray-700 shadow-lg border-yellow-500 border-4">
-                  <h1 className="title-font sm:text-2xl text-xl font-medium text-white mb-3  font-squid">
+                  <h1 className="title-font sm:text-2xl text-xl font-medium text-white mb-6 font-squid">
                     ₹2,30,000 Prize Pool
                   </h1>
                   {/* <p className="leading-relaxed mb-3 font-outfit tracking-wide max-sm:text-sm "> */}
-                    <div className="flex flex-col justify-center items-center space-y-1 lg:space-y-4 sm:mb-2 lg:mb-5">
-                      <div className="flex flex-row items-center text-left w-full p-1 rounded-lg border-yellow-400 border-2 shadow-lg">
-                        <img src="/disable.png" alt="Specially-abled icon" className="w-16 h-16 lg:scale-100" />
-                        <p className="text-sm font-semibold">
-                          A special prize is reserved for teams with specially-abled members. (Minimum 2 in a team)
-                        </p>
-                      </div>
-                     
-                      <div className="flex flex-row items-center text-left w-full p-1 rounded-lg border-yellow-400 border-2 shadow-lg">
-                        <img src="/girls.png" alt="Girls team icon" className="w-16 h-16 lg:scale-100" />
-                        <p className="text-sm font-semibold">
-                          A special prize is reserved for all girls team. (100% girls Team)
-                        <br></br>
-                        <br></br>
-                        </p>
-                      </div>
+                  <div className="flex flex-col justify-center items-center space-y-1 lg:space-y-4 sm:mb-2 lg:mb-5">
+                    <div className="flex flex-row items-center text-left w-full mb-1">
+                      <img
+                        src="/disable.png"
+                        alt="Specially-abled icon"
+                        className="w-16 h-16 lg:scale-100 me-4"
+                      />
+                      <p className="text-sm font-semibold">
+                        A special prize is reserved for teams with
+                        specially-abled members. (Minimum 2 in a team)
+                      </p>
                     </div>
+
+                    <div className="flex flex-row items-center text-left w-full">
+                      <img
+                        src="/girls.png"
+                        alt="Girls team icon"
+                        className="w-16 h-16 lg:scale-100 me-4"
+                      />
+                      <p className="text-sm font-semibold">
+                        A special prize is reserved for all girls team. (100%
+                        girls Team)
+                      </p>
+                      <br />
+                      <br />
+                      <br />
+                    </div>
+                  </div>
                   {/* </p> */}
                 </div>
               </div>
@@ -676,7 +724,7 @@ function Home() {
                           <p className="text-sm text-gray-600">{item.role}</p>
                         </>
                       )} */}
-                        {/* {item.description && (
+        {/* {item.description && (
                         <p className="text-sm text-gray-600">{item.description}</p>
                       )} }
                       </div>
