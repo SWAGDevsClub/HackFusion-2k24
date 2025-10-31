@@ -192,16 +192,25 @@ function Home() {
           </div> */}
           {/* Floating Images */}
           <img
-            src="/hero-element1.webp"
+            src="/hero-element4.png"
             alt="hero 1"
-            className="h-28 mt-10 lg:h-60 lg:block lg:ms-4 md:hidden sm:hidden max-sm:hidden sm:h-30 md:h-40 absolute top-10 left-8 md:left-36 md:top-20"
+            className="h-28 mt-10 lg:h-60 lg:ms-4 custom-hide absolute top-10 left-8 md:left-36 md:top-20"
             data-aos="fade-down-right"
           />
+
           <img
             src="/hero-element2.png"
             alt="hero 2"
             className="h-40 lg:ms-36 md:ms-30  sm:h-50 md:h-60 absolute bottom-10 left-4 md:left-16"
             data-aos="fade-up-right"
+          />
+
+          {/* Right side image  */}
+          <img
+            src="/hero-element1.png"
+            alt="hero right"
+            className="h-28 mt-10 lg:h-60 lg:me-4 custom-hide absolute top-10 right-8 md:right-36 md:top-20 rotate-y-180"
+            data-aos="fade-down-left"
           />
 
           {/* Main Content */}
