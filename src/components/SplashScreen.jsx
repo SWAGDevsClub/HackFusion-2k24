@@ -1,7 +1,9 @@
 import React from 'react'
 import { useEffect ,useState} from 'react';
+import Loader from './loader';
 export default function SplashScreen({onEnd}) {
     const [isVideoLoaded, setIsVideoLoaded] = useState(false);
+    const [isMobile, setIsMobile] = useState(false);
     
     // Preload critical assets while splash screen is showing
     useEffect(() => {
@@ -38,23 +40,50 @@ export default function SplashScreen({onEnd}) {
     }, []);
     
     useEffect(() => {
+        // If on mobile, show loader for fixed duration instead of video
         let timer;
-        if (isVideoLoaded) {
+        if (isMobile) {
+            timer = setTimeout(onEnd, 2000);
+        } else if (isVideoLoaded) {
             timer = setTimeout(onEnd, 7000);
         }
         return () => clearTimeout(timer);
-    }, [isVideoLoaded, onEnd]);
+    }, [isVideoLoaded, isMobile, onEnd]);
+
+    // detect mobile viewport (tailwind sm breakpoint ~= 640px)
+    useEffect(() => {
+        const mq = window.matchMedia('(max-width: 640px)');
+        const handler = (e) => setIsMobile(e.matches);
+        setIsMobile(mq.matches);
+        if (mq.addEventListener) mq.addEventListener('change', handler);
+        else mq.addListener(handler);
+        return () => {
+            if (mq.removeEventListener) mq.removeEventListener('change', handler);
+            else mq.removeListener(handler);
+        };
+    }, []);
     const handleVideoLoad = () => {
         setIsVideoLoaded(true);
     };
     return (
         <div className='bg-black h-screen flex items-center justify-center hide overflow-hidden'>
-            <div className='h-screen w-screen flex items-center justify-center hide overflow-hidden'>
-                <video src="/webintro.mp4" className='w-full h-full lg:object-cover sm:object-contain hide' onLoadedData={handleVideoLoad} autoPlay muted>
-                    Your browser does not support the video .
-                </video>
-                {!isVideoLoaded?
-                 <iframe src='/loading.gif'/>:""}
+            <div className='relative h-screen w-screen flex items-center justify-center hide overflow-hidden'>
+                {isMobile ? (
+                    <div className='absolute inset-0 flex items-center justify-center bg-black'>
+                        <Loader />
+                    </div>
+                ) : (
+                    <>
+                        <video src="/webintro.mp4" className='w-full h-full lg:object-cover sm:object-contain hide' onLoadedData={handleVideoLoad} autoPlay muted>
+                            Your browser does not support the video .
+                        </video>
+                        {!isVideoLoaded && (
+                            <div className='absolute inset-0 flex items-center justify-center bg-black'>
+                                <Loader />
+                            </div>
+                        )}
+                    </>
+                )}
             </div>
         </div>
     )
