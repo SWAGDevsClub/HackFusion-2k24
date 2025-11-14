@@ -439,6 +439,21 @@ function Home() {
           <div className="container px-5 py-24 mx-auto">
             <div className="flex flex-wrap -m-4">
               {/* Card 1 */}
+              <div className="lg:p-4 lg:mx-0 sm:p-2 max-sm:p-6 md:mx-16 lg:w-1/3 ">
+                <div className="bg-gray-800/70 rounded-xl p-6 mb-6 border border-gray-700 shadow-lg border-yellow-500 border-4">
+                  <h1 className="title-font sm:text-2xl text-xl font-medium text-white mb-3  font-squid">
+                    Great Community
+                  </h1>
+                  <p className="leading-relaxed mb-3 font-outfit tracking-wide max-sm:text-sm">
+                    Embark on a journey of collaboration and knowledge exchange
+                    as you seize networking opportunities with fellow
+                    enthusiasts and industry experts. Don&apos;t just win an
+                    award, create lasting connections that propel your success
+                    to new heights!
+                  </p>
+                </div>
+              </div>
+              {/* Card 2 */}
               <div className="lg:p-4 lg:mx-0 sm:p-2 max-sm:p-6 md:mx-16 lg:w-1/3">
                 <div className="bg-gray-800/70 rounded-xl p-6 pb-1 mb-6 sm:max-h-60 md:max-h-80 border border-gray-700 shadow-lg border-yellow-500 border-4">
                   <h1 className="title-font sm:text-2xl text-xl font-medium text-white mb-6 font-squid">
@@ -474,21 +489,6 @@ function Home() {
                     </div>
                   </div>
                   {/* </p> */}
-                </div>
-              </div>
-              {/* Card 2 */}
-              <div className="lg:p-4 lg:mx-0 sm:p-2 max-sm:p-6 md:mx-16 lg:w-1/3 ">
-                <div className="bg-gray-800/70 rounded-xl p-6 mb-6 border border-gray-700 shadow-lg border-yellow-500 border-4">
-                  <h1 className="title-font sm:text-2xl text-xl font-medium text-white mb-3  font-squid">
-                    Great Community
-                  </h1>
-                  <p className="leading-relaxed mb-3 font-outfit tracking-wide max-sm:text-sm">
-                    Embark on a journey of collaboration and knowledge exchange
-                    as you seize networking opportunities with fellow
-                    enthusiasts and industry experts. Don&apos;t just win an
-                    award, create lasting connections that propel your success
-                    to new heights!
-                  </p>
                 </div>
               </div>
               {/* Card 3 */}
