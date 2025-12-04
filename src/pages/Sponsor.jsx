@@ -41,6 +41,26 @@ export default function Sponsor() {
         </section>
 
         <section className="text-gray-600 body-font">
+          <div className="container px-4 mx-auto mb-28 max-sm:p-7">
+            <h1 className="lg:text-xl max-sm:text-base font-bold title-font mb-2 text-white font-squid">
+              Technology Partner
+            </h1>
+            <div className="flex flex-wrap -m-4">
+              <div className="lg:w-1/4 md:w-1/2 p-4 w-full">
+                <a className="block relative h-50 rounded overflow-hidden">
+                  <img
+                    alt="ecommerce"
+                    className="object-cover object-center pt-8 w-full h-full block"
+                    src="/beestack_text_logo.png"
+                  />
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+
+
+        <section className="text-gray-600 body-font">
           {/* Second Section without vertical gap */}
           <div className="container px-4 mx-auto mb-20 max-sm:p-7">
             <h1 className="lg:text-xl max-sm:text-base font-bold title-font mb-2 text-white font-squid">
@@ -132,7 +152,7 @@ export default function Sponsor() {
                   />
                 </a>
               </div>
-              <div className="lg:w-1/4 md:w-1/2 p-4 w-full mb-2">
+              {/* <div className="lg:w-1/4 md:w-1/2 p-4 w-full mb-2">
                 <a className="block relative h-50 rounded overflow-hidden">
                   <img
                     alt="ecommerce"
@@ -140,9 +160,9 @@ export default function Sponsor() {
                     src={swoc}
                   />
                 </a>
-              </div>
+              </div> */}
 
-              <div className="lg:w-1/4 md:w-1/2 p-4 w-full">
+              {/* <div className="lg:w-1/4 md:w-1/2 p-4 w-full">
                 <a className="block relative h-30 rounded overflow-hidden ">
                   <img
                     alt="ecommerce"
@@ -150,26 +170,7 @@ export default function Sponsor() {
                     src="/Black.png"
                   />
                 </a>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="text-gray-600 body-font">
-          <div className="container px-4 mx-auto mb-28 max-sm:p-7">
-            <h1 className="lg:text-xl max-sm:text-base font-bold title-font mb-2 text-white font-squid">
-              Technology Partner
-            </h1>
-            <div className="flex flex-wrap -m-4">
-              <div className="lg:w-1/4 md:w-1/2 p-4 w-full">
-                <a className="block relative h-50 rounded overflow-hidden">
-                  <img
-                    alt="ecommerce"
-                    className="object-cover object-center pt-8 w-full h-full block"
-                    src="/beestack_text_logo.png"
-                  />
-                </a>
-              </div>
+              </div> */}
             </div>
           </div>
         </section>
