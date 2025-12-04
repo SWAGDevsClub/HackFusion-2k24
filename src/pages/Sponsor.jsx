@@ -80,8 +80,8 @@ export default function Sponsor() {
           </div>
         </section>
 
-        <section className="text-gray-600 body-font">
-          {/* Second Section without vertical gap */}
+        {/* <section className="text-gray-600 body-font">
+          { Second Section without vertical gap }
           <div className="container px-4 mx-auto mb-20 max-sm:p-7">
             <h1 className="lg:text-xl max-sm:text-base font-bold title-font mb-2 text-white font-squid">
               Hiring Partner
@@ -98,7 +98,7 @@ export default function Sponsor() {
               </div>
             </div>
           </div>
-        </section>
+        </section> */}
 
         {/* <section className="text-gray-600 body-font">
 
