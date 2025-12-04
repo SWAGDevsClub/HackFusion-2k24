@@ -276,7 +276,7 @@ function Home() {
             </button> */}
 
             {/* Countdown Timer */}
-            <CountdownTimer targetDate="2026-02-19T00:00:00" />
+            <CountdownTimer targetDate="2026-02-27T00:00:00" />
 
             {/* Logos Section */}
             <div className="flex items-center justify-center gap-4 pt-5 flex-wrap">
