@@ -20,7 +20,7 @@ export default function Sponsor() {
       >
         <section className="text-gray-600 body-font" id="sponsor">
           <h1 className="text-4xl font-bold title-font mb-10 text-center text-white font-squid transition-all ease-in-out drop-shadow-[0_0_10px_#ff69b4]">
-            Past year Sponsers & Partners
+            Sponsers & Partners
           </h1>
           <div className="container px-4 py-24 mx-auto mb-0 max-sm:p-7">
             <h1 className="lg:text-xl max-sm:text-base font-bold title-font mb-2 text-white font-squid">
@@ -32,7 +32,7 @@ export default function Sponsor() {
                   <img
                     alt="ecommerce"
                     className=" object-fill object-center w-auto h-full block"
-                    src={askmeidentity}
+                    src="/MediloonLogo.webp"
                   />
                 </a>
               </div>
@@ -43,7 +43,7 @@ export default function Sponsor() {
         <section className="text-gray-600 body-font">
           <div className="container px-4 mx-auto mb-28 max-sm:p-7">
             <h1 className="lg:text-xl max-sm:text-base font-bold title-font mb-2 text-white font-squid">
-              Technology Partner
+              Technology Sponsor
             </h1>
             <div className="flex flex-wrap -m-4">
               <div className="lg:w-1/4 md:w-1/2 p-4 w-full">
@@ -64,7 +64,7 @@ export default function Sponsor() {
           {/* Second Section without vertical gap */}
           <div className="container px-4 mx-auto mb-20 max-sm:p-7">
             <h1 className="lg:text-xl max-sm:text-base font-bold title-font mb-2 text-white font-squid">
-              Diamond Sponsor
+              Gold Sponsor
             </h1>
             <div className="flex flex-wrap -m-4">
               <div className="lg:w-1/4 md:w-1/2 p-4 w-full">
