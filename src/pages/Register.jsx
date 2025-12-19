@@ -7,30 +7,30 @@ function Register() {
   const [formData, setFormData] = useState({
     teamSize: 4,
     abstract: "",
-    city: "Gudivada ",
-    college: "VKR VNB AGK COLLEGE OF ENGINEERING",
-    confirmEmail: "krishnasri2k4@gmail.com",
+    city: "",
+    college: "",
+    confirmEmail: "a",
     coupon: "",
-    leadEmail: "krishnasri2k4@gmail.com",
-    leadGender: "F",
-    leadMobile: "6302962225",
-    leadName: "PARASU DHANA NAGA KRISHNA SRI",
-    leadPwd: "no",
-    m1Email: "neelapalaharshamitra@gmail.com",
-    m1Gender: "M",
-    m1Mobile: "9704164951",
-    m1Name: "NEELAPALA HARSHA MITRA",
-    m1Pwd: "no",
-    m2Email: "jujjuvarapumahalakshmi471@gmail.com",
-    m2Gender: "F",
-    m2Mobile: "7330836782",
-    m2Name: "JUJJUVARAPU MAHA LAKSHMI",
-    m2Pwd: "no",
-    m3Email: "gunashekar3148@gmail.com",
-    m3Gender: "M",
-    m3Mobile: "7386402422",
+    leadEmail: "",
+    leadGender: "",
+    leadMobile: "",
+    leadName: "",
+    leadPwd: "",
+    m1Email: "",
+    m1Gender: "",
+    m1Mobile: "",
+    m1Name: "",
+    m1Pwd: "",
+    m2Email: "",
+    m2Gender: "",
+    m2Mobile: "",
+    m2Name: "",
+    m2Pwd: "",
+    m3Email: "",
+    m3Gender: "",
+    m3Mobile: "",
     m3Name: "",
-    m3Pwd: "no",
+    m3Pwd: "",
     password: "",
     confirmPassword: "",
     leadImage: null,
@@ -343,7 +343,7 @@ function Register() {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex-shrink-0 px-6 py-3 font-semibold transition-all duration-300 ${
+              className={`flex-shrink-1 px-6 py-3 font-semibold transition-all duration-300 ${
                 activeTab === tab.id
                   ? `${tab.color} text-white`
                   : "bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white"
@@ -907,13 +907,21 @@ function Register() {
 
           {/* Abstract Tab */}
           {activeTab === "abstract" && (
-            <div className="space-y-4">
+            <div className="">
               <h2 className="text-2xl font-bold text-orange-400 mb-4">
-                Abstract Submission
+                Abstract and PPT Submission
               </h2>
+              <div className="bg-gray-800/80 flex flex-row items-center text-left w-fit p-1 rounded-lg border-yellow-400 border-2 shadow-lg mb-2">
+                <a href="/Hackfusionps.pdf" target="_blank" rel="noopener noreferrer" className="text-yellow-300 font-semibold hover:underline px-3">
+                  Click here to see the Problem Statement
+                </a>
+              </div>
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-1">
                   Project Abstract * (Minimum 100 characters)
+                </label>
+                <label className="block text-sm font-medium text-gray-300 mb-1">
+                  PPT is optional * (upload link in abstract if prepared)
                 </label>
                 <textarea
                   name="abstract"
@@ -956,10 +964,7 @@ function Register() {
                 <div className="flex flex-col md:flex-row items-center justify-between mt-6 gap-6">
                   <div className="bg-white p-4 rounded-lg shadow-lg">
                     <div className="w-48 h-48 bg-gray-300 flex items-center justify-center text-gray-600 rounded-lg">
-                      <div className="text-center">
-                        <p className="font-bold">UPI QR Code</p>
-                        <p className="text-sm mt-2">Scan to Pay ₹749</p>
-                      </div>
+                      <img src="/hackfusionpayment.jpeg" alt="UPI QR Code" className="w-full h-full object-contain" />
                     </div>
                     <p className="text-center font-semibold mt-2 text-black">
                       Registration Fee: ₹749

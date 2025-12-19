@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import CountdownTimer from "../components/CountdownTimer";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import { Link } from "react-router-dom";
 function Home() {
   const [activeTab, setActiveTab] = useState("day1");
   useEffect(() => {
@@ -231,7 +232,7 @@ function Home() {
             </p>
 
             {/* Registration Button */}
-            <div className="flex flex-col items-center gap-4 justify-center">
+            <div className="flex flex-col items-center gap-2 justify-center">
               <button
                 className="bg-green-500 py-2  px-6 rounded-full shadow-lg hover:bg-green-600 transition duration-300 font-squid cursor-pointer tracking-wide"
                 data-aos="fade-right"
@@ -241,17 +242,17 @@ function Home() {
 
               {/* <a
                 className="outline-none"
-                href="https://docs.google.com/document/d/1KsOGCSk-buQ7ewl6Z1viC847XhHBDl3HmceKTGFhMxU/edit?usp=sharing"
+                href="/Hackfusionps.pdf"
                 target="_blank"
               >
                 <button
-                  className="bg-pink-500 py-2 px-6 rounded-full shadow-lg hover:bg-pink-600 transition duration-300 font-squid cursor-pointer tracking-wide"
+                  className="bg-blue-500 py-2 px-6 rounded-full shadow-lg hover:bg-blue-600 transition duration-300 font-squid cursor-pointer tracking-wide"
                   data-aos="fade-right"
                 >
                   View Problem Statement
                 </button>
-              </a>
-              <a
+              </a> */}
+              {/* <a
                 className="outline-none"
                 href="https://docs.google.com/document/d/1gOltYvRzzqnFfO9jaJuGtuucVhDzi4f3dwBBWwF7PpI/edit?usp=sharing"
                 target="_blank"
@@ -263,17 +264,22 @@ function Home() {
                   Code of Conduct
                 </button>
               </a> */}
-            </div>
-            {/* <button
-              className="bg-pink-500 py-2 px-6 rounded-full shadow-lg hover:bg-pink-600 transition duration-300 font-squid cursor-pointer"
+            
+            {/* <Link
+              className="bg-green-500 py-2 px-6 rounded-full shadow-lg hover:bg-green-600 transition duration-300 font-squid cursor-pointer"
               data-aos="fade-right"
-              onClick={(event) => {
-                event.preventDefault(); // Prevents default behavior, if needed
-                alert("Registration is temporarily unavailable due to maintenance. Please try after 3AM 18 Jan 2025.");
-              }}
+              to="/Register"
             >
               Register Now
-            </button> */}
+            </Link>
+            <Link
+              className="bg-red-500 py-2 px-6 rounded-full shadow-lg hover:bg-red-600 transition duration-300 font-squid cursor-pointer"
+              data-aos="fade-right"
+              to="/Login"
+            >
+              Login 
+            </Link> */}
+            </div>
 
             {/* Countdown Timer */}
             <CountdownTimer targetDate="2026-02-27T00:00:00" />

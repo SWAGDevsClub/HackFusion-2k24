@@ -97,7 +97,7 @@ function Login() {
                 htmlFor="email"
                 className="block text-sm font-medium text-gray-300 mb-1"
               >
-                Trainer Email
+                Member Email
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -209,7 +209,7 @@ function Login() {
             </div>
           </form>
 
-          <div className="mt-6 text-center">
+          {/* <div className="mt-6 text-center">
             <a 
               href="#" 
               className="text-sm text-blue-400 hover:text-blue-300"
@@ -217,11 +217,11 @@ function Login() {
             >
               Forgot your password?
             </a>
-          </div>
+          </div> */}
 
           <div className="mt-4 text-center">
             <p className="text-xs text-gray-500">
-              Not a trainer yet?{" "}
+              Not Registered yet?{" "}
               <a 
                 href="#" 
                 className="text-blue-400 hover:text-blue-300"
