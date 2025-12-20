@@ -9,7 +9,7 @@ function Register() {
     abstract: "",
     city: "",
     college: "",
-    confirmEmail: "a",
+    confirmEmail: "",
     coupon: "",
     leadEmail: "",
     leadGender: "",
