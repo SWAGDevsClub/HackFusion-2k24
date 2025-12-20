@@ -11,123 +11,123 @@ function Schedule() {
   const scheduleData = {
     day1: [
       {
-        time: "6.00 pm",
-        title: "Opening Ceremony\nIntroduction & problem statement briefing",
+        time: "20 December 2025",
+        title: "Registration & Abstract Submission Starts",
         speaker: "",
         role: "",
         image: "/api/placeholder/80/80",
       },
       {
-        time: "8:00 pm",
-        title: "Dinner Break",
+        time: "10 February 2026",
+        title: "Registration & Abstract Submission Ends",
         speaker: "",
         role: "",
         image: "/api/placeholder/80/80",
       },
       {
-        time: "9.00 pm",
-        title: "Hackathon Begins",
+        time: "12 February 2026",
+        title: "Announcement of Selected Participants",
         speaker: "",
         role: "",
         image: "/api/placeholder/80/80",
       },
       {
-        time: "10.00 pm",
-        title: "First Invigilation",
+        time: "27 February 2026",
+        title: "Offline Hackathon Begins",
         speaker: "",
         role: "",
         image: "/api/placeholder/80/80",
       },
-      {
-        time: "12.00 am",
-        title: "Coffee/Tea Break",
-        speaker: "",
-        role: "",
-        image: "/api/placeholder/80/80",
-      },
+      // {
+      //   time: "12.00 am",
+      //   title: "Coffee/Tea Break",
+      //   speaker: "",
+      //   role: "",
+      //   image: "/api/placeholder/80/80",
+      // },
     ],
-    day2: [
-      {
-        time: "8.00am",
-        title: "Breakfast & Coffee",
-        speaker: "",
-        role: "",
-        image: "/api/placeholder/80/80",
-      },
-      {
-        time: "9.00 am",
-        title:
-          '1st Evaluation", "Respective seats", "End of First Invigilation',
-        speaker: "",
-        role: "",
-        image: "/api/placeholder/80/80",
-      },
-      {
-        time: "12.00 pm",
-        title: "Lunch Break",
-        speaker: "",
-        role: "",
-        image: "/api/placeholder/80/80",
-      },
-      {
-        time: "4.00 pm",
-        title: "Game for all participants",
-        speaker: "",
-        role: "",
-        image: "/api/placeholder/80/80",
-      },
-      {
-        time: "5.00 pm",
-        title: "2nd Evaluation",
-        speaker: "",
-        role: "",
-        image: "/api/placeholder/80/80",
-      },
-      {
-        time: "8.00 pm",
-        title: 'Dinner Break", "End of Secod Invigilation',
-        speaker: "",
-        role: "",
-        image: "/api/placeholder/80/80",
-      },
-      {
-        time: "12.00 am",
-        title: "Coffee/Tea Break",
-        speaker: "",
-        role: "",
-        image: "/api/placeholder/80/80",
-      },
-    ],
-    day3: [
-      {
-        time: "8.00 am",
-        title: "Breakfast & Coffee/Tea",
-        speaker: "",
-        role: "",
-        image: "/api/placeholder/80/80",
-      },
-      {
-        time: "9.00 am",
-        title: "Hackathon Ends",
-        speaker: "",
-        role: "",
-        image: "/api/placeholder/80/80",
-      },
-      {
-        time: "11.00 am",
-        title: "Final evaluation (presentation to judges)",
-        speaker: "",
-        role: "",
-        image: "/api/placeholder/80/80",
-      },
-      {
-        time: "4.00 pm",
-        title: "Award ceremony!!!",
-        speaker: "",
-        role: "",
-        image: "/api/placeholder/80/80",
-      },
-    ],
+    // day2: [
+    //   {
+    //     time: "8.00am",
+    //     title: "Breakfast & Coffee",
+    //     speaker: "",
+    //     role: "",
+    //     image: "/api/placeholder/80/80",
+    //   },
+    //   {
+    //     time: "9.00 am",
+    //     title:
+    //       '1st Evaluation", "Respective seats", "End of First Invigilation',
+    //     speaker: "",
+    //     role: "",
+    //     image: "/api/placeholder/80/80",
+    //   },
+    //   {
+    //     time: "12.00 pm",
+    //     title: "Lunch Break",
+    //     speaker: "",
+    //     role: "",
+    //     image: "/api/placeholder/80/80",
+    //   },
+    //   {
+    //     time: "4.00 pm",
+    //     title: "Game for all participants",
+    //     speaker: "",
+    //     role: "",
+    //     image: "/api/placeholder/80/80",
+    //   },
+    //   {
+    //     time: "5.00 pm",
+    //     title: "2nd Evaluation",
+    //     speaker: "",
+    //     role: "",
+    //     image: "/api/placeholder/80/80",
+    //   },
+    //   {
+    //     time: "8.00 pm",
+    //     title: 'Dinner Break", "End of Secod Invigilation',
+    //     speaker: "",
+    //     role: "",
+    //     image: "/api/placeholder/80/80",
+    //   },
+    //   {
+    //     time: "12.00 am",
+    //     title: "Coffee/Tea Break",
+    //     speaker: "",
+    //     role: "",
+    //     image: "/api/placeholder/80/80",
+    //   },
+    // ],
+    // day3: [
+    //   {
+    //     time: "8.00 am",
+    //     title: "Breakfast & Coffee/Tea",
+    //     speaker: "",
+    //     role: "",
+    //     image: "/api/placeholder/80/80",
+    //   },
+    //   {
+    //     time: "9.00 am",
+    //     title: "Hackathon Ends",
+    //     speaker: "",
+    //     role: "",
+    //     image: "/api/placeholder/80/80",
+    //   },
+    //   {
+    //     time: "11.00 am",
+    //     title: "Final evaluation (presentation to judges)",
+    //     speaker: "",
+    //     role: "",
+    //     image: "/api/placeholder/80/80",
+    //   },
+    //   {
+    //     time: "4.00 pm",
+    //     title: "Award ceremony!!!",
+    //     speaker: "",
+    //     role: "",
+    //     image: "/api/placeholder/80/80",
+    //   },
+    // ],
   };
 
   const tabs = [
@@ -138,19 +138,17 @@ function Schedule() {
   return (
     <>
     
-      <div className="flex items-center justify-center text-center min-h-[70vh]" data-aos="fade-down">
-        <span className="self-center font-outfit tracking-wide text-yellow-500 lg:text-6xl md:text-6xl sm:text-5xl max-sm:text-3xl p-3 border-2 border-yellow-500 rounded-lg bg-black/20 backdrop-blur-sm">
-                                <p className="mb-1 text-center">Coming Soon</p>
-                            </span>
+      <div className="flex justify-center text-center min-h-fit" data-aos="fade-down">
+         <h1 className="text-4xl z-100 font-bold title-font mt-8 text-center text-white font-squid transition-all ease-in-out drop-shadow-[0_0_10px_#ff69b4] ">TimeLine</h1>
       </div>
-      {/* <div
+      <div
         className="absolute z-30 inset-0 overflow-y-auto"
         data-aos="fade-up-left"
       >
                 <div className="flex justify-center items-center min-h-screen">
           <div className=" container lg:mx-auto mt-8 max-sm:p-6 ">
             <div className="flex flex-col position-relative bg-opacity-90 rounded-2xl p-14 lg:p-16">
-              <nav
+              {/* <nav
                 className="flex justify-center space-x-4 mb-8 tracking-wide font-outfit"
                 role="tablist"
               >
@@ -170,7 +168,7 @@ function Schedule() {
                     <p className="text-sm">{tab.date}</p>
                   </button>
                 ))}
-              </nav>
+              </nav> */}
 
               <div className="tab-content ">
                 <ul className="space-y-4 font-outfit tracking-wide ">
@@ -184,15 +182,15 @@ function Schedule() {
                         <h3 className="text-lg font-bold mb-2 max-sm:text-sm">
                           {item.title}
                         </h3>
-                        {/* {item.speaker && (
+                        {item.speaker && (
                         <>
                           <span className="text-sm font-semibold">By {item.speaker}</span>
                           <p className="text-sm text-gray-600">{item.role}</p>
                         </>
-                      )} */}
-                        {/* {item.description && (
+                      )}
+                         {item.description && (
                         <p className="text-sm text-gray-600">{item.description}</p>
-                      )} }
+                      )} 
                       </div>
                     </li>
                   ))}
@@ -201,7 +199,7 @@ function Schedule() {
             </div>
           </div>
         </div>
-      </div> */}
+      </div>
       <Footer />
     </>
   );
