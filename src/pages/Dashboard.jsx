@@ -938,7 +938,7 @@ function Dashboard() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Team Information Card */}
-          <div className="bg-gray-800/70 rounded-xl p-6 border border-gray-700 shadow-lg border-yellow-500 border-4">
+          <div className="bg-gray-800/70 overflow-auto rounded-xl p-6 border border-gray-700 shadow-lg border-yellow-500 border-4">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-bold text-white">Team Information</h2>
               {isLead && (
@@ -1010,7 +1010,7 @@ function Dashboard() {
           </div>
 
           {/* Abstract Card */}
-          <div className="bg-gray-800/70 rounded-xl p-6 border border-gray-700 shadow-lg border-yellow-500 border-4">
+          <div className="bg-gray-800/70 max-h-96 overflow-auto rounded-xl p-6 border border-gray-700 shadow-lg border-yellow-500 border-4">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-bold text-white">Project Abstract</h2>
               {isLead && (
@@ -1041,10 +1041,10 @@ function Dashboard() {
                   value={teamData.abstract}
                   onChange={handleInputChange}
                   rows="6"
-                  className="w-full px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                  className="w-full px-4 py-2  bg-gray-700 text-white border border-gray-600 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                 />
               ) : (
-                <p className="text-white bg-gray-700/50 px-4 py-4 rounded-lg whitespace-pre-wrap">
+                <p className="text-white overflow-auto bg-gray-700/50 px-4 py-4 rounded-lg whitespace-pre-wrap">
                   {teamData.abstract}
                 </p>
               )}

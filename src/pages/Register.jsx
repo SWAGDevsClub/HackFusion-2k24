@@ -9,28 +9,28 @@ function Register() {
     abstract: "",
     city: "",
     college: "",
-    confirmEmail: "a",
+    confirmEmail: "",
     coupon: "",
     leadEmail: "",
-    leadGender: "",
+    leadGender: "F",
     leadMobile: "",
     leadName: "",
-    leadPwd: "",
+    leadPwd: "no",
     m1Email: "",
-    m1Gender: "",
+    m1Gender: "F",
     m1Mobile: "",
     m1Name: "",
-    m1Pwd: "",
+    m1Pwd: "no",
     m2Email: "",
-    m2Gender: "",
+    m2Gender: "F",
     m2Mobile: "",
     m2Name: "",
-    m2Pwd: "",
+    m2Pwd: "no",
     m3Email: "",
-    m3Gender: "",
+    m3Gender: "F",
     m3Mobile: "",
     m3Name: "",
-    m3Pwd: "",
+    m3Pwd: "no",
     password: "",
     confirmPassword: "",
     leadImage: null,
@@ -240,22 +240,28 @@ function Register() {
           if (!formData.leadName.trim()) newErrors.leadName = "Full name is required";
           if (!formData.leadEmail.trim()) newErrors.leadEmail = "Email is required";
           if (!formData.leadMobile.trim()) newErrors.leadMobile = "Mobile number is required";
+          if (formData.leadMobile.trim().length < 10 || formData.leadMobile.trim().length > 10) newErrors.leadMobile = "Mobile number must be 10 digits";
           if (!formData.password.trim()) newErrors.password = "Password is required";
           if (formData.password.length < 6) newErrors.password = "Password must be at least 6 characters";
           if (!formData.confirmPassword.trim()) newErrors.confirmPassword = "Please confirm your password";
           if (formData.password !== formData.confirmPassword) newErrors.confirmPassword = "Passwords do not match";
+          if (!formData.leadImage) newErrors.leadImage = "Profile picture is required";
           break;
 
         case "member1":
           if (!formData.m1Name.trim()) newErrors.m1Name = "Full name is required";
           if (!formData.m1Email.trim()) newErrors.m1Email = "Email is required";
           if (!formData.m1Mobile.trim()) newErrors.m1Mobile = "Mobile number is required";
+          if (formData.m1Mobile && formData.m1Mobile.trim().length < 10 || formData.m1Mobile.trim().length > 10) newErrors.m1Mobile = "Mobile number must be 10 digits";
+          if (!formData.m1Image) newErrors.m1Image = "Profile picture is required";
           break;
 
         case "member2":
           if (!formData.m2Name.trim()) newErrors.m2Name = "Full name is required";
           if (!formData.m2Email.trim()) newErrors.m2Email = "Email is required";
           if (!formData.m2Mobile.trim()) newErrors.m2Mobile = "Mobile number is required";
+          if (formData.m2Mobile && formData.m2Mobile.trim().length < 10 || formData.m2Mobile.trim().length > 10) newErrors.m2Mobile = "Mobile number must be 10 digits";
+          if (!formData.m2Image) newErrors.m2Image = "Profile picture is required";
           break;
 
         case "member3":
@@ -263,6 +269,8 @@ function Register() {
             if (!formData.m3Name.trim()) newErrors.m3Name = "Full name is required";
             if (!formData.m3Email.trim()) newErrors.m3Email = "Email is required";
             if (!formData.m3Mobile.trim()) newErrors.m3Mobile = "Mobile number is required";
+            if (formData.m3Mobile && formData.m3Mobile.trim().length < 10 || formData.m3Mobile.trim().length > 10) newErrors.m3Mobile = "Mobile number must be 10 digits";
+            if (!formData.m3Image) newErrors.m3Image = "Profile picture is required";
           }
           break;
 
@@ -523,6 +531,7 @@ function Register() {
                     accept="image/*"
                     className="w-full px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-red-500 file:text-white hover:file:bg-red-600"
                   />
+                  {errors.leadImage && <p className="text-red-400 text-sm mt-1">{errors.leadImage}</p>}
                   {renderImagePreview("leadImage", formData.leadImage)}
                 </div>
               </div>
@@ -624,6 +633,7 @@ function Register() {
                     accept="image/*"
                     className="w-full px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-500 file:text-white hover:file:bg-blue-600"
                   />
+                  {errors.m1Image && <p className="text-red-400 text-sm mt-1">{errors.m1Image}</p>}
                   {renderImagePreview("m1Image", formData.m1Image)}
                 </div>
               </div>
@@ -725,6 +735,7 @@ function Register() {
                     accept="image/*"
                     className="w-full px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-yellow-500 file:text-gray-900 hover:file:bg-yellow-600"
                   />
+                  {errors.m2Image && <p className="text-red-400 text-sm mt-1">{errors.m2Image}</p>}
                   {renderImagePreview("m2Image", formData.m2Image)}
                 </div>
               </div>
@@ -826,6 +837,7 @@ function Register() {
                     accept="image/*"
                     className="w-full px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-500 file:text-white hover:file:bg-green-600"
                   />
+                  {errors.m3Image && <p className="text-red-400 text-sm mt-1">{errors.m3Image}</p>}
                   {renderImagePreview("m3Image", formData.m3Image)}
                 </div>
               </div>
@@ -834,10 +846,15 @@ function Register() {
 
           {/* Team Info Tab */}
           {activeTab === "team" && (
-            <div className="space-y-4">
+            <div className="space-y-">
               <h2 className="text-2xl font-bold text-purple-400 mb-4">
                 Team Information
               </h2>
+              <div className="bg-gray-800/80 flex flex-row items-center text-left w-fit p-1 rounded-lg border-yellow-400 border-2 shadow-lg mb-2">
+                <p className="text-yellow-300 font-semibold px-3">
+                 Teams will be assigned unique pokemon name as their team name after successful registration.
+                </p>
+              </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-1">
@@ -918,7 +935,7 @@ function Register() {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-1">
-                  Project Abstract * (Minimum 100 characters)
+                  Project Abstract * (Minimum 100 characters and Abstract can be edited after submission from dashboard)
                 </label>
                 <label className="block text-sm font-medium text-gray-300 mb-1">
                   PPT is optional * (upload link in abstract if prepared)
