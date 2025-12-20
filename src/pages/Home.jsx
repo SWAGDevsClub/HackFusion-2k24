@@ -227,20 +227,20 @@ function Home() {
             </div>
 
             {/* Subtitle */}
-            <p className="text-xl italic mb-6 font-squid" data-aos="fade-right">
+            <p className="text-xl italic mb-4 font-squid" data-aos="fade-right">
               &quot;Code, Compete, Survive&quot;
             </p>
 
             {/* Registration Button */}
             <div className="flex flex-col items-center gap-2 justify-center">
-              <button
+              {/* <button
                 className="bg-green-500 py-2  px-6 rounded-full shadow-lg hover:bg-green-600 transition duration-300 font-squid cursor-pointer tracking-wide"
                 data-aos="fade-right"
               >
                 Registration Starting Soon
-              </button>
+              </button> */}
 
-              {/* <a
+              <a
                 className="outline-none"
                 href="/Hackfusionps.pdf"
                 target="_blank"
@@ -251,7 +251,7 @@ function Home() {
                 >
                   View Problem Statement
                 </button>
-              </a> */}
+              </a>
               {/* <a
                 className="outline-none"
                 href="https://docs.google.com/document/d/1gOltYvRzzqnFfO9jaJuGtuucVhDzi4f3dwBBWwF7PpI/edit?usp=sharing"
@@ -265,7 +265,7 @@ function Home() {
                 </button>
               </a> */}
             
-            {/* <Link
+            <Link
               className="bg-green-500 py-2 px-6 rounded-full shadow-lg hover:bg-green-600 transition duration-300 font-squid cursor-pointer"
               data-aos="fade-right"
               to="/Register"
@@ -278,7 +278,7 @@ function Home() {
               to="/Login"
             >
               Login 
-            </Link> */}
+            </Link>
             </div>
 
             {/* Countdown Timer */}
@@ -370,7 +370,7 @@ function Home() {
                 like-minded developers, mentors, and sponsors!
               </p>
               <div className="flex justify-center">
-                <a href="/rulebook2025.pdf" target="_blank">
+                <a href="/HackFusion3RuleBook.pdf" target="_blank">
                   <button className="font-squid inline-flex text-[#2a75bb] bg-yellow-500  py-2 px-6 focus:outline-none hover:yellow-400 rounded text-lg border-0 hover:shadow-[0_0_20px_5px] hover:shadow-yellow-400">
                     Rule Book
                   </button>
@@ -432,7 +432,7 @@ function Home() {
                 <br />( Please keep checking out this page for updated FAQs! )
               </p>
               <div className="flex justify-center">
-                <a href="/FAQs.pdf" target="_blank">
+                <a href="/hackfusionfaqs.pdf" target="_blank">
                   <button className="font-squid inline-flex text-[#2a75bb] bg-yellow-500  py-2 px-6 focus:outline-none hover:yellow-400 rounded text-lg border-0 hover:shadow-[0_0_20px_5px] hover:shadow-yellow-400">
                     FAQs
                   </button>
