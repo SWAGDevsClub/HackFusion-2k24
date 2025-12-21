@@ -331,7 +331,7 @@ function Register() {
   const isLastTab = activeTab === tabs[tabs.length - 1].id;
 
   return (
-    <div className="fixed inset-0 z-30 overflow-y-auto py-32 pb-6 ms-5 me5 [&::-webkit-scrollbar]:hidden">
+    <div className="fixed inset-0 z-30 overflow-y-auto py-32 pb-6 ms-3 me-3 [&::-webkit-scrollbar]:hidden">
       <div className="max-w-4xl mx-auto bg-gray-800/80 rounded-xl shadow-2xl overflow-hidden border border-gray-700 border-yellow-500 border-4 " ref={tabsRef}>
         {/* Header */}
         <div className="bg-gray-900/70 py-4 px-6 text-center relative border-b border-gray-700">
@@ -1010,7 +1010,7 @@ function Register() {
 
                     {/* Submit Button */}
                     {isLastTab && (
-                      <div className="text-center mt-6">
+                      <div className="text-center m-2">
                         <button
                           type="submit"
                           disabled={isLoading}
@@ -1034,6 +1034,11 @@ function Register() {
                         </button>
                       </div>
                     )}
+                    <div className="bg-gray-800/80 flex flex-row items-center  text-left w-fit p-1 rounded-lg border-yellow-400 border-2 shadow-lg mb-2">
+                <p className="text-yellow-300 text-center font-semibold px-3">
+                 Note: Teams who didn't get shortlisted in final round will get full refund of registration fee.
+                </p>
+              </div>
                   </div>
                 </div>
               </div>

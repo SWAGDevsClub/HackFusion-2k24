@@ -139,15 +139,15 @@ function Schedule() {
     <>
     
       <div className="flex justify-center text-center min-h-fit" data-aos="fade-down">
-         <h1 className="text-4xl z-100 font-bold title-font mt-8 text-center text-white font-squid transition-all ease-in-out drop-shadow-[0_0_10px_#ff69b4] ">TimeLine</h1>
+         <h1 className="text-4xl z-100 font-bold title-font mt- text-center text-white font-squid transition-all ease-in-out drop-shadow-[0_0_10px_#ff69b4] ">TimeLine</h1>
       </div>
       <div
         className="absolute z-30 inset-0 overflow-y-auto"
         data-aos="fade-up-left"
       >
                 <div className="flex justify-center items-center min-h-screen">
-          <div className=" container lg:mx-auto mt-8 max-sm:p-6 ">
-            <div className="flex flex-col position-relative bg-opacity-90 rounded-2xl p-14 lg:p-16">
+          <div className=" container lg:mx-auto mt- max-sm:px-1">
+            <div className="flex flex-col position-relative bg-opacity-90 rounded-2xl ">
               {/* <nav
                 className="flex justify-center space-x-4 mb-8 tracking-wide font-outfit"
                 role="tablist"
@@ -175,7 +175,7 @@ function Schedule() {
                   {scheduleData[activeTab].map((item, index) => (
                     <li
                       key={index}
-                      className="flex items-center justify-center gap-10 bg-gray-100 p-4 rounded-lg shadow-lg"
+                      className="flex items-center min-w-64 justify-center gap-8 bg-gray-100 p-2 rounded-lg shadow-lg"
                     >
                       <h4 className="text-[#2a75bb] font-bold">{item.time}</h4>
                       <div className="flex-1 px-4 items-center justify-center">
