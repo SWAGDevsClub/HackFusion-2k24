@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import CountdownTimer from "../components/CountdownTimer";
 import AOS from "aos";
+import { Analytics } from '@vercel/analytics/react';
 import "aos/dist/aos.css";
 import { Link } from "react-router-dom";
 function Home() {
@@ -139,6 +140,7 @@ function Home() {
   return (
     <>
       <div className="absolute z-30 inset-0 pb-6 overflow-y-scroll hide">
+      <Analytics/>
         <div
           className="absolute inset-0 z-0"
           style={{
