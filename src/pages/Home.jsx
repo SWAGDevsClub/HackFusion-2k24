@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import CountdownTimer from "../components/CountdownTimer";
 import AOS from "aos";
-import { Analytics } from "@vercel/analytics/next"
+import { Analytics } from '@vercel/analytics/react';
 import "aos/dist/aos.css";
 import { Link } from "react-router-dom";
 function Home() {
