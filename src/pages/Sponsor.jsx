@@ -152,6 +152,96 @@ export default function Sponsor() {
                   />
                 </a>
               </div>
+              <div className="lg:w-1/4 md:w-1/2 p-4 w-full">
+                <a className="block relative h-50 rounded overflow-hidden">
+                  <img
+                    alt="ecommerce"
+                    className="object-cover object-center mt-16 w-full h-full block"
+                    src="/KBJ.png"
+                  />
+                </a>
+              </div>
+              {/* <div className="lg:w-1/4 md:w-1/2 p-4 w-full">
+                <a className="block relative h-50 rounded overflow-hidden">
+                  <img
+                    alt="ecommerce"
+                    className="object-cover object-center mt-16 w-full h-full block"
+                    src="/Xavier.png"
+                  />
+                </a>
+              </div> */}
+              {/* <div className="lg:w-1/4 md:w-1/2 p-4 w-full">
+                <a className="block relative h-50 rounded overflow-hidden">
+                  <img
+                    alt="ecommerce"
+                    className="object-cover object-center mt-16 w-full h-full block"
+                    src="/SIES.png"
+                  />
+                </a>
+              </div>
+              <div className="lg:w-1/4 md:w-1/2 p-4 w-full">
+                <a className="block relative h-50 rounded overflow-hidden">
+                  <img
+                    alt="ecommerce"
+                    className="object-cover object-center mt-16 w-full h-full block"
+                    src="/Atharva.png"
+                  />
+                </a>
+              </div>
+              <div className="lg:w-1/4 md:w-1/2 p-4 w-full">
+                <a className="block relative h-50 rounded overflow-hidden">
+                  <img
+                    alt="ecommerce"
+                    className="object-cover object-center mt-16 w-full h-full block"
+                    src="/SVECW.png"
+                  />
+                </a>
+              </div>
+              <div className="lg:w-1/4 md:w-1/2 p-4 w-full">
+                <a className="block relative h-50 rounded overflow-hidden">
+                  <img
+                    alt="ecommerce"
+                    className="object-cover object-center mt-16 w-full h-full block"
+                    src="/MIT.png"
+                  />
+                </a>
+              </div> */}
+              <div className="lg:w-1/4 md:w-1/2 p-4 w-full">
+                <a className="block relative h-50 rounded overflow-hidden">
+                  <img
+                    alt="ecommerce"
+                    className="object-cover object-center mt-16 w-full h-full block"
+                    src="/MGMCO.png"
+                  />
+                </a>
+              </div>
+              <div className="lg:w-1/4 md:w-1/2 p-4 w-full">
+                <a className="block relative h-50 rounded overflow-hidden">
+                  <img
+                    alt="ecommerce"
+                    className="object-cover object-center mt-16 w-full h-full block"
+                    src="/sponsor.jpeg"
+                  />
+                </a>
+              </div>
+              {/* <div className="lg:w-1/4 md:w-1/2 p-4 w-full">
+                <a className="block relative h-50 rounded overflow-hidden">
+                  <img
+                    alt="ecommerce"
+                    className="object-cover object-center mt-16 w-full h-full block"
+                    src="/nbnscoe.png"
+                  />
+                </a>
+              </div>
+              <div className="lg:w-1/4 md:w-1/2 p-4 w-full">
+                <a className="block relative h-50 rounded overflow-hidden">
+                  <img
+                    alt="ecommerce"
+                    className="object-cover object-center mt-16 w-full h-full block"
+                    src="/icfai.png"
+                  />
+                </a>
+              </div> */}
               {/* <div className="lg:w-1/4 md:w-1/2 p-4 w-full mb-2">
                 <a className="block relative h-50 rounded overflow-hidden">
                   <img
@@ -175,7 +265,7 @@ export default function Sponsor() {
           </div>
         </section>
 
-        <section className="text-gray-600 body-font">
+        {/* <section className="text-gray-600 body-font">
           <div className="container px-4 mx-auto mb-20 max-sm:p-7">
             <h1 className="lg:text-xl max-sm:text-base font-bold title-font mb-2 text-white font-squid  ">
               GDG on Campus Community Partners
@@ -264,7 +354,7 @@ export default function Sponsor() {
               </div>
             </div>
           </div>
-        </section>
+        </section> */}
       </div>
       <Footer />
     </>
