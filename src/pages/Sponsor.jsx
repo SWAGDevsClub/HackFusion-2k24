@@ -224,6 +224,33 @@ export default function Sponsor() {
                   />
                 </a>
               </div>
+              <div className="lg:w-1/4 md:w-1/2 p-4 w-full">
+                <a className="block relative h-50 rounded overflow-hidden">
+                  <img
+                    alt="ecommerce"
+                    className="object-cover object-center mt-16 w-full h-full block"
+                    src="/cube.jpeg"
+                  />
+                </a>
+              </div>
+              <div className="lg:w-1/4 md:w-1/2 p-4 w-full">
+                <a className="block relative h-50 rounded overflow-hidden">
+                  <img
+                    alt="ecommerce"
+                    className="object-cover object-center mt-16 w-full h-full block"
+                    src="/gauhati.png"
+                  />
+                </a>
+              </div>
+              <div className="lg:w-1/4 md:w-1/2 p-4 w-full">
+                <a className="block relative h-50 rounded overflow-hidden">
+                  <img
+                    alt="ecommerce"
+                    className="object-cover object-center mt-16 w-full h-full block"
+                    src="/mit.jpg"
+                  />
+                </a>
+              </div>
               {/* <div className="lg:w-1/4 md:w-1/2 p-4 w-full">
                 <a className="block relative h-50 rounded overflow-hidden">
                   <img
