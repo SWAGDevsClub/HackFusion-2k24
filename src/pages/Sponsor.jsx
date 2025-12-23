@@ -139,7 +139,7 @@ export default function Sponsor() {
                   <img
                     alt="ecommerce"
                     className="object-cover object-center w-full h-full block"
-                    src={nexus}
+                    src="/NEXUS.jpg"
                   />
                 </a>
               </div>
