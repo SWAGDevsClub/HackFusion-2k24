@@ -372,7 +372,7 @@ function Home() {
                 like-minded developers, mentors, and sponsors!
               </p>
               <div className="flex justify-center">
-                <a href="/HackFusion3RuleBook.pdf" target="_blank">
+                <a href="/rulebook2025.pdf" target="_blank">
                   <button className="font-squid inline-flex text-[#2a75bb] bg-yellow-500  py-2 px-6 focus:outline-none hover:yellow-400 rounded text-lg border-0 hover:shadow-[0_0_20px_5px] hover:shadow-yellow-400">
                     Rule Book
                   </button>
@@ -434,7 +434,7 @@ function Home() {
                 <br />( Please keep checking out this page for updated FAQs! )
               </p>
               <div className="flex justify-center">
-                <a href="/hackfusionfaqs.pdf" target="_blank">
+                <a href="/FAQs.pdf" target="_blank">
                   <button className="font-squid inline-flex text-[#2a75bb] bg-yellow-500  py-2 px-6 focus:outline-none hover:yellow-400 rounded text-lg border-0 hover:shadow-[0_0_20px_5px] hover:shadow-yellow-400">
                     FAQs
                   </button>
