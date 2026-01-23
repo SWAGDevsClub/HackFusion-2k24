@@ -235,7 +235,7 @@ function Login() {
 
         <div className="mt-6 text-center">
           <p className="text-xs text-gray-500">
-            © 2025 HackFusion. Gotta code &apos;em all!
+            © 2026 HackFusion. Gotta code &apos;em all!
           </p>
         </div>
       </div>
