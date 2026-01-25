@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { Camera, X, Check, Crop, UserPlus } from "lucide-react";
+import { Camera, X, Check, Crop, UserPlus, Trash2 } from "lucide-react";
 
 function Dashboard() {
   const [teamData, setTeamData] = useState(null);
@@ -94,6 +94,35 @@ function Dashboard() {
   });
   const [addMemberErrors, setAddMemberErrors] = useState({});
   const [isSubmittingMember, setIsSubmittingMember] = useState(false);
+
+  // Change password state
+  const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
+  const [passwordData, setPasswordData] = useState({
+    oldPassword: "",
+    newPassword: "",
+    confirmNewPassword: "",
+  });
+  const [passwordErrors, setPasswordErrors] = useState({});
+  const [isChangingPassword, setIsChangingPassword] = useState(false);
+
+  // Delete member state
+  const [showDeleteMemberModal, setShowDeleteMemberModal] = useState(false);
+  const [deletePassword, setDeletePassword] = useState("");
+  const [memberToDelete, setMemberToDelete] = useState(null);
+  const [deleteError, setDeleteError] = useState("");
+  const [isDeletingMember, setIsDeletingMember] = useState(false);
+
+  const linkify = (text) => {
+    if (!text) return "";
+  
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    return text.replace(
+      urlRegex,
+      (url) =>
+        `<a href="${url}" target="_blank" rel="noopener noreferrer" class="text-yellow-400 underline hover:text-yellow-300">${url}</a>`
+    );
+  };
+  
 
   useEffect(() => {
     const token = localStorage.getItem("authToken");
@@ -201,6 +230,136 @@ function Dashboard() {
   const handleLogout = () => {
     localStorage.clear();
     navigate("/login");
+  };
+
+  // Change Password handlers
+  const handlePasswordInputChange = (e) => {
+    const { name, value } = e.target;
+    setPasswordData((prev) => ({ ...prev, [name]: value }));
+    
+    if (passwordErrors[name]) {
+      setPasswordErrors(prev => ({ ...prev, [name]: null }));
+    }
+  };
+
+  const validatePasswordChange = () => {
+    const errors = {};
+    
+    if (!passwordData.oldPassword) {
+      errors.oldPassword = "Current password is required";
+    }
+    if (!passwordData.newPassword) {
+      errors.newPassword = "New password is required";
+    }
+    if (passwordData.newPassword.length < 6) {
+      errors.newPassword = "Password must be at least 6 characters";
+    }
+    if (!passwordData.confirmNewPassword) {
+      errors.confirmNewPassword = "Please confirm new password";
+    }
+    if (passwordData.newPassword !== passwordData.confirmNewPassword) {
+      errors.confirmNewPassword = "Passwords do not match";
+    }
+    
+    setPasswordErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  const handleChangePassword = async (e) => {
+    e.preventDefault();
+    
+    if (!validatePasswordChange()) {
+      return;
+    }
+
+    setIsChangingPassword(true);
+
+    try {
+      const token = localStorage.getItem("authToken");
+      const userEmail = teamData.leadEmail;
+
+      const response = await axios.post(
+        "https://swagserver.co.in/hackfusion/change_password.php",
+        {
+          email: userEmail,
+          token: token,
+          oldPassword: passwordData.oldPassword,
+          newPassword: passwordData.newPassword,
+        }
+      );
+
+      if (response.data.success) {
+        alert("Password changed successfully!");
+        setShowChangePasswordModal(false);
+        setPasswordData({
+          oldPassword: "",
+          newPassword: "",
+          confirmNewPassword: "",
+        });
+        setPasswordErrors({});
+      } else {
+        alert("Failed to change password: " + response.data.message);
+      }
+    } catch (error) {
+      console.error("Error changing password:", error);
+      alert("Error changing password. Please try again.");
+    } finally {
+      setIsChangingPassword(false);
+    }
+  };
+
+  // Delete Member handlers
+  const handleDeleteMemberClick = (memberId, memberName) => {
+    setMemberToDelete({ id: memberId, name: memberName });
+    setShowDeleteMemberModal(true);
+    setDeletePassword("");
+    setDeleteError("");
+  };
+
+  const handleDeleteMember = async (e) => {
+    e.preventDefault();
+    
+    if (!deletePassword) {
+      setDeleteError("Password is required");
+      return;
+    }
+
+    setIsDeletingMember(true);
+    setDeleteError("");
+
+    try {
+      const token = localStorage.getItem("authToken");
+      const leadEmail = teamData.leadEmail;
+      const teamId = teamData.teamId;
+
+      const response = await axios.post(
+        "https://swagserver.co.in/hackfusion/delete_member.php",
+        {
+          leadEmail: leadEmail,
+          leadToken: token,
+          teamId: teamId,
+          password: deletePassword,
+          memberId: memberToDelete.id,
+        }
+      );
+
+      if (response.data.success) {
+        alert(`Member ${memberToDelete.name} deleted successfully!`);
+        setShowDeleteMemberModal(false);
+        setMemberToDelete(null);
+        setDeletePassword("");
+        
+        // Refresh dashboard data
+        fetchDashboardData(token);
+      } else {
+        setDeleteError(response.data.message || "Failed to delete member");
+      }
+    } catch (error) {
+      console.error("Error deleting member:", error);
+      setDeleteError("Error deleting member. Please try again.");
+    } finally {
+      setIsDeletingMember(false);
+    }
   };
 
   const saveChanges = async (section) => {
@@ -965,53 +1124,85 @@ function Dashboard() {
       <canvas ref={canvasRef} style={{ display: "none" }} />
 
       <div className="max-w-6xl mx-auto">
-        <div className="bg-gray-800/70 rounded-xl p-6 mb-6 border border-gray-700 shadow-lg border-yellow-500 border-4">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-4">
-              {teamData.teamLogo ? (
-                <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-yellow-400">
-                  <img
-                    src={teamData.teamLogo}
-                    alt="Team Logo"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              ) : (
-                <div className="w-16 h-16 rounded-full bg-gray-700 border-2 border-yellow-400 flex items-center justify-center">
-                  <span className="text-2xl font-bold text-yellow-400">
-                    {teamData.teamName?.charAt(0) || "T"}
-                  </span>
-                </div>
-              )}
-              <div>
-                <h1 className="text-4xl font-bold text-yellow-400">
-                  TEAM DASHBOARD
-                </h1>
-                <h2 className="text-2xl font-semibold text-white mt-1">
-                  {teamData.teamName}
-                </h2>
-                <p className="text-gray-300">{teamData.theme}</p>
-              </div>
-            </div>
+      <div className="bg-gray-800/70 rounded-xl p-5 md:p-6 mb-6 border border-yellow-500 shadow-lg">
+  
+  {/* Header */}
+  <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-5">
 
-            <div className="flex flex-col items-end gap-2">
-              <div className="flex flex-wrap gap-2 justify-end">
-                <span className="px-4 py-1 bg-green-600 text-white rounded-full text-sm font-medium">
-                  Team Selection: {teamData.registrationStatus}
-                </span>
-                <span className="px-4 py-1 bg-blue-600 text-white rounded-full text-sm font-medium">
-                  Payment Verification: {teamData.paymentStatus}
-                </span>
-              </div>
-              <button
-                onClick={handleLogout}
-                className="mt-2 px-6 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg text-sm font-medium border-2 border-yellow-500 transition-colors"
-              >
-                Logout
-              </button>
-            </div>
-          </div>
+    {/* Team Info */}
+    <div className="flex items-center gap-4">
+      {teamData.teamLogo ? (
+        <img
+          src={teamData.teamLogo}
+          alt="Team Logo"
+          className="w-14 h-14 md:w-16 md:h-16 rounded-full border-2 border-yellow-400 object-cover"
+        />
+      ) : (
+        <div className="w-14 h-14 md:w-16 md:h-16 rounded-full bg-gray-700 border-2 border-yellow-400 flex items-center justify-center">
+          <span className="text-xl md:text-2xl font-bold text-yellow-400">
+            {teamData.teamName?.charAt(0) || "T"}
+          </span>
         </div>
+      )}
+
+      <div>
+        <h1 className="text-2xl md:text-4xl font-bold text-yellow-400">
+          Team Dashboard
+        </h1>
+        <h2 className="text-lg md:text-2xl font-semibold text-white">
+          {teamData.teamName}
+        </h2>
+        <p className="text-gray-400 text-sm">{teamData.theme}</p>
+      </div>
+    </div>
+
+    {/* Actions */}
+    <div className="flex flex-col gap-3 md:items-end">
+      <div className="flex flex-wrap gap-2">
+        <span className="px-3 py-1 bg-green-600 text-white rounded-full text-xs md:text-sm">
+          Team: {teamData.registrationStatus}
+        </span>
+        <span className="px-3 py-1 bg-blue-600 text-white rounded-full text-xs md:text-sm">
+          Payment: {teamData.paymentStatus}
+        </span>
+      </div>
+
+      <div className="flex gap-2">
+        <button
+          onClick={() => setShowChangePasswordModal(true)}
+          className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-sm"
+        >
+          Change Password
+        </button>
+
+        <button
+          onClick={handleLogout}
+          className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm"
+        >
+          Logout
+        </button>
+      </div>
+    </div>
+  </div>
+
+  {/* Footer Branding */}
+  <div className="mt-5 pt-3 border-t border-gray-700 text-center text-xs text-gray-400 flex items-center justify-center gap-2">
+    Powered by{" "}
+    <a
+      href="https://beestack.in"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="text-yellow-400 hover:underline"
+    >
+      <img
+      src="/beestack_text_logo.png"
+      alt="BeeStack"
+      className="h-4 md:h-5 w-auto"
+    />
+    </a>
+  </div>
+</div>
+
 
         {/* Add Member Button */}
         {canAddMember && (
@@ -1198,6 +1389,196 @@ function Dashboard() {
           </div>
         )}
 
+        {/* Change Password Modal */}
+        {showChangePasswordModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+            <div className="bg-gray-800 rounded-xl p-6 max-w-md w-full border-4 border-yellow-500">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-2xl font-bold text-blue-400">Change Password</h2>
+                <button
+                  onClick={() => {
+                    setShowChangePasswordModal(false);
+                    setPasswordData({
+                      oldPassword: "",
+                      newPassword: "",
+                      confirmNewPassword: "",
+                    });
+                    setPasswordErrors({});
+                  }}
+                  className="text-gray-400 hover:text-white"
+                >
+                  <X size={24} />
+                </button>
+              </div>
+
+              <form onSubmit={handleChangePassword} className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">
+                    Current Password *
+                  </label>
+                  <input
+                    type="password"
+                    name="oldPassword"
+                    value={passwordData.oldPassword}
+                    onChange={handlePasswordInputChange}
+                    className={`w-full px-4 py-2 bg-gray-700 text-white border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+                      passwordErrors.oldPassword ? 'border-red-500' : 'border-gray-600'
+                    }`}
+                  />
+                  {passwordErrors.oldPassword && (
+                    <p className="text-red-400 text-sm mt-1">{passwordErrors.oldPassword}</p>
+                  )}
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">
+                    New Password *
+                  </label>
+                  <input
+                    type="password"
+                    name="newPassword"
+                    value={passwordData.newPassword}
+                    onChange={handlePasswordInputChange}
+                    className={`w-full px-4 py-2 bg-gray-700 text-white border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+                      passwordErrors.newPassword ? 'border-red-500' : 'border-gray-600'
+                    }`}
+                  />
+                  {passwordErrors.newPassword && (
+                    <p className="text-red-400 text-sm mt-1">{passwordErrors.newPassword}</p>
+                  )}
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">
+                    Confirm New Password *
+                  </label>
+                  <input
+                    type="password"
+                    name="confirmNewPassword"
+                    value={passwordData.confirmNewPassword}
+                    onChange={handlePasswordInputChange}
+                    className={`w-full px-4 py-2 bg-gray-700 text-white border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+                      passwordErrors.confirmNewPassword ? 'border-red-500' : 'border-gray-600'
+                    }`}
+                  />
+                  {passwordErrors.confirmNewPassword && (
+                    <p className="text-red-400 text-sm mt-1">{passwordErrors.confirmNewPassword}</p>
+                  )}
+                </div>
+
+                <div className="flex gap-4 mt-6">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowChangePasswordModal(false);
+                      setPasswordData({
+                        oldPassword: "",
+                        newPassword: "",
+                        confirmNewPassword: "",
+                      });
+                      setPasswordErrors({});
+                    }}
+                    className="flex-1 px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white rounded-lg font-medium transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={isChangingPassword}
+                    className={`flex-1 px-6 py-3 bg-blue-600 text-white rounded-lg font-medium transition-colors ${
+                      isChangingPassword
+                        ? 'opacity-70 cursor-not-allowed'
+                        : 'hover:bg-blue-700'
+                    }`}
+                  >
+                    {isChangingPassword ? 'Changing...' : 'Change Password'}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+
+        {/* Delete Member Confirmation Modal */}
+        {showDeleteMemberModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+            <div className="bg-gray-800 rounded-xl p-6 max-w-md w-full border-4 border-red-500">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-2xl font-bold text-red-400">Remove Member</h2>
+                <button
+                  onClick={() => {
+                    setShowDeleteMemberModal(false);
+                    setMemberToDelete(null);
+                    setDeletePassword("");
+                    setDeleteError("");
+                  }}
+                  className="text-gray-400 hover:text-white"
+                >
+                  <X size={24} />
+                </button>
+              </div>
+
+              <div className="mb-6">
+                <p className="text-white text-lg mb-2">
+                  Are you sure you want to Remove <span className="font-bold text-red-400">{memberToDelete?.name}</span>?
+                </p>
+                <p className="text-gray-400 text-sm">
+                  This action cannot be undone. Please enter your password to confirm.
+                </p>
+              </div>
+
+              <form onSubmit={handleDeleteMember} className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">
+                    Your Password *
+                  </label>
+                  <input
+                    type="password"
+                    value={deletePassword}
+                    onChange={(e) => {
+                      setDeletePassword(e.target.value);
+                      setDeleteError("");
+                    }}
+                    className={`w-full px-4 py-2 bg-gray-700 text-white border rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent ${
+                      deleteError ? 'border-red-500' : 'border-gray-600'
+                    }`}
+                    placeholder="Enter your password"
+                  />
+                  {deleteError && (
+                    <p className="text-red-400 text-sm mt-1">{deleteError}</p>
+                  )}
+                </div>
+
+                <div className="flex gap-4 mt-6">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowDeleteMemberModal(false);
+                      setMemberToDelete(null);
+                      setDeletePassword("");
+                      setDeleteError("");
+                    }}
+                    className="flex-1 px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white rounded-lg font-medium transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={isDeletingMember}
+                    className={`flex-1 px-6 py-3 bg-red-600 text-white rounded-lg font-medium transition-colors ${
+                      isDeletingMember
+                        ? 'opacity-70 cursor-not-allowed'
+                        : 'hover:bg-red-700'
+                    }`}
+                  >
+                    {isDeletingMember ? 'Removing...' : 'Remove Member'}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Team Information Card */}
           <div className="bg-gray-800/70 overflow-auto rounded-xl p-6 border border-gray-700 shadow-lg border-yellow-500 border-4">
@@ -1294,9 +1675,6 @@ function Dashboard() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-1">
-                Abstract
-              </label>
               {editMode.abstract ? (
                 <textarea
                   name="abstract"
@@ -1467,22 +1845,33 @@ function Dashboard() {
                   )}
                   <h2 className="text-xl font-bold text-white">Member 1</h2>
                 </div>
-                {(isLead || userId === teamData.m1Id) && (
-                  <button
-                    onClick={() =>
-                      editMode.member1
-                        ? saveChanges("member1")
-                        : toggleEditMode("member1")
-                    }
-                    className={`px-4 py-2 rounded-lg font-medium ${
-                      editMode.member1
-                        ? "bg-green-600 hover:bg-green-500"
-                        : "bg-blue-600 hover:bg-blue-500"
-                    } text-white transition-colors`}
-                  >
-                    {editMode.member1 ? "Save" : "Edit"}
-                  </button>
-                )}
+                <div className="flex gap-2">
+                  {(isLead || userId === teamData.m1Id) && (
+                    <button
+                      onClick={() =>
+                        editMode.member1
+                          ? saveChanges("member1")
+                          : toggleEditMode("member1")
+                      }
+                      className={`px-4 py-2 rounded-lg font-medium ${
+                        editMode.member1
+                          ? "bg-green-600 hover:bg-green-500"
+                          : "bg-blue-600 hover:bg-blue-500"
+                      } text-white transition-colors`}
+                    >
+                      {editMode.member1 ? "Save" : "Edit"}
+                    </button>
+                  )}
+                  {isLead && teamData?.teamSize === 4 && (
+                    <button
+                      onClick={() => handleDeleteMemberClick(teamData.m1Id, teamData.m1Name)}
+                      className="px-4 py-2 rounded-lg font-medium bg-red-600 hover:bg-red-700 text-white transition-colors flex items-center gap-2"
+                    >
+                      <Trash2 size={16} />
+                      Remove
+                    </button>
+                  )}
+                </div>
               </div>
 
               <div className="space-y-4">
@@ -1611,22 +2000,33 @@ function Dashboard() {
                   )}
                   <h2 className="text-xl font-bold text-white">Member 2</h2>
                 </div>
-                {(isLead || userId === teamData.m2Id) && (
-                  <button
-                    onClick={() =>
-                      editMode.member2
-                        ? saveChanges("member2")
-                        : toggleEditMode("member2")
-                    }
-                    className={`px-4 py-2 rounded-lg font-medium ${
-                      editMode.member2
-                        ? "bg-green-600 hover:bg-green-500"
-                        : "bg-yellow-600 hover:bg-yellow-500"
-                    } text-white transition-colors`}
-                  >
-                    {editMode.member2 ? "Save" : "Edit"}
-                  </button>
-                )}
+                <div className="flex gap-2">
+                  {(isLead || userId === teamData.m2Id) && (
+                    <button
+                      onClick={() =>
+                        editMode.member2
+                          ? saveChanges("member2")
+                          : toggleEditMode("member2")
+                      }
+                      className={`px-4 py-2 rounded-lg font-medium ${
+                        editMode.member2
+                          ? "bg-green-600 hover:bg-green-500"
+                          : "bg-yellow-600 hover:bg-yellow-500"
+                      } text-white transition-colors`}
+                    >
+                      {editMode.member2 ? "Save" : "Edit"}
+                    </button>
+                  )}
+                  {isLead && teamData?.teamSize === 4 && (
+                    <button
+                      onClick={() => handleDeleteMemberClick(teamData.m2Id, teamData.m2Name)}
+                      className="px-4 py-2 rounded-lg font-medium bg-red-600 hover:bg-red-700 text-white transition-colors flex items-center gap-2"
+                    >
+                      <Trash2 size={16} />
+                      Remove
+                    </button>
+                  )}
+                </div>
               </div>
 
               <div className="space-y-4">
@@ -1755,22 +2155,33 @@ function Dashboard() {
                   )}
                   <h2 className="text-xl font-bold text-white">Member 3</h2>
                 </div>
-                {(isLead || userId === teamData.m3Id) && (
-                  <button
-                    onClick={() =>
-                      editMode.member3
-                        ? saveChanges("member3")
-                        : toggleEditMode("member3")
-                    }
-                    className={`px-4 py-2 rounded-lg font-medium ${
-                      editMode.member3
-                        ? "bg-green-600 hover:bg-green-500"
-                        : "bg-green-600 hover:bg-green-500"
-                    } text-white transition-colors`}
-                  >
-                    {editMode.member3 ? "Save" : "Edit"}
-                  </button>
-                )}
+                <div className="flex gap-2">
+                  {(isLead || userId === teamData.m3Id) && (
+                    <button
+                      onClick={() =>
+                        editMode.member3
+                          ? saveChanges("member3")
+                          : toggleEditMode("member3")
+                      }
+                      className={`px-4 py-2 rounded-lg font-medium ${
+                        editMode.member3
+                          ? "bg-green-600 hover:bg-green-500"
+                          : "bg-green-600 hover:bg-green-500"
+                      } text-white transition-colors`}
+                    >
+                      {editMode.member3 ? "Save" : "Edit"}
+                    </button>
+                  )}
+                  {isLead && teamData?.teamSize === 4 && (
+                    <button
+                      onClick={() => handleDeleteMemberClick(teamData.m3Id, teamData.m3Name)}
+                      className="px-4 py-2 rounded-lg font-medium bg-red-600 hover:bg-red-700 text-white transition-colors flex items-center gap-2"
+                    >
+                      <Trash2 size={16} />
+                      Remove
+                    </button>
+                  )}
+                </div>
               </div>
 
               <div className="space-y-4">
