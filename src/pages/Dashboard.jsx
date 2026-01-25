@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { Camera, X, Check, Crop } from "lucide-react";
+import { Camera, X, Check, Crop, UserPlus } from "lucide-react";
 
 function Dashboard() {
   const [teamData, setTeamData] = useState(null);
@@ -81,9 +81,21 @@ function Dashboard() {
   const navigate = useNavigate();
   const [isLead, setIsLead] = useState(false);
   const [userId, setUserId] = useState(null);
+  
+  // New state for adding member
+  const [showAddMemberForm, setShowAddMemberForm] = useState(false);
+  const [newMemberData, setNewMemberData] = useState({
+    name: "",
+    email: "",
+    mobile: "",
+    gender: "M",
+    isPwd: "no",
+    profilePic: null,
+  });
+  const [addMemberErrors, setAddMemberErrors] = useState({});
+  const [isSubmittingMember, setIsSubmittingMember] = useState(false);
 
   useEffect(() => {
-    // Get token from localStorage (set during login)
     const token = localStorage.getItem("authToken");
     const userIdFromStorage = localStorage.getItem("user")
       ? JSON.parse(localStorage.getItem("user")).member_id
@@ -99,6 +111,10 @@ function Dashboard() {
       return;
     }
 
+    fetchDashboardData(token);
+  }, [navigate]);
+
+  const fetchDashboardData = (token) => {
     axios
       .get(
         `https://swagserver.co.in/hackfusion/get_dashboard.php?token=${token}`
@@ -106,7 +122,6 @@ function Dashboard() {
       .then((res) => {
         console.log(res.data);
         if (res.data.success) {
-          // Transform the API response to match the expected format
           const data = res.data.data;
           const leadMember = data.members.find(
             (member) => member.is_lead === 1
@@ -116,6 +131,7 @@ function Dashboard() {
           );
 
           const transformedData = {
+            teamId: data.team_id,
             teamName: data.team_name,
             theme: data.theme,
             abstract: data.abstract,
@@ -128,7 +144,6 @@ function Dashboard() {
             teamLogo: data.team_logo,
             paymentProof: data.payment_proof,
 
-            // Lead member details
             leadId: leadMember?.member_id || "",
             leadName: leadMember?.name || "",
             leadEmail: leadMember?.email || "",
@@ -137,7 +152,6 @@ function Dashboard() {
             leadPwd: leadMember?.is_pwd === 1 ? "yes" : "no",
             leadProfilePic: leadMember?.profile_pic || "",
 
-            // Member 1 details (if exists)
             m1Id: otherMembers[0]?.member_id || "",
             m1Name: otherMembers[0]?.name || "",
             m1Email: otherMembers[0]?.email || "",
@@ -146,7 +160,6 @@ function Dashboard() {
             m1Pwd: otherMembers[0]?.is_pwd === 1 ? "yes" : "no",
             m1ProfilePic: otherMembers[0]?.profile_pic || "",
 
-            // Member 2 details (if exists)
             m2Id: otherMembers[1]?.member_id || "",
             m2Name: otherMembers[1]?.name || "",
             m2Email: otherMembers[1]?.email || "",
@@ -155,7 +168,6 @@ function Dashboard() {
             m2Pwd: otherMembers[1]?.is_pwd === 1 ? "yes" : "no",
             m2ProfilePic: otherMembers[1]?.profile_pic || "",
 
-            // Member 3 details (if exists)
             m3Id: otherMembers[2]?.member_id || "",
             m3Name: otherMembers[2]?.name || "",
             m3Email: otherMembers[2]?.email || "",
@@ -175,7 +187,7 @@ function Dashboard() {
         console.error(err);
         navigate("/login");
       });
-  }, [navigate]);
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -195,7 +207,6 @@ function Dashboard() {
     const token = localStorage.getItem("authToken");
     let payload = { token };
 
-    // Determine edit type and populate payload
     switch (section) {
       case "teamInfo":
         payload.edit_type = "team";
@@ -262,17 +273,112 @@ function Dashboard() {
     }
   };
 
+  // New member form handlers
+  const handleNewMemberInputChange = (e) => {
+    const { name, value, files } = e.target;
+    if (files) {
+      setNewMemberData((prev) => ({ ...prev, [name]: files[0] }));
+    } else {
+      setNewMemberData((prev) => ({ ...prev, [name]: value }));
+    }
+    
+    if (addMemberErrors[name]) {
+      setAddMemberErrors(prev => ({ ...prev, [name]: null }));
+    }
+  };
+
+  const validateNewMember = () => {
+    const errors = {};
+    
+    if (!newMemberData.name.trim()) {
+      errors.name = "Name is required";
+    }
+    if (!newMemberData.email.trim()) {
+      errors.email = "Email is required";
+    }
+    if (!newMemberData.mobile.trim()) {
+      errors.mobile = "Mobile number is required";
+    }
+    if (newMemberData.mobile.trim().length !== 10) {
+      errors.mobile = "Mobile number must be 10 digits";
+    }
+    if (!newMemberData.profilePic) {
+      errors.profilePic = "Profile picture is required";
+    }
+    
+    setAddMemberErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  const handleAddMember = async (e) => {
+    e.preventDefault();
+    
+    if (!validateNewMember()) {
+      return;
+    }
+
+    setIsSubmittingMember(true);
+
+    try {
+      const token = localStorage.getItem("authToken");
+      const leadEmail = teamData.leadEmail;
+      const teamId = teamData.teamId;
+
+      const formData = new FormData();
+      formData.append("leadEmail", leadEmail);
+      formData.append("leadToken", token);
+      formData.append("teamId", teamId);
+      formData.append("name", newMemberData.name);
+      formData.append("email", newMemberData.email);
+      formData.append("mobile", newMemberData.mobile);
+      formData.append("gender", newMemberData.gender);
+      formData.append("isPwd", newMemberData.isPwd === "yes" ? 1 : 0);
+      formData.append("profilePic", newMemberData.profilePic);
+
+      const response = await axios.post(
+        "https://swagserver.co.in/hackfusion/add_team_member.php",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      if (response.data.success) {
+        alert("Member added successfully! Refreshing dashboard...");
+        setShowAddMemberForm(false);
+        setNewMemberData({
+          name: "",
+          email: "",
+          mobile: "",
+          gender: "M",
+          isPwd: "no",
+          profilePic: null,
+        });
+        
+        // Refresh dashboard data
+        fetchDashboardData(token);
+      } else {
+        alert("Failed to add member: " + response.data.message);
+      }
+    } catch (error) {
+      console.error("Error adding member:", error);
+      alert("Error adding member. Please try again.");
+    } finally {
+      setIsSubmittingMember(false);
+    }
+  };
+
   const handleImageSelect = (memberType, event) => {
     const file = event.target.files[0];
     if (!file) return;
 
-    // Check file type
     if (!file.type.startsWith("image/")) {
       alert("Please select an image file");
       return;
     }
 
-    // Check file size (5MB limit)
     if (file.size > 5 * 1024 * 1024) {
       alert("Image size should be less than 5MB");
       return;
@@ -289,13 +395,11 @@ function Dashboard() {
         [memberType]: true,
       }));
 
-      // Initialize crop position and size
       setCropPosition((prev) => ({
         ...prev,
         [memberType]: { x: 0, y: 0 },
       }));
 
-      // Default crop size to 100px or half the image size, whichever is smaller
       const img = new Image();
       img.onload = () => {
         const size = Math.min(img.width, img.height, 100);
@@ -324,13 +428,11 @@ function Dashboard() {
   };
 
   const applyManualCrop = (memberType) => {
-    // Crop the image based on the current crop position and size
     const canvas = document.createElement("canvas");
     const ctx = canvas.getContext("2d");
     const img = new Image();
 
     img.onload = () => {
-      // Calculate the actual crop area based on the image dimensions
       const container = cropContainerRefs[memberType].current;
       if (!container) return;
 
@@ -341,14 +443,11 @@ function Dashboard() {
       const cropY = cropPosition[memberType].y * scaleY;
       const cropSizePx = cropSize[memberType] * Math.min(scaleX, scaleY);
 
-      // Set canvas size to 400x400 (output size)
       canvas.width = 400;
       canvas.height = 400;
 
-      // Draw the cropped portion of the image
       ctx.drawImage(img, cropX, cropY, cropSizePx, cropSizePx, 0, 0, 400, 400);
 
-      // Update the selected image with the cropped version
       canvas.toBlob(
         (blob) => {
           const reader = new FileReader();
@@ -364,7 +463,6 @@ function Dashboard() {
         0.9
       );
 
-      // Exit cropping mode
       setCroppingMode((prev) => ({
         ...prev,
         [memberType]: false,
@@ -385,7 +483,6 @@ function Dashboard() {
       [memberType]: {
         x: clientX,
         y: clientY,
-        // Store initial crop position and size for resize operations
         initialX: cropPosition[memberType].x,
         initialY: cropPosition[memberType].y,
         initialSize: cropSize[memberType],
@@ -418,7 +515,6 @@ function Dashboard() {
     const deltaY = clientY - dragStart[memberType].y;
 
     if (corner === "move") {
-      // Move the crop area
       const newX = Math.max(
         0,
         Math.min(
@@ -438,16 +534,15 @@ function Dashboard() {
         [memberType]: { x: newX, y: newY },
       }));
     } else if (corner === "resize") {
-      // Resize the crop area from the bottom-right corner
       const maxDelta = Math.max(deltaX, deltaY);
       const newSize = Math.max(
-        50, // Minimum size
+        50,
         Math.min(
           Math.min(
             rect.width - dragStart[memberType].initialX,
             rect.height - dragStart[memberType].initialY
-          ), // Maximum size (available space)
-          dragStart[memberType].initialSize + maxDelta // New size based on drag
+          ),
+          dragStart[memberType].initialSize + maxDelta
         )
       );
 
@@ -488,9 +583,7 @@ function Dashboard() {
     handleCropEnd(memberType);
   };
 
-  // Update the cropImageToSquare function to use manual crop data if available
   const cropImageToSquare = async (imageSrc, memberType) => {
-    // If we're in manual crop mode, use those coordinates
     if (croppingMode[memberType] && selectedImages[memberType]) {
       return new Promise((resolve) => {
         const canvas = document.createElement("canvas");
@@ -536,7 +629,6 @@ function Dashboard() {
       });
     }
 
-    // Fall back to automatic center crop
     return new Promise((resolve) => {
       const canvas = canvasRef.current;
       const ctx = canvas.getContext("2d");
@@ -565,7 +657,6 @@ function Dashboard() {
     });
   };
 
-  // Update the saveProfilePicture function to pass memberType
   const saveProfilePicture = async (memberType) => {
     try {
       const token = localStorage.getItem("authToken");
@@ -576,7 +667,6 @@ function Dashboard() {
         return;
       }
 
-      // Get the member ID based on member type
       let memberId;
       switch (memberType) {
         case "lead":
@@ -595,10 +685,8 @@ function Dashboard() {
           return;
       }
 
-      // Crop image to square (pass memberType for manual cropping)
       const croppedBlob = await cropImageToSquare(imageSrc, memberType);
 
-      // Create FormData
       const formData = new FormData();
       formData.append("token", token);
       formData.append("member_id", memberId);
@@ -615,7 +703,6 @@ function Dashboard() {
       );
 
       if (response.data.success) {
-        // Update the team data with new profile picture URL
         const profilePicKey =
           memberType === "lead"
             ? "leadProfilePic"
@@ -630,7 +717,6 @@ function Dashboard() {
           [profilePicKey]: response.data.data.profile_pic,
         }));
 
-        // Clear the selected image and exit edit mode
         setSelectedImages((prev) => ({
           ...prev,
           [memberType]: null,
@@ -641,7 +727,6 @@ function Dashboard() {
           [memberType]: false,
         }));
 
-        // Reset cropping mode
         setCroppingMode((prev) => ({
           ...prev,
           [memberType]: false,
@@ -666,12 +751,10 @@ function Dashboard() {
       ...prev,
       [memberType]: false,
     }));
-    // Reset cropping mode
     setCroppingMode((prev) => ({
       ...prev,
       [memberType]: false,
     }));
-    // Clear file input
     if (fileInputRefs[memberType].current) {
       fileInputRefs[memberType].current.value = "";
     }
@@ -725,7 +808,6 @@ function Dashboard() {
             </div>
           )}
 
-          {/* Camera overlay for edit */}
           {canEdit && !isEditing && (
             <div
               className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
@@ -736,7 +818,6 @@ function Dashboard() {
           )}
         </div>
 
-        {/* Crop Interface */}
         {isEditing && selectedImage && (
           <div className="absolute top-24 left-0 z-50 bg-gray-800 p-4 rounded-lg border border-gray-600 shadow-xl min-w-[300px]">
             <div className="flex justify-between items-center mb-3">
@@ -792,7 +873,6 @@ function Dashboard() {
                     className="w-full h-full object-contain pointer-events-none"
                     style={{ touchAction: 'none' }}
                   />
-                  {/* Crop overlay */}
 
                   <div
                     className="absolute border-2 border-white shadow-lg select-none"
@@ -812,20 +892,19 @@ function Dashboard() {
                       handleCropTouchStart(memberType, e, "move")
                     }
                   >
-                    {/* Resize handle in bottom-right corner - positioned inside the crop area */}
                     <div
                       className="absolute bottom-0 right-0 w-6 h-6 bg-white cursor-nwse-resize select-none"
                       style={{
-                        transform: "translate(25%, 25%)", // Position it slightly inside the corner
+                        transform: "translate(25%, 25%)",
                         borderRadius: "2px",
                         touchAction: 'none'
                       }}
                       onMouseDown={(e) => {
-                        e.stopPropagation(); // Prevent triggering the move event
+                        e.stopPropagation();
                         handleCropMouseDown(memberType, e, "resize");
                       }}
                       onTouchStart={(e) => {
-                        e.stopPropagation(); // Prevent triggering the move event
+                        e.stopPropagation();
                         handleCropTouchStart(memberType, e, "resize");
                       }}
                     ></div>
@@ -860,7 +939,6 @@ function Dashboard() {
           </div>
         )}
 
-        {/* Hidden file input */}
         <input
           ref={fileInputRefs[memberType]}
           type="file"
@@ -880,15 +958,15 @@ function Dashboard() {
     );
   }
 
+  const canAddMember = teamData.teamSize === 3 && !teamData.m3Name && isLead;
+
   return (
     <div className="fixed inset-0 z-30 overflow-y-auto py-32 pb-6 ms-5 me-5 [&::-webkit-scrollbar]:hidden">
-      {/* Hidden canvas for image processing */}
       <canvas ref={canvasRef} style={{ display: "none" }} />
 
       <div className="max-w-6xl mx-auto">
         <div className="bg-gray-800/70 rounded-xl p-6 mb-6 border border-gray-700 shadow-lg border-yellow-500 border-4">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            {/* Team Logo and Name */}
             <div className="flex items-center gap-4">
               {teamData.teamLogo ? (
                 <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-yellow-400">
@@ -916,7 +994,6 @@ function Dashboard() {
               </div>
             </div>
 
-            {/* Status Badges + Logout */}
             <div className="flex flex-col items-end gap-2">
               <div className="flex flex-wrap gap-2 justify-end">
                 <span className="px-4 py-1 bg-green-600 text-white rounded-full text-sm font-medium">
@@ -935,6 +1012,191 @@ function Dashboard() {
             </div>
           </div>
         </div>
+
+        {/* Add Member Button */}
+        {canAddMember && (
+          <div className="mb-6">
+            <button
+              onClick={() => setShowAddMemberForm(true)}
+              className="w-full bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-500 hover:to-blue-500 text-white px-6 py-4 rounded-xl font-bold text-lg transition-all shadow-lg flex items-center justify-center gap-2 border-2 border-yellow-400"
+            >
+              <UserPlus size={24} />
+              Add 4th Team Member
+            </button>
+          </div>
+        )}
+
+        {/* Add Member Form Modal */}
+        {showAddMemberForm && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+            <div className="bg-gray-800 rounded-xl p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto border-4 border-yellow-500">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-2xl font-bold text-green-400">Add New Team Member</h2>
+                <button
+                  onClick={() => {
+                    setShowAddMemberForm(false);
+                    setNewMemberData({
+                      name: "",
+                      email: "",
+                      mobile: "",
+                      gender: "M",
+                      isPwd: "no",
+                      profilePic: null,
+                    });
+                    setAddMemberErrors({});
+                  }}
+                  className="text-gray-400 hover:text-white"
+                >
+                  <X size={24} />
+                </button>
+              </div>
+
+              <form onSubmit={handleAddMember} className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-1">
+                      Full Name *
+                    </label>
+                    <input
+                      type="text"
+                      name="name"
+                      value={newMemberData.name}
+                      onChange={handleNewMemberInputChange}
+                      className={`w-full px-4 py-2 bg-gray-700 text-white border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent ${
+                        addMemberErrors.name ? 'border-red-500' : 'border-gray-600'
+                      }`}
+                    />
+                    {addMemberErrors.name && (
+                      <p className="text-red-400 text-sm mt-1">{addMemberErrors.name}</p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-1">
+                      Email *
+                    </label>
+                    <input
+                      type="email"
+                      name="email"
+                      value={newMemberData.email}
+                      onChange={handleNewMemberInputChange}
+                      className={`w-full px-4 py-2 bg-gray-700 text-white border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent ${
+                        addMemberErrors.email ? 'border-red-500' : 'border-gray-600'
+                      }`}
+                    />
+                    {addMemberErrors.email && (
+                      <p className="text-red-400 text-sm mt-1">{addMemberErrors.email}</p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-1">
+                      Mobile *
+                    </label>
+                    <input
+                      type="tel"
+                      name="mobile"
+                      value={newMemberData.mobile}
+                      onChange={handleNewMemberInputChange}
+                      className={`w-full px-4 py-2 bg-gray-700 text-white border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent ${
+                        addMemberErrors.mobile ? 'border-red-500' : 'border-gray-600'
+                      }`}
+                    />
+                    {addMemberErrors.mobile && (
+                      <p className="text-red-400 text-sm mt-1">{addMemberErrors.mobile}</p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-1">
+                      Gender
+                    </label>
+                    <select
+                      name="gender"
+                      value={newMemberData.gender}
+                      onChange={handleNewMemberInputChange}
+                      className="w-full px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                    >
+                      <option value="M">Male</option>
+                      <option value="F">Female</option>
+                      <option value="O">Other</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-1">
+                      PWD (Person with Disability)
+                    </label>
+                    <select
+                      name="isPwd"
+                      value={newMemberData.isPwd}
+                      onChange={handleNewMemberInputChange}
+                      className="w-full px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                    >
+                      <option value="no">No</option>
+                      <option value="yes">Yes</option>
+                    </select>
+                  </div>
+
+                  <div className="md:col-span-2">
+                    <label className="block text-sm font-medium text-gray-300 mb-1">
+                      Profile Picture *
+                    </label>
+                    <input
+                      type="file"
+                      name="profilePic"
+                      onChange={handleNewMemberInputChange}
+                      accept="image/*"
+                      className={`w-full px-4 py-2 bg-gray-700 text-white border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-500 file:text-white hover:file:bg-green-600 ${
+                        addMemberErrors.profilePic ? 'border-red-500' : 'border-gray-600'
+                      }`}
+                    />
+                    {addMemberErrors.profilePic && (
+                      <p className="text-red-400 text-sm mt-1">{addMemberErrors.profilePic}</p>
+                    )}
+                    {newMemberData.profilePic && (
+                      <p className="text-sm text-green-400 mt-1">
+                        Selected: {newMemberData.profilePic.name}
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="flex gap-4 mt-6">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowAddMemberForm(false);
+                      setNewMemberData({
+                        name: "",
+                        email: "",
+                        mobile: "",
+                        gender: "M",
+                        isPwd: "no",
+                        profilePic: null,
+                      });
+                      setAddMemberErrors({});
+                    }}
+                    className="flex-1 px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white rounded-lg font-medium transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={isSubmittingMember}
+                    className={`flex-1 px-6 py-3 bg-green-600 text-white rounded-lg font-medium transition-colors ${
+                      isSubmittingMember
+                        ? 'opacity-70 cursor-not-allowed'
+                        : 'hover:bg-green-700'
+                    }`}
+                  >
+                    {isSubmittingMember ? 'Adding Member...' : 'Add Member'}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Team Information Card */}
@@ -1479,7 +1741,7 @@ function Dashboard() {
             </div>
           )}
 
-          {/* Member 3 Card (if exists) */}
+          {/* Member 3 Card */}
           {teamData.m3Name && (
             <div className="bg-gray-800/70 rounded-xl p-6 border border-gray-700 shadow-lg border-yellow-500 border-4">
               <div className="flex justify-between items-center mb-4">
