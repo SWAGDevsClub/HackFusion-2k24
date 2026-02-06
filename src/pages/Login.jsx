@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { BASE_URL } from "../config/api";
 
 function Login() {
   const [loginData, setLoginData] = useState({
@@ -32,7 +33,7 @@ function Login() {
       formData.append("password", loginData.password);
 
       const response = await axios.post(
-        "https://swagserver.co.in/hackfusion/login.php",
+        `${BASE_URL}/login.php`,
         formData,
         { headers: { "Content-Type": "multipart/form-data" } }
       );

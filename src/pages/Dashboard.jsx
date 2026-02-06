@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Camera, X, Check, Crop, UserPlus, Trash2 } from "lucide-react";
+import { BASE_URL } from "../config/api";
 
 function Dashboard() {
   const [teamData, setTeamData] = useState(null);
@@ -145,7 +146,7 @@ function Dashboard() {
   const fetchDashboardData = (token) => {
     axios
       .get(
-        `https://swagserver.co.in/hackfusion/get_dashboard.php?token=${token}`
+        `${BASE_URL}/get_dashboard.php?token=${token}`
       )
       .then((res) => {
         console.log(res.data);
@@ -278,7 +279,7 @@ function Dashboard() {
       const userEmail = teamData.leadEmail;
 
       const response = await axios.post(
-        "https://swagserver.co.in/hackfusion/change_password.php",
+        `${BASE_URL}/change_password.php`,
         {
           email: userEmail,
           token: token,
@@ -332,7 +333,7 @@ function Dashboard() {
       const teamId = teamData.teamId;
 
       const response = await axios.post(
-        "https://swagserver.co.in/hackfusion/delete_member.php",
+        `${BASE_URL}/delete_member.php`,
         {
           leadEmail: leadEmail,
           leadToken: token,
@@ -415,7 +416,7 @@ function Dashboard() {
 
     try {
       const res = await axios.post(
-        "https://swagserver.co.in/hackfusion/edit_team.php",
+        `${BASE_URL}/edit_team.php`,
         payload
       );
 
@@ -494,7 +495,7 @@ function Dashboard() {
       formData.append("profilePic", newMemberData.profilePic);
 
       const response = await axios.post(
-        "https://swagserver.co.in/hackfusion/add_team_member.php",
+        `${BASE_URL}/add_team_member.php`,
         formData,
         {
           headers: {
@@ -851,7 +852,7 @@ function Dashboard() {
       formData.append("profile_pic", croppedBlob, "profile_pic.jpg");
 
       const response = await axios.post(
-        "https://swagserver.co.in/hackfusion/edit_img.php",
+        `${BASE_URL}/edit_img.php`,
         formData,
         {
           headers: {

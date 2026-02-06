@@ -1,5 +1,6 @@
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { BASE_URL } from "../config/api";
 
 function Register() {
   const [teamSize, setTeamSize] = useState(4); // Default to 4 members
@@ -278,7 +279,7 @@ function Register() {
 
       // API Request
       const response = await fetch(
-        "https://swagserver.co.in/hackfusion/register.php",
+        `${BASE_URL}/register.php`,
         {
           method: "POST",
           body: formDataToSend,
