@@ -44,21 +44,38 @@ function Register() {
   const tabsRef = useRef(null);
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+// Add this state near other useState declarations (around line 47)
+const [fileSizeErrors, setFileSizeErrors] = useState({});
 
-  const handleInputChange = (e) => {
-    const { name, value, files } = e.target;
-    if (files) {
-      setFormData((prev) => ({ ...prev, [name]: files[0] }));
-    } else {
-      setFormData((prev) => ({ ...prev, [name]: value }));
-    }
+// Update the handleInputChange function to include file size validation
+const handleInputChange = (e) => {
+  const { name, value, files } = e.target;
+  if (files) {
+    const file = files[0];
+    const maxSize = 1 * 1024 * 1024; // 1MB in bytes
     
-    // Clear error when user starts typing
-    if (errors[name]) {
-      setErrors(prev => ({ ...prev, [name]: null }));
+    if (file.size > maxSize) {
+      setFileSizeErrors(prev => ({ 
+        ...prev, 
+        [name]: `File size must be less than 1MB. Current size: ${(file.size / (1024 * 1024)).toFixed(2)}MB` 
+      }));
+      // Clear the file input
+      e.target.value = '';
+      return;
+    } else {
+      // Clear file size error if valid
+      setFileSizeErrors(prev => ({ ...prev, [name]: null }));
+      setFormData((prev) => ({ ...prev, [name]: file }));
     }
-  };
-
+  } else {
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  }
+  
+  // Clear error when user starts typing
+  if (errors[name]) {
+    setErrors(prev => ({ ...prev, [name]: null }));
+  }
+};
   const handleTeamSizeChange = (size) => {
     setTeamSize(size);
     setFormData((prev) => ({ ...prev, teamSize: size }));
@@ -531,8 +548,10 @@ function Register() {
                     accept="image/*"
                     className="w-full px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-red-500 file:text-white hover:file:bg-red-600"
                   />
+                  {fileSizeErrors.leadImage && <p className="text-red-400 text-sm mt-1">{fileSizeErrors.leadImage}</p>}
                   {errors.leadImage && <p className="text-red-400 text-sm mt-1">{errors.leadImage}</p>}
                   {renderImagePreview("leadImage", formData.leadImage)}
+                  <p className="text-sm text-gray-400 mt-1">Maximum file size: 1MB</p>
                 </div>
               </div>
             </div>
@@ -632,9 +651,11 @@ function Register() {
                     onChange={handleInputChange}
                     accept="image/*"
                     className="w-full px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-500 file:text-white hover:file:bg-blue-600"
-                  />
+                  />  
+                  {fileSizeErrors.m1Image && <p className="text-red-400 text-sm mt-1">{fileSizeErrors.leadImage}</p>}
                   {errors.m1Image && <p className="text-red-400 text-sm mt-1">{errors.m1Image}</p>}
                   {renderImagePreview("m1Image", formData.m1Image)}
+                  <p className="text-sm text-gray-400 mt-1">Maximum file size: 1MB</p>
                 </div>
               </div>
             </div>
@@ -735,8 +756,10 @@ function Register() {
                     accept="image/*"
                     className="w-full px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-yellow-500 file:text-gray-900 hover:file:bg-yellow-600"
                   />
+                  {fileSizeErrors.m2Image && <p className="text-red-400 text-sm mt-1">{fileSizeErrors.leadImage}</p>}
                   {errors.m2Image && <p className="text-red-400 text-sm mt-1">{errors.m2Image}</p>}
-                  {renderImagePreview("m2Image", formData.m2Image)}
+                  {renderImagePreview("m2Image", formData.m2Image)}  
+                  <p className="text-sm text-gray-400 mt-1">Maximum file size: 1MB</p>
                 </div>
               </div>
             </div>
@@ -837,8 +860,10 @@ function Register() {
                     accept="image/*"
                     className="w-full px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-500 file:text-white hover:file:bg-green-600"
                   />
+                  {fileSizeErrors.m3Image && <p className="text-red-400 text-sm mt-1">{fileSizeErrors.leadImage}</p>}
                   {errors.m3Image && <p className="text-red-400 text-sm mt-1">{errors.m3Image}</p>}
                   {renderImagePreview("m3Image", formData.m3Image)}
+                  <p className="text-sm text-gray-400 mt-1">Maximum file size: 1MB</p>
                 </div>
               </div>
             </div>
@@ -1001,12 +1026,14 @@ function Register() {
                         errors.paymentScreenshot ? 'border-red-500' : 'border-gray-600'
                       }`}
                       // required
-                    />
+                    />  
+                    {fileSizeErrors.paymentScreenshot && <p className="text-red-400 text-sm mt-1">{fileSizeErrors.leadImage}</p>}
                     {errors.paymentScreenshot && <p className="text-red-400 text-sm mt-1">{errors.paymentScreenshot}</p>}
                     {renderImagePreview("paymentScreenshot", formData.paymentScreenshot)}
                     <p className="text-sm text-gray-400 mt-2">
                       Upload a clear screenshot of your successful payment transaction
                     </p>
+                    <p className="text-sm text-gray-400 mt-1">Maximum file size: 1MB</p>
 
                     {/* Submit Button */}
                     {isLastTab && (
