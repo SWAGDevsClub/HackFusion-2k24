@@ -14,6 +14,7 @@ import CountDown from "./pages/CountDown";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
+import Receipt from './pages/Receipt';
 
 function App() {
   const [splashScreen, setSplashScreen] = useState(true);
@@ -37,7 +38,7 @@ function App() {
             <Route path="/schedule" element={<Schedule/>} />
             <Route path="/contact" element={<Contact/>} />
             <Route path="/admin" element={<FirebaseStats/>} />
-            {/* <Route path="/male" element={<MaleParticipantsOutsideCampus/>}/> */}
+            <Route path="/receipt" element={<Receipt />} />
             <Route path="/CountDown" element={<CountDown/>}/>
           </Routes>
         </BackgroundGradientAnimation>

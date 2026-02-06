@@ -44,38 +44,41 @@ function Register() {
   const tabsRef = useRef(null);
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
-// Add this state near other useState declarations (around line 47)
-const [fileSizeErrors, setFileSizeErrors] = useState({});
+  // Add this state near other useState declarations (around line 47)
+  const [fileSizeErrors, setFileSizeErrors] = useState({});
 
-// Update the handleInputChange function to include file size validation
-const handleInputChange = (e) => {
-  const { name, value, files } = e.target;
-  if (files) {
-    const file = files[0];
-    const maxSize = 1 * 1024 * 1024; // 1MB in bytes
-    
-    if (file.size > maxSize) {
-      setFileSizeErrors(prev => ({ 
-        ...prev, 
-        [name]: `File size must be less than 1MB. Current size: ${(file.size / (1024 * 1024)).toFixed(2)}MB` 
-      }));
-      // Clear the file input
-      e.target.value = '';
-      return;
+  // Update the handleInputChange function to include file size validation
+  const handleInputChange = (e) => {
+    const { name, value, files } = e.target;
+    if (files) {
+      const file = files[0];
+      const maxSize = 1 * 1024 * 1024; // 1MB in bytes
+
+      if (file.size > maxSize) {
+        setFileSizeErrors((prev) => ({
+          ...prev,
+          [name]: `File size must be less than 1MB. Current size: ${(
+            file.size /
+            (1024 * 1024)
+          ).toFixed(2)}MB`,
+        }));
+        // Clear the file input
+        e.target.value = "";
+        return;
+      } else {
+        // Clear file size error if valid
+        setFileSizeErrors((prev) => ({ ...prev, [name]: null }));
+        setFormData((prev) => ({ ...prev, [name]: file }));
+      }
     } else {
-      // Clear file size error if valid
-      setFileSizeErrors(prev => ({ ...prev, [name]: null }));
-      setFormData((prev) => ({ ...prev, [name]: file }));
+      setFormData((prev) => ({ ...prev, [name]: value }));
     }
-  } else {
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  }
-  
-  // Clear error when user starts typing
-  if (errors[name]) {
-    setErrors(prev => ({ ...prev, [name]: null }));
-  }
-};
+
+    // Clear error when user starts typing
+    if (errors[name]) {
+      setErrors((prev) => ({ ...prev, [name]: null }));
+    }
+  };
   const handleTeamSizeChange = (size) => {
     setTeamSize(size);
     setFormData((prev) => ({ ...prev, teamSize: size }));
@@ -95,84 +98,133 @@ const handleInputChange = (e) => {
     };
 
     // Validate lead tab
-    if (!formData.leadName.trim()) setErrorAndTrackTab("leadName", "Full name is required", "lead");
-    if (!formData.leadEmail.trim()) setErrorAndTrackTab("leadEmail", "Email is required", "lead");
-    if (!formData.leadMobile.trim()) setErrorAndTrackTab("leadMobile", "Mobile number is required", "lead");
-    if (!formData.leadImage) setErrorAndTrackTab("leadImage", "Profile picture is required", "lead");
-    if (!formData.password.trim()) setErrorAndTrackTab("password", "Password is required", "lead");
-    if (formData.password.length < 6) setErrorAndTrackTab("password", "Password must be at least 6 characters", "lead");
-    if (!formData.confirmPassword.trim()) setErrorAndTrackTab("confirmPassword", "Please confirm your password", "lead");
-    if (formData.password !== formData.confirmPassword) setErrorAndTrackTab("confirmPassword", "Passwords do not match", "lead");
+    if (!formData.leadName.trim())
+      setErrorAndTrackTab("leadName", "Full name is required", "lead");
+    if (!formData.leadEmail.trim())
+      setErrorAndTrackTab("leadEmail", "Email is required", "lead");
+    if (!formData.leadMobile.trim())
+      setErrorAndTrackTab("leadMobile", "Mobile number is required", "lead");
+    if (!formData.leadImage)
+      setErrorAndTrackTab("leadImage", "Profile picture is required", "lead");
+    if (!formData.password.trim())
+      setErrorAndTrackTab("password", "Password is required", "lead");
+    if (formData.password.length < 6)
+      setErrorAndTrackTab(
+        "password",
+        "Password must be at least 6 characters",
+        "lead"
+      );
+    if (!formData.confirmPassword.trim())
+      setErrorAndTrackTab(
+        "confirmPassword",
+        "Please confirm your password",
+        "lead"
+      );
+    if (formData.password !== formData.confirmPassword)
+      setErrorAndTrackTab("confirmPassword", "Passwords do not match", "lead");
 
     // Validate member1 tab
-    if (!formData.m1Name.trim()) setErrorAndTrackTab("m1Name", "Full name is required", "member1");
-    if (!formData.m1Email.trim()) setErrorAndTrackTab("m1Email", "Email is required", "member1");
-    if (!formData.m1Image) setErrorAndTrackTab("m1Image", "Profile picture is required", "member1");
-    if (!formData.m1Mobile.trim()) setErrorAndTrackTab("m1Mobile", "Mobile number is required", "member1");
+    if (!formData.m1Name.trim())
+      setErrorAndTrackTab("m1Name", "Full name is required", "member1");
+    if (!formData.m1Email.trim())
+      setErrorAndTrackTab("m1Email", "Email is required", "member1");
+    if (!formData.m1Image)
+      setErrorAndTrackTab("m1Image", "Profile picture is required", "member1");
+    if (!formData.m1Mobile.trim())
+      setErrorAndTrackTab("m1Mobile", "Mobile number is required", "member1");
 
     // Validate member2 tab
-    if (!formData.m2Name.trim()) setErrorAndTrackTab("m2Name", "Full name is required", "member2");
-    if (!formData.m2Email.trim()) setErrorAndTrackTab("m2Email", "Email is required", "member2");
-    if (!formData.m2Image) setErrorAndTrackTab("m2Image", "Profile picture is required", "member2");
-    if (!formData.m2Mobile.trim()) setErrorAndTrackTab("m2Mobile", "Mobile number is required", "member2");
+    if (!formData.m2Name.trim())
+      setErrorAndTrackTab("m2Name", "Full name is required", "member2");
+    if (!formData.m2Email.trim())
+      setErrorAndTrackTab("m2Email", "Email is required", "member2");
+    if (!formData.m2Image)
+      setErrorAndTrackTab("m2Image", "Profile picture is required", "member2");
+    if (!formData.m2Mobile.trim())
+      setErrorAndTrackTab("m2Mobile", "Mobile number is required", "member2");
 
     // Validate member3 tab (if team size is 4)
     if (teamSize === 4) {
-      if (!formData.m3Name.trim()) setErrorAndTrackTab("m3Name", "Full name is required", "member3");
-      if (!formData.m3Email.trim()) setErrorAndTrackTab("m3Email", "Email is required", "member3");
-      if (!formData.m3Image) setErrorAndTrackTab("m3Image", "Profile picture is required", "member3");
-      if (!formData.m3Mobile.trim()) setErrorAndTrackTab("m3Mobile", "Mobile number is required", "member3");
+      if (!formData.m3Name.trim())
+        setErrorAndTrackTab("m3Name", "Full name is required", "member3");
+      if (!formData.m3Email.trim())
+        setErrorAndTrackTab("m3Email", "Email is required", "member3");
+      if (!formData.m3Image)
+        setErrorAndTrackTab(
+          "m3Image",
+          "Profile picture is required",
+          "member3"
+        );
+      if (!formData.m3Mobile.trim())
+        setErrorAndTrackTab("m3Mobile", "Mobile number is required", "member3");
     }
 
     // Validate team tab
-    if (!formData.college.trim()) setErrorAndTrackTab("college", "College name is required", "team");
-    if (!formData.city.trim()) setErrorAndTrackTab("city", "City is required", "team");
-    if (!formData.confirmEmail.trim()) setErrorAndTrackTab("confirmEmail", "Confirm email is required", "team");
+    if (!formData.college.trim())
+      setErrorAndTrackTab("college", "College name is required", "team");
+    if (!formData.city.trim())
+      setErrorAndTrackTab("city", "City is required", "team");
+    if (!formData.confirmEmail.trim())
+      setErrorAndTrackTab("confirmEmail", "Confirm email is required", "team");
     if (formData.confirmEmail !== formData.leadEmail) {
-      setErrorAndTrackTab("confirmEmail", "Email confirmation doesn't match lead email", "team");
+      setErrorAndTrackTab(
+        "confirmEmail",
+        "Email confirmation doesn't match lead email",
+        "team"
+      );
     }
 
     // Validate abstract tab
-    if (!formData.abstract.trim()) setErrorAndTrackTab("abstract", "Abstract is required", "abstract");
+    if (!formData.abstract.trim())
+      setErrorAndTrackTab("abstract", "Abstract is required", "abstract");
     if (formData.abstract.trim().length < 100) {
-      setErrorAndTrackTab("abstract", "Abstract must be at least 100 characters", "abstract");
+      setErrorAndTrackTab(
+        "abstract",
+        "Abstract must be at least 100 characters",
+        "abstract"
+      );
     }
 
     // Validate payment tab
-    if (!formData.paymentScreenshot) setErrorAndTrackTab("paymentScreenshot", "Payment screenshot is required", "payment");
+    if (!formData.paymentScreenshot)
+      setErrorAndTrackTab(
+        "paymentScreenshot",
+        "Payment screenshot is required",
+        "payment"
+      );
 
     setErrors(newErrors);
-    
+
     // Return both validation result and the first tab with error
     return {
       isValid: Object.keys(newErrors).length === 0,
-      firstErrorTab
+      firstErrorTab,
     };
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     setIsLoading(true);
     // Validate all tabs
     const validationResult = validateAllTabs();
-    
+
     // If there are errors, navigate to the first tab with an error
     if (!validationResult.isValid && validationResult.firstErrorTab) {
       setActiveTab(validationResult.firstErrorTab);
-      
+
       // Scroll to the top of the form to ensure the error is visible
       if (tabsRef.current) {
-        tabsRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        tabsRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
       }
       setIsLoading(false);
 
       return;
     }
-  
+
     try {
       const formDataToSend = new FormData();
-  
+
       // Append normal fields
       formDataToSend.append("theme", "AI in Healthcare"); // Or bind from your UI if needed
       formDataToSend.append("abstract", formData.abstract);
@@ -181,28 +233,28 @@ const handleInputChange = (e) => {
       formDataToSend.append("coupon", formData.coupon);
       formDataToSend.append("teamSize", formData.teamSize);
       formDataToSend.append("password", formData.password);
-  
+
       // Lead
       formDataToSend.append("leadName", formData.leadName);
       formDataToSend.append("leadEmail", formData.leadEmail);
       formDataToSend.append("leadMobile", formData.leadMobile);
       formDataToSend.append("leadGender", formData.leadGender);
       formDataToSend.append("leadIsPwd", formData.leadPwd === "yes" ? 1 : 0);
-  
+
       // Member 1
       formDataToSend.append("m1Name", formData.m1Name);
       formDataToSend.append("m1Email", formData.m1Email);
       formDataToSend.append("m1Mobile", formData.m1Mobile);
       formDataToSend.append("m1Gender", formData.m1Gender);
       formDataToSend.append("m1IsPwd", formData.m1Pwd === "yes" ? 1 : 0);
-  
+
       // Member 2
       formDataToSend.append("m2Name", formData.m2Name);
       formDataToSend.append("m2Email", formData.m2Email);
       formDataToSend.append("m2Mobile", formData.m2Mobile);
       formDataToSend.append("m2Gender", formData.m2Gender);
       formDataToSend.append("m2IsPwd", formData.m2Pwd === "yes" ? 1 : 0);
-  
+
       // Member 3 (only if teamSize === 4)
       if (formData.teamSize === 4) {
         formDataToSend.append("m3Name", formData.m3Name);
@@ -211,7 +263,7 @@ const handleInputChange = (e) => {
         formDataToSend.append("m3Gender", formData.m3Gender);
         formDataToSend.append("m3IsPwd", formData.m3Pwd === "yes" ? 1 : 0);
       }
-  
+
       // Files
       if (formData.leadImage)
         formDataToSend.append("leadProfilePic", formData.leadImage);
@@ -223,16 +275,19 @@ const handleInputChange = (e) => {
         formDataToSend.append("m3ProfilePic", formData.m3Image);
       if (formData.paymentScreenshot)
         formDataToSend.append("paymentProof", formData.paymentScreenshot);
-  
+
       // API Request
-      const response = await fetch("https://swagserver.co.in/hackfusion/register.php", {
-        method: "POST",
-        body: formDataToSend,
-      });
-  
+      const response = await fetch(
+        "https://swagserver.co.in/hackfusion/register.php",
+        {
+          method: "POST",
+          body: formDataToSend,
+        }
+      );
+
       const result = await response.json();
       console.log("Response:", result);
-  
+
       if (result.success) {
         alert(`Registration successful! Team ID: ${result.data.team_id}`);
         navigate("/login");
@@ -248,60 +303,98 @@ const handleInputChange = (e) => {
   };
 
   const handleTabNavigation = (direction) => {
-    if (direction === 'next') {
+    if (direction === "next") {
       // Validate current tab before proceeding
       const newErrors = {};
-      
+
       switch (activeTab) {
         case "lead":
-          if (!formData.leadName.trim()) newErrors.leadName = "Full name is required";
-          if (!formData.leadEmail.trim()) newErrors.leadEmail = "Email is required";
-          if (!formData.leadMobile.trim()) newErrors.leadMobile = "Mobile number is required";
-          if (formData.leadMobile.trim().length < 10 || formData.leadMobile.trim().length > 10) newErrors.leadMobile = "Mobile number must be 10 digits";
-          if (!formData.password.trim()) newErrors.password = "Password is required";
-          if (formData.password.length < 6) newErrors.password = "Password must be at least 6 characters";
-          if (!formData.confirmPassword.trim()) newErrors.confirmPassword = "Please confirm your password";
-          if (formData.password !== formData.confirmPassword) newErrors.confirmPassword = "Passwords do not match";
-          if (!formData.leadImage) newErrors.leadImage = "Profile picture is required";
+          if (!formData.leadName.trim())
+            newErrors.leadName = "Full name is required";
+          if (!formData.leadEmail.trim())
+            newErrors.leadEmail = "Email is required";
+          if (!formData.leadMobile.trim())
+            newErrors.leadMobile = "Mobile number is required";
+          if (
+            formData.leadMobile.trim().length < 10 ||
+            formData.leadMobile.trim().length > 10
+          )
+            newErrors.leadMobile = "Mobile number must be 10 digits";
+          if (!formData.password.trim())
+            newErrors.password = "Password is required";
+          if (formData.password.length < 6)
+            newErrors.password = "Password must be at least 6 characters";
+          if (!formData.confirmPassword.trim())
+            newErrors.confirmPassword = "Please confirm your password";
+          if (formData.password !== formData.confirmPassword)
+            newErrors.confirmPassword = "Passwords do not match";
+          if (!formData.leadImage)
+            newErrors.leadImage = "Profile picture is required";
           break;
 
         case "member1":
-          if (!formData.m1Name.trim()) newErrors.m1Name = "Full name is required";
+          if (!formData.m1Name.trim())
+            newErrors.m1Name = "Full name is required";
           if (!formData.m1Email.trim()) newErrors.m1Email = "Email is required";
-          if (!formData.m1Mobile.trim()) newErrors.m1Mobile = "Mobile number is required";
-          if (formData.m1Mobile && formData.m1Mobile.trim().length < 10 || formData.m1Mobile.trim().length > 10) newErrors.m1Mobile = "Mobile number must be 10 digits";
-          if (!formData.m1Image) newErrors.m1Image = "Profile picture is required";
+          if (!formData.m1Mobile.trim())
+            newErrors.m1Mobile = "Mobile number is required";
+          if (
+            (formData.m1Mobile && formData.m1Mobile.trim().length < 10) ||
+            formData.m1Mobile.trim().length > 10
+          )
+            newErrors.m1Mobile = "Mobile number must be 10 digits";
+          if (!formData.m1Image)
+            newErrors.m1Image = "Profile picture is required";
           break;
 
         case "member2":
-          if (!formData.m2Name.trim()) newErrors.m2Name = "Full name is required";
+          if (!formData.m2Name.trim())
+            newErrors.m2Name = "Full name is required";
           if (!formData.m2Email.trim()) newErrors.m2Email = "Email is required";
-          if (!formData.m2Mobile.trim()) newErrors.m2Mobile = "Mobile number is required";
-          if (formData.m2Mobile && formData.m2Mobile.trim().length < 10 || formData.m2Mobile.trim().length > 10) newErrors.m2Mobile = "Mobile number must be 10 digits";
-          if (!formData.m2Image) newErrors.m2Image = "Profile picture is required";
+          if (!formData.m2Mobile.trim())
+            newErrors.m2Mobile = "Mobile number is required";
+          if (
+            (formData.m2Mobile && formData.m2Mobile.trim().length < 10) ||
+            formData.m2Mobile.trim().length > 10
+          )
+            newErrors.m2Mobile = "Mobile number must be 10 digits";
+          if (!formData.m2Image)
+            newErrors.m2Image = "Profile picture is required";
           break;
 
         case "member3":
           if (teamSize === 4) {
-            if (!formData.m3Name.trim()) newErrors.m3Name = "Full name is required";
-            if (!formData.m3Email.trim()) newErrors.m3Email = "Email is required";
-            if (!formData.m3Mobile.trim()) newErrors.m3Mobile = "Mobile number is required";
-            if (formData.m3Mobile && formData.m3Mobile.trim().length < 10 || formData.m3Mobile.trim().length > 10) newErrors.m3Mobile = "Mobile number must be 10 digits";
-            if (!formData.m3Image) newErrors.m3Image = "Profile picture is required";
+            if (!formData.m3Name.trim())
+              newErrors.m3Name = "Full name is required";
+            if (!formData.m3Email.trim())
+              newErrors.m3Email = "Email is required";
+            if (!formData.m3Mobile.trim())
+              newErrors.m3Mobile = "Mobile number is required";
+            if (
+              (formData.m3Mobile && formData.m3Mobile.trim().length < 10) ||
+              formData.m3Mobile.trim().length > 10
+            )
+              newErrors.m3Mobile = "Mobile number must be 10 digits";
+            if (!formData.m3Image)
+              newErrors.m3Image = "Profile picture is required";
           }
           break;
 
         case "team":
-          if (!formData.college.trim()) newErrors.college = "College name is required";
+          if (!formData.college.trim())
+            newErrors.college = "College name is required";
           if (!formData.city.trim()) newErrors.city = "City is required";
-          if (!formData.confirmEmail.trim()) newErrors.confirmEmail = "Confirm email is required";
+          if (!formData.confirmEmail.trim())
+            newErrors.confirmEmail = "Confirm email is required";
           if (formData.confirmEmail !== formData.leadEmail) {
-            newErrors.confirmEmail = "Email confirmation doesn't match lead email";
+            newErrors.confirmEmail =
+              "Email confirmation doesn't match lead email";
           }
           break;
 
         case "abstract":
-          if (!formData.abstract.trim()) newErrors.abstract = "Abstract is required";
+          if (!formData.abstract.trim())
+            newErrors.abstract = "Abstract is required";
           if (formData.abstract.trim().length < 100) {
             newErrors.abstract = "Abstract must be at least 100 characters";
           }
@@ -315,16 +408,16 @@ const handleInputChange = (e) => {
     }
 
     const currentIndex = tabs.findIndex((tab) => tab.id === activeTab);
-    if (direction === 'next' && currentIndex < tabs.length - 1) {
+    if (direction === "next" && currentIndex < tabs.length - 1) {
       setActiveTab(tabs[currentIndex + 1].id);
-    } else if (direction === 'prev' && currentIndex > 0) {
+    } else if (direction === "prev" && currentIndex > 0) {
       setActiveTab(tabs[currentIndex - 1].id);
     }
   };
 
   const renderImagePreview = (imageName, imageFile) => {
     if (!imageFile) return null;
-    
+
     return (
       <div className="mt-2">
         <p className="text-sm text-green-400">Selected: {imageFile.name}</p>
@@ -349,17 +442,20 @@ const handleInputChange = (e) => {
 
   return (
     <div className="fixed inset-0 z-30 overflow-y-auto py-32 pb-6 ms-3 me-3 [&::-webkit-scrollbar]:hidden">
-      <div className="max-w-4xl mx-auto bg-gray-800/80 rounded-xl shadow-2xl overflow-hidden border border-gray-700 border-yellow-500 border-4 " ref={tabsRef}>
+      <div
+        className="max-w-4xl mx-auto bg-gray-800/80 rounded-xl shadow-2xl overflow-hidden border border-gray-700 border-yellow-500 border-4 "
+        ref={tabsRef}
+      >
         {/* Header */}
         <div className="bg-gray-900/70 py-4 px-6 text-center relative border-b border-gray-700">
           {/* Decorative elements */}
           <div className="absolute -top-4 -left-4 w-16 h-16 bg-red-600 rounded-full opacity-30"></div>
           <img
-              src="/logon.png"
-              className="h-10 w-auto sm:h-5 md:h-auto md:w-[250px] ms-auto  me-auto items-center justify-center"
-              alt="Logo"
-              data-aos="flip-right"
-            />
+            src="/logon.png"
+            className="h-10 w-auto sm:h-5 md:h-auto md:w-[250px] ms-auto  me-auto items-center justify-center"
+            alt="Logo"
+            data-aos="flip-right"
+          />
         </div>
 
         {/* Tabs */}
@@ -436,11 +532,15 @@ const handleInputChange = (e) => {
                     value={formData.leadName}
                     onChange={handleInputChange}
                     className={`w-full px-4 py-2 bg-gray-700 text-white border rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent ${
-                      errors.leadName ? 'border-red-500' : 'border-gray-600'
+                      errors.leadName ? "border-red-500" : "border-gray-600"
                     }`}
                     required
                   />
-                  {errors.leadName && <p className="text-red-400 text-sm mt-1">{errors.leadName}</p>}
+                  {errors.leadName && (
+                    <p className="text-red-400 text-sm mt-1">
+                      {errors.leadName}
+                    </p>
+                  )}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-1">
@@ -452,11 +552,15 @@ const handleInputChange = (e) => {
                     value={formData.leadEmail}
                     onChange={handleInputChange}
                     className={`w-full px-4 py-2 bg-gray-700 text-white border rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent ${
-                      errors.leadEmail ? 'border-red-500' : 'border-gray-600'
+                      errors.leadEmail ? "border-red-500" : "border-gray-600"
                     }`}
                     required
                   />
-                  {errors.leadEmail && <p className="text-red-400 text-sm mt-1">{errors.leadEmail}</p>}
+                  {errors.leadEmail && (
+                    <p className="text-red-400 text-sm mt-1">
+                      {errors.leadEmail}
+                    </p>
+                  )}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-1">
@@ -468,11 +572,15 @@ const handleInputChange = (e) => {
                     value={formData.leadMobile}
                     onChange={handleInputChange}
                     className={`w-full px-4 py-2 bg-gray-700 text-white border rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent ${
-                      errors.leadMobile ? 'border-red-500' : 'border-gray-600'
+                      errors.leadMobile ? "border-red-500" : "border-gray-600"
                     }`}
                     required
                   />
-                  {errors.leadMobile && <p className="text-red-400 text-sm mt-1">{errors.leadMobile}</p>}
+                  {errors.leadMobile && (
+                    <p className="text-red-400 text-sm mt-1">
+                      {errors.leadMobile}
+                    </p>
+                  )}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-1">
@@ -484,12 +592,16 @@ const handleInputChange = (e) => {
                     value={formData.password}
                     onChange={handleInputChange}
                     className={`w-full px-4 py-2 bg-gray-700 text-white border rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent ${
-                      errors.password ? 'border-red-500' : 'border-gray-600'
+                      errors.password ? "border-red-500" : "border-gray-600"
                     }`}
                     required
                     minLength={6}
                   />
-                  {errors.password && <p className="text-red-400 text-sm mt-1">{errors.password}</p>}
+                  {errors.password && (
+                    <p className="text-red-400 text-sm mt-1">
+                      {errors.password}
+                    </p>
+                  )}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-1">
@@ -501,12 +613,18 @@ const handleInputChange = (e) => {
                     value={formData.confirmPassword}
                     onChange={handleInputChange}
                     className={`w-full px-4 py-2 bg-gray-700 text-white border rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent ${
-                      errors.confirmPassword ? 'border-red-500' : 'border-gray-600'
+                      errors.confirmPassword
+                        ? "border-red-500"
+                        : "border-gray-600"
                     }`}
                     required
                     minLength={6}
                   />
-                  {errors.confirmPassword && <p className="text-red-400 text-sm mt-1">{errors.confirmPassword}</p>}
+                  {errors.confirmPassword && (
+                    <p className="text-red-400 text-sm mt-1">
+                      {errors.confirmPassword}
+                    </p>
+                  )}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-1">
@@ -539,7 +657,8 @@ const handleInputChange = (e) => {
                 </div>
                 <div className="md:col-span-2">
                   <label className="block text-sm font-medium text-gray-300 mb-1">
-                    Photo *(Dont upload passport style photo, upload a cool photo 😎)
+                    Photo *(Dont upload passport style photo, upload a cool
+                    photo 😎)
                   </label>
                   <input
                     type="file"
@@ -548,10 +667,20 @@ const handleInputChange = (e) => {
                     accept="image/*"
                     className="w-full px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-red-500 file:text-white hover:file:bg-red-600"
                   />
-                  {fileSizeErrors.leadImage && <p className="text-red-400 text-sm mt-1">{fileSizeErrors.leadImage}</p>}
-                  {errors.leadImage && <p className="text-red-400 text-sm mt-1">{errors.leadImage}</p>}
+                  {fileSizeErrors.leadImage && (
+                    <p className="text-red-400 text-sm mt-1">
+                      {fileSizeErrors.leadImage}
+                    </p>
+                  )}
+                  {errors.leadImage && (
+                    <p className="text-red-400 text-sm mt-1">
+                      {errors.leadImage}
+                    </p>
+                  )}
                   {renderImagePreview("leadImage", formData.leadImage)}
-                  <p className="text-sm text-gray-400 mt-1">Maximum file size: 1MB</p>
+                  <p className="text-sm text-gray-400 mt-1">
+                    Maximum file size: 1MB
+                  </p>
                 </div>
               </div>
             </div>
@@ -574,11 +703,13 @@ const handleInputChange = (e) => {
                     value={formData.m1Name}
                     onChange={handleInputChange}
                     className={`w-full px-4 py-2 bg-gray-700 text-white border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                      errors.m1Name ? 'border-red-500' : 'border-gray-600'
+                      errors.m1Name ? "border-red-500" : "border-gray-600"
                     }`}
                     required
                   />
-                  {errors.m1Name && <p className="text-red-400 text-sm mt-1">{errors.m1Name}</p>}
+                  {errors.m1Name && (
+                    <p className="text-red-400 text-sm mt-1">{errors.m1Name}</p>
+                  )}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-1">
@@ -590,11 +721,15 @@ const handleInputChange = (e) => {
                     value={formData.m1Email}
                     onChange={handleInputChange}
                     className={`w-full px-4 py-2 bg-gray-700 text-white border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                      errors.m1Email ? 'border-red-500' : 'border-gray-600'
+                      errors.m1Email ? "border-red-500" : "border-gray-600"
                     }`}
                     required
                   />
-                  {errors.m1Email && <p className="text-red-400 text-sm mt-1">{errors.m1Email}</p>}
+                  {errors.m1Email && (
+                    <p className="text-red-400 text-sm mt-1">
+                      {errors.m1Email}
+                    </p>
+                  )}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-1">
@@ -606,11 +741,15 @@ const handleInputChange = (e) => {
                     value={formData.m1Mobile}
                     onChange={handleInputChange}
                     className={`w-full px-4 py-2 bg-gray-700 text-white border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                      errors.m1Mobile ? 'border-red-500' : 'border-gray-600'
+                      errors.m1Mobile ? "border-red-500" : "border-gray-600"
                     }`}
                     required
                   />
-                  {errors.m1Mobile && <p className="text-red-400 text-sm mt-1">{errors.m1Mobile}</p>}
+                  {errors.m1Mobile && (
+                    <p className="text-red-400 text-sm mt-1">
+                      {errors.m1Mobile}
+                    </p>
+                  )}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-1">
@@ -643,7 +782,8 @@ const handleInputChange = (e) => {
                 </div>
                 <div className="md:col-span-2">
                   <label className="block text-sm font-medium text-gray-300 mb-1">
-                    Photo *(Dont upload passport style photo, upload a cool photo 😎)
+                    Photo *(Dont upload passport style photo, upload a cool
+                    photo 😎)
                   </label>
                   <input
                     type="file"
@@ -651,11 +791,21 @@ const handleInputChange = (e) => {
                     onChange={handleInputChange}
                     accept="image/*"
                     className="w-full px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-500 file:text-white hover:file:bg-blue-600"
-                  />  
-                  {fileSizeErrors.m1Image && <p className="text-red-400 text-sm mt-1">{fileSizeErrors.leadImage}</p>}
-                  {errors.m1Image && <p className="text-red-400 text-sm mt-1">{errors.m1Image}</p>}
+                  />
+                  {fileSizeErrors.m1Image && (
+                    <p className="text-red-400 text-sm mt-1">
+                      {fileSizeErrors.leadImage}
+                    </p>
+                  )}
+                  {errors.m1Image && (
+                    <p className="text-red-400 text-sm mt-1">
+                      {errors.m1Image}
+                    </p>
+                  )}
                   {renderImagePreview("m1Image", formData.m1Image)}
-                  <p className="text-sm text-gray-400 mt-1">Maximum file size: 1MB</p>
+                  <p className="text-sm text-gray-400 mt-1">
+                    Maximum file size: 1MB
+                  </p>
                 </div>
               </div>
             </div>
@@ -678,11 +828,13 @@ const handleInputChange = (e) => {
                     value={formData.m2Name}
                     onChange={handleInputChange}
                     className={`w-full px-4 py-2 bg-gray-700 text-white border rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent ${
-                      errors.m2Name ? 'border-red-500' : 'border-gray-600'
+                      errors.m2Name ? "border-red-500" : "border-gray-600"
                     }`}
                     required
                   />
-                  {errors.m2Name && <p className="text-red-400 text-sm mt-1">{errors.m2Name}</p>}
+                  {errors.m2Name && (
+                    <p className="text-red-400 text-sm mt-1">{errors.m2Name}</p>
+                  )}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-1">
@@ -694,11 +846,15 @@ const handleInputChange = (e) => {
                     value={formData.m2Email}
                     onChange={handleInputChange}
                     className={`w-full px-4 py-2 bg-gray-700 text-white border rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent ${
-                      errors.m2Email ? 'border-red-500' : 'border-gray-600'
+                      errors.m2Email ? "border-red-500" : "border-gray-600"
                     }`}
                     required
                   />
-                  {errors.m2Email && <p className="text-red-400 text-sm mt-1">{errors.m2Email}</p>}
+                  {errors.m2Email && (
+                    <p className="text-red-400 text-sm mt-1">
+                      {errors.m2Email}
+                    </p>
+                  )}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-1">
@@ -710,11 +866,15 @@ const handleInputChange = (e) => {
                     value={formData.m2Mobile}
                     onChange={handleInputChange}
                     className={`w-full px-4 py-2 bg-gray-700 text-white border rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent ${
-                      errors.m2Mobile ? 'border-red-500' : 'border-gray-600'
+                      errors.m2Mobile ? "border-red-500" : "border-gray-600"
                     }`}
                     required
                   />
-                  {errors.m2Mobile && <p className="text-red-400 text-sm mt-1">{errors.m2Mobile}</p>}
+                  {errors.m2Mobile && (
+                    <p className="text-red-400 text-sm mt-1">
+                      {errors.m2Mobile}
+                    </p>
+                  )}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-1">
@@ -747,7 +907,8 @@ const handleInputChange = (e) => {
                 </div>
                 <div className="md:col-span-2">
                   <label className="block text-sm font-medium text-gray-300 mb-1">
-                    Photo *(Dont upload passport style photo, upload a cool photo 😎)
+                    Photo *(Dont upload passport style photo, upload a cool
+                    photo 😎)
                   </label>
                   <input
                     type="file"
@@ -756,10 +917,20 @@ const handleInputChange = (e) => {
                     accept="image/*"
                     className="w-full px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-yellow-500 file:text-gray-900 hover:file:bg-yellow-600"
                   />
-                  {fileSizeErrors.m2Image && <p className="text-red-400 text-sm mt-1">{fileSizeErrors.leadImage}</p>}
-                  {errors.m2Image && <p className="text-red-400 text-sm mt-1">{errors.m2Image}</p>}
-                  {renderImagePreview("m2Image", formData.m2Image)}  
-                  <p className="text-sm text-gray-400 mt-1">Maximum file size: 1MB</p>
+                  {fileSizeErrors.m2Image && (
+                    <p className="text-red-400 text-sm mt-1">
+                      {fileSizeErrors.leadImage}
+                    </p>
+                  )}
+                  {errors.m2Image && (
+                    <p className="text-red-400 text-sm mt-1">
+                      {errors.m2Image}
+                    </p>
+                  )}
+                  {renderImagePreview("m2Image", formData.m2Image)}
+                  <p className="text-sm text-gray-400 mt-1">
+                    Maximum file size: 1MB
+                  </p>
                 </div>
               </div>
             </div>
@@ -782,11 +953,13 @@ const handleInputChange = (e) => {
                     value={formData.m3Name}
                     onChange={handleInputChange}
                     className={`w-full px-4 py-2 bg-gray-700 text-white border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent ${
-                      errors.m3Name ? 'border-red-500' : 'border-gray-600'
+                      errors.m3Name ? "border-red-500" : "border-gray-600"
                     }`}
                     required
                   />
-                  {errors.m3Name && <p className="text-red-400 text-sm mt-1">{errors.m3Name}</p>}
+                  {errors.m3Name && (
+                    <p className="text-red-400 text-sm mt-1">{errors.m3Name}</p>
+                  )}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-1">
@@ -798,11 +971,15 @@ const handleInputChange = (e) => {
                     value={formData.m3Email}
                     onChange={handleInputChange}
                     className={`w-full px-4 py-2 bg-gray-700 text-white border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent ${
-                      errors.m3Email ? 'border-red-500' : 'border-gray-600'
+                      errors.m3Email ? "border-red-500" : "border-gray-600"
                     }`}
                     required
                   />
-                  {errors.m3Email && <p className="text-red-400 text-sm mt-1">{errors.m3Email}</p>}
+                  {errors.m3Email && (
+                    <p className="text-red-400 text-sm mt-1">
+                      {errors.m3Email}
+                    </p>
+                  )}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-1">
@@ -814,11 +991,15 @@ const handleInputChange = (e) => {
                     value={formData.m3Mobile}
                     onChange={handleInputChange}
                     className={`w-full px-4 py-2 bg-gray-700 text-white border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent ${
-                      errors.m3Mobile ? 'border-red-500' : 'border-gray-600'
+                      errors.m3Mobile ? "border-red-500" : "border-gray-600"
                     }`}
                     required
                   />
-                  {errors.m3Mobile && <p className="text-red-400 text-sm mt-1">{errors.m3Mobile}</p>}
+                  {errors.m3Mobile && (
+                    <p className="text-red-400 text-sm mt-1">
+                      {errors.m3Mobile}
+                    </p>
+                  )}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-1">
@@ -851,7 +1032,8 @@ const handleInputChange = (e) => {
                 </div>
                 <div className="md:col-span-2">
                   <label className="block text-sm font-medium text-gray-300 mb-1">
-                    Photo *(Dont upload passport style photo, upload a cool photo 😎)
+                    Photo *(Dont upload passport style photo, upload a cool
+                    photo 😎)
                   </label>
                   <input
                     type="file"
@@ -860,10 +1042,20 @@ const handleInputChange = (e) => {
                     accept="image/*"
                     className="w-full px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-500 file:text-white hover:file:bg-green-600"
                   />
-                  {fileSizeErrors.m3Image && <p className="text-red-400 text-sm mt-1">{fileSizeErrors.leadImage}</p>}
-                  {errors.m3Image && <p className="text-red-400 text-sm mt-1">{errors.m3Image}</p>}
+                  {fileSizeErrors.m3Image && (
+                    <p className="text-red-400 text-sm mt-1">
+                      {fileSizeErrors.leadImage}
+                    </p>
+                  )}
+                  {errors.m3Image && (
+                    <p className="text-red-400 text-sm mt-1">
+                      {errors.m3Image}
+                    </p>
+                  )}
                   {renderImagePreview("m3Image", formData.m3Image)}
-                  <p className="text-sm text-gray-400 mt-1">Maximum file size: 1MB</p>
+                  <p className="text-sm text-gray-400 mt-1">
+                    Maximum file size: 1MB
+                  </p>
                 </div>
               </div>
             </div>
@@ -877,7 +1069,8 @@ const handleInputChange = (e) => {
               </h2>
               <div className="bg-gray-800/80 flex flex-row items-center text-left w-fit p-1 rounded-lg border-yellow-400 border-2 shadow-lg mb-2">
                 <p className="text-yellow-300 font-semibold px-3">
-                 Teams will be assigned unique pokemon name as their team name after successful registration.
+                  Teams will be assigned unique pokemon name as their team name
+                  after successful registration.
                 </p>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -891,11 +1084,15 @@ const handleInputChange = (e) => {
                     value={formData.college}
                     onChange={handleInputChange}
                     className={`w-full px-4 py-2 bg-gray-700 text-white border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent ${
-                      errors.college ? 'border-red-500' : 'border-gray-600'
+                      errors.college ? "border-red-500" : "border-gray-600"
                     }`}
                     required
                   />
-                  {errors.college && <p className="text-red-400 text-sm mt-1">{errors.college}</p>}
+                  {errors.college && (
+                    <p className="text-red-400 text-sm mt-1">
+                      {errors.college}
+                    </p>
+                  )}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-1">
@@ -907,11 +1104,13 @@ const handleInputChange = (e) => {
                     value={formData.city}
                     onChange={handleInputChange}
                     className={`w-full px-4 py-2 bg-gray-700 text-white border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent ${
-                      errors.city ? 'border-red-500' : 'border-gray-600'
+                      errors.city ? "border-red-500" : "border-gray-600"
                     }`}
                     required
                   />
-                  {errors.city && <p className="text-red-400 text-sm mt-1">{errors.city}</p>}
+                  {errors.city && (
+                    <p className="text-red-400 text-sm mt-1">{errors.city}</p>
+                  )}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-1">
@@ -923,12 +1122,18 @@ const handleInputChange = (e) => {
                     value={formData.confirmEmail}
                     onChange={handleInputChange}
                     className={`w-full px-4 py-2 bg-gray-700 text-white border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent ${
-                      errors.confirmEmail ? 'border-red-500' : 'border-gray-600'
+                      errors.confirmEmail ? "border-red-500" : "border-gray-600"
                     }`}
                     required
                   />
-                  {errors.confirmEmail && <p className="text-red-400 text-sm mt-1">{errors.confirmEmail}</p>}
-                  <p className="text-sm text-gray-400 mt-1">Must match team lead email</p>
+                  {errors.confirmEmail && (
+                    <p className="text-red-400 text-sm mt-1">
+                      {errors.confirmEmail}
+                    </p>
+                  )}
+                  <p className="text-sm text-gray-400 mt-1">
+                    Must match team lead email
+                  </p>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-1">
@@ -954,13 +1159,19 @@ const handleInputChange = (e) => {
                 Abstract and PPT Submission
               </h2>
               <div className="bg-gray-800/80 flex flex-row items-center text-left w-fit p-1 rounded-lg border-yellow-400 border-2 shadow-lg mb-2">
-                <a href="/Hackfusionps.pdf" target="_blank" rel="noopener noreferrer" className="text-yellow-300 font-semibold hover:underline px-3">
+                <a
+                  href="/Hackfusionps.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-yellow-300 font-semibold hover:underline px-3"
+                >
                   Click here to see the Problem Statement
                 </a>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-1">
-                  Project Abstract * (Minimum 100 characters and Abstract can be edited after submission from dashboard)
+                  Project Abstract * (Minimum 100 characters and Abstract can be
+                  edited after submission from dashboard)
                 </label>
                 <label className="block text-sm font-medium text-gray-300 mb-1">
                   PPT is optional * (upload link in abstract if prepared)
@@ -971,13 +1182,15 @@ const handleInputChange = (e) => {
                   onChange={handleInputChange}
                   rows="8"
                   className={`w-full px-4 py-2 bg-gray-700 text-white border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent ${
-                    errors.abstract ? 'border-red-500' : 'border-gray-600'
+                    errors.abstract ? "border-red-500" : "border-gray-600"
                   }`}
                   placeholder="Describe your project idea, approach, and expected outcomes..."
                   required
                   minLength={100}
                 />
-                {errors.abstract && <p className="text-red-400 text-sm mt-1">{errors.abstract}</p>}
+                {errors.abstract && (
+                  <p className="text-red-400 text-sm mt-1">{errors.abstract}</p>
+                )}
                 <p className="text-sm text-gray-400 mt-1">
                   Current length: {formData.abstract.length} characters
                 </p>
@@ -1006,7 +1219,11 @@ const handleInputChange = (e) => {
                 <div className="flex flex-col md:flex-row items-center justify-between mt-6 gap-6">
                   <div className="bg-white p-4 rounded-lg shadow-lg">
                     <div className="w-48 h-48 bg-gray-300 flex items-center justify-center text-gray-600 rounded-lg">
-                      <img src="/hackfusionpayment.jpeg" alt="UPI QR Code" className="w-full h-full object-contain" />
+                      <img
+                        src="/hackfusionpayment.jpeg"
+                        alt="UPI QR Code"
+                        className="w-full h-full object-contain"
+                      />
                     </div>
                     <p className="text-center font-semibold mt-2 text-black">
                       Registration Fee: ₹749
@@ -1023,17 +1240,33 @@ const handleInputChange = (e) => {
                       onChange={handleInputChange}
                       accept="image/*"
                       className={`w-full px-4 py-2 bg-gray-700 text-white border rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-pink-500 file:text-white hover:file:bg-pink-600 ${
-                        errors.paymentScreenshot ? 'border-red-500' : 'border-gray-600'
+                        errors.paymentScreenshot
+                          ? "border-red-500"
+                          : "border-gray-600"
                       }`}
                       // required
-                    />  
-                    {fileSizeErrors.paymentScreenshot && <p className="text-red-400 text-sm mt-1">{fileSizeErrors.leadImage}</p>}
-                    {errors.paymentScreenshot && <p className="text-red-400 text-sm mt-1">{errors.paymentScreenshot}</p>}
-                    {renderImagePreview("paymentScreenshot", formData.paymentScreenshot)}
+                    />
+                    {fileSizeErrors.paymentScreenshot && (
+                      <p className="text-red-400 text-sm mt-1">
+                        {fileSizeErrors.leadImage}
+                      </p>
+                    )}
+                    {errors.paymentScreenshot && (
+                      <p className="text-red-400 text-sm mt-1">
+                        {errors.paymentScreenshot}
+                      </p>
+                    )}
+                    {renderImagePreview(
+                      "paymentScreenshot",
+                      formData.paymentScreenshot
+                    )}
                     <p className="text-sm text-gray-400 mt-2">
-                      Upload a clear screenshot of your successful payment transaction
+                      Upload a clear screenshot of your successful payment
+                      transaction
                     </p>
-                    <p className="text-sm text-gray-400 mt-1">Maximum file size: 1MB</p>
+                    <p className="text-sm text-gray-400 mt-1">
+                      Maximum file size: 1MB
+                    </p>
 
                     {/* Submit Button */}
                     {isLastTab && (
@@ -1042,30 +1275,47 @@ const handleInputChange = (e) => {
                           type="submit"
                           disabled={isLoading}
                           className={`px-8 py-3 bg-gradient-to-r from-red-600 to-yellow-600 text-white font-bold rounded-lg transition-all shadow-lg ${
-                            isLoading 
-                              ? 'opacity-70 cursor-not-allowed' 
-                              : 'hover:from-red-500 hover:to-yellow-500'
+                            isLoading
+                              ? "opacity-70 cursor-not-allowed"
+                              : "hover:from-red-500 hover:to-yellow-500"
                           }`}
                         >
                           {isLoading ? (
                             <div className="flex items-center justify-center">
-                              <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                              <svg
+                                className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                              >
+                                <circle
+                                  className="opacity-25"
+                                  cx="12"
+                                  cy="12"
+                                  r="10"
+                                  stroke="currentColor"
+                                  strokeWidth="4"
+                                ></circle>
+                                <path
+                                  className="opacity-75"
+                                  fill="currentColor"
+                                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                                ></path>
                               </svg>
                               Processing...
                             </div>
                           ) : (
-                            'Submit Registration'
+                            "Submit Registration"
                           )}
                         </button>
                       </div>
                     )}
                     <div className="bg-gray-800/80 flex flex-row items-center  text-left w-fit p-1 rounded-lg border-yellow-400 border-2 shadow-lg mb-2">
-                <p className="text-yellow-300 text-center font-semibold px-3">
-                 Note: Teams who didn't get shortlisted in final round will get full refund of registration fee.
-                </p>
-              </div>
+                      <p className="text-yellow-300 text-center font-semibold px-3">
+                        Note: Teams who didn't get shortlisted in final round
+                        will get full refund of registration fee.
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1076,12 +1326,12 @@ const handleInputChange = (e) => {
           <div className="flex justify-between mt-8">
             <button
               type="button"
-              onClick={() => handleTabNavigation('prev')}
-              disabled={activeTab === 'teamSize'}
+              onClick={() => handleTabNavigation("prev")}
+              disabled={activeTab === "teamSize"}
               className={`px-6 py-2 rounded-lg transition-colors ${
-                activeTab === 'teamSize'
-                  ? 'bg-gray-600 text-gray-400 cursor-not-allowed'
-                  : 'bg-gray-700 text-white hover:bg-gray-600'
+                activeTab === "teamSize"
+                  ? "bg-gray-600 text-gray-400 cursor-not-allowed"
+                  : "bg-gray-700 text-white hover:bg-gray-600"
               }`}
             >
               Previous
@@ -1090,7 +1340,7 @@ const handleInputChange = (e) => {
             {!isLastTab && (
               <button
                 type="button"
-                onClick={() => handleTabNavigation('next')}
+                onClick={() => handleTabNavigation("next")}
                 className="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-500 transition-colors"
               >
                 Next

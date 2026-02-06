@@ -38,3 +38,14 @@ scrollbar-width: none;
     }
   }
   
+.pdf-mode {
+  background: #ffffff !important;
+  color: #111111 !important;
+}
+
+.pdf-mode * {
+  background-color: transparent !important;
+  color: #111111 !important;
+  border-color: #cccccc !important;
+}
+  

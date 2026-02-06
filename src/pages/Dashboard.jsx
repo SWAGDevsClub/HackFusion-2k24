@@ -81,7 +81,7 @@ function Dashboard() {
   const navigate = useNavigate();
   const [isLead, setIsLead] = useState(false);
   const [userId, setUserId] = useState(null);
-  
+
   // New state for adding member
   const [showAddMemberForm, setShowAddMemberForm] = useState(false);
   const [newMemberData, setNewMemberData] = useState({
@@ -114,7 +114,7 @@ function Dashboard() {
 
   const linkify = (text) => {
     if (!text) return "";
-  
+
     const urlRegex = /(https?:\/\/[^\s]+)/g;
     return text.replace(
       urlRegex,
@@ -122,7 +122,6 @@ function Dashboard() {
         `<a href="${url}" target="_blank" rel="noopener noreferrer" class="text-yellow-400 underline hover:text-yellow-300">${url}</a>`
     );
   };
-  
 
   useEffect(() => {
     const token = localStorage.getItem("authToken");
@@ -236,15 +235,15 @@ function Dashboard() {
   const handlePasswordInputChange = (e) => {
     const { name, value } = e.target;
     setPasswordData((prev) => ({ ...prev, [name]: value }));
-    
+
     if (passwordErrors[name]) {
-      setPasswordErrors(prev => ({ ...prev, [name]: null }));
+      setPasswordErrors((prev) => ({ ...prev, [name]: null }));
     }
   };
 
   const validatePasswordChange = () => {
     const errors = {};
-    
+
     if (!passwordData.oldPassword) {
       errors.oldPassword = "Current password is required";
     }
@@ -260,14 +259,14 @@ function Dashboard() {
     if (passwordData.newPassword !== passwordData.confirmNewPassword) {
       errors.confirmNewPassword = "Passwords do not match";
     }
-    
+
     setPasswordErrors(errors);
     return Object.keys(errors).length === 0;
   };
 
   const handleChangePassword = async (e) => {
     e.preventDefault();
-    
+
     if (!validatePasswordChange()) {
       return;
     }
@@ -318,7 +317,7 @@ function Dashboard() {
 
   const handleDeleteMember = async (e) => {
     e.preventDefault();
-    
+
     if (!deletePassword) {
       setDeleteError("Password is required");
       return;
@@ -348,7 +347,7 @@ function Dashboard() {
         setShowDeleteMemberModal(false);
         setMemberToDelete(null);
         setDeletePassword("");
-        
+
         // Refresh dashboard data
         fetchDashboardData(token);
       } else {
@@ -440,15 +439,15 @@ function Dashboard() {
     } else {
       setNewMemberData((prev) => ({ ...prev, [name]: value }));
     }
-    
+
     if (addMemberErrors[name]) {
-      setAddMemberErrors(prev => ({ ...prev, [name]: null }));
+      setAddMemberErrors((prev) => ({ ...prev, [name]: null }));
     }
   };
 
   const validateNewMember = () => {
     const errors = {};
-    
+
     if (!newMemberData.name.trim()) {
       errors.name = "Name is required";
     }
@@ -464,14 +463,14 @@ function Dashboard() {
     if (!newMemberData.profilePic) {
       errors.profilePic = "Profile picture is required";
     }
-    
+
     setAddMemberErrors(errors);
     return Object.keys(errors).length === 0;
   };
 
   const handleAddMember = async (e) => {
     e.preventDefault();
-    
+
     if (!validateNewMember()) {
       return;
     }
@@ -515,7 +514,7 @@ function Dashboard() {
           isPwd: "no",
           profilePic: null,
         });
-        
+
         // Refresh dashboard data
         fetchDashboardData(token);
       } else {
@@ -1030,7 +1029,7 @@ function Dashboard() {
                     src={selectedImage}
                     alt="Crop preview"
                     className="w-full h-full object-contain pointer-events-none"
-                    style={{ touchAction: 'none' }}
+                    style={{ touchAction: "none" }}
                   />
 
                   <div
@@ -1042,7 +1041,7 @@ function Dashboard() {
                       height: cropSize[memberType],
                       boxShadow: "0 0 0 9999px rgba(0, 0, 0, 0.5)",
                       cursor: "move",
-                      touchAction: 'none'
+                      touchAction: "none",
                     }}
                     onMouseDown={(e) =>
                       handleCropMouseDown(memberType, e, "move")
@@ -1056,7 +1055,7 @@ function Dashboard() {
                       style={{
                         transform: "translate(25%, 25%)",
                         borderRadius: "2px",
-                        touchAction: 'none'
+                        touchAction: "none",
                       }}
                       onMouseDown={(e) => {
                         e.stopPropagation();
@@ -1124,85 +1123,92 @@ function Dashboard() {
       <canvas ref={canvasRef} style={{ display: "none" }} />
 
       <div className="max-w-6xl mx-auto">
-      <div className="bg-gray-800/70 rounded-xl p-5 md:p-6 mb-6 border border-yellow-500 shadow-lg">
-  
-  {/* Header */}
-  <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-5">
+        <div className="bg-gray-800/70 rounded-xl p-5 md:p-6 mb-6 border border-yellow-500 shadow-lg">
+          {/* Header */}
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-5">
+            {/* Team Info */}
+            <div className="flex items-center gap-4">
+              {teamData.teamLogo ? (
+                <img
+                  src={teamData.teamLogo}
+                  alt="Team Logo"
+                  className="w-14 h-14 md:w-16 md:h-16 rounded-full border-2 border-yellow-400 object-cover"
+                />
+              ) : (
+                <div className="w-14 h-14 md:w-16 md:h-16 rounded-full bg-gray-700 border-2 border-yellow-400 flex items-center justify-center">
+                  <span className="text-xl md:text-2xl font-bold text-yellow-400">
+                    {teamData.teamName?.charAt(0) || "T"}
+                  </span>
+                </div>
+              )}
 
-    {/* Team Info */}
-    <div className="flex items-center gap-4">
-      {teamData.teamLogo ? (
-        <img
-          src={teamData.teamLogo}
-          alt="Team Logo"
-          className="w-14 h-14 md:w-16 md:h-16 rounded-full border-2 border-yellow-400 object-cover"
-        />
-      ) : (
-        <div className="w-14 h-14 md:w-16 md:h-16 rounded-full bg-gray-700 border-2 border-yellow-400 flex items-center justify-center">
-          <span className="text-xl md:text-2xl font-bold text-yellow-400">
-            {teamData.teamName?.charAt(0) || "T"}
-          </span>
+              <div>
+                <h1 className="text-2xl md:text-4xl font-bold text-yellow-400">
+                  Team Dashboard
+                </h1>
+                <h2 className="text-lg md:text-2xl font-semibold text-white">
+                  {teamData.teamName}
+                </h2>
+                <p className="text-gray-400 text-sm">{teamData.theme}</p>
+              </div>
+            </div>
+
+            {/* Actions */}
+            <div className="flex flex-col gap-3 md:items-end">
+              <div className="flex flex-wrap gap-2">
+                <span className="px-3 py-1 bg-green-600 text-white rounded-full text-xs md:text-sm">
+                  Team: {teamData.registrationStatus}
+                </span>
+                <span className="px-3 py-1 bg-blue-600 text-white rounded-full text-xs md:text-sm">
+                  Payment: {teamData.paymentStatus}
+                </span>
+              </div>
+
+              <div className="flex flex-wrap gap-2">
+              {teamData.registrationStatus !== "Pending" && teamData.registrationStatus !== "Rejected" && (
+                <button
+                  onClick={() =>
+                    window.open(`/receipt?team_id=${teamData.teamId}`, "_blank")
+                  }
+                  className="px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-md text-sm"
+                >
+                  View Receipt
+                </button>
+              )}
+                <button
+                  onClick={() => setShowChangePasswordModal(true)}
+                  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-sm"
+                >
+                  Change Password
+                </button>
+
+                <button
+                  onClick={handleLogout}
+                  className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm"
+                >
+                  Logout
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Footer Branding */}
+          <div className="mt-5 pt-3 border-t border-gray-700 text-center text-xs text-gray-400 flex items-center justify-center gap-2">
+            Powered by{" "}
+            <a
+              href="https://beestack.in"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-yellow-400 hover:underline"
+            >
+              <img
+                src="/beestack_text_logo.png"
+                alt="BeeStack"
+                className="h-4 md:h-5 w-auto"
+              />
+            </a>
+          </div>
         </div>
-      )}
-
-      <div>
-        <h1 className="text-2xl md:text-4xl font-bold text-yellow-400">
-          Team Dashboard
-        </h1>
-        <h2 className="text-lg md:text-2xl font-semibold text-white">
-          {teamData.teamName}
-        </h2>
-        <p className="text-gray-400 text-sm">{teamData.theme}</p>
-      </div>
-    </div>
-
-    {/* Actions */}
-    <div className="flex flex-col gap-3 md:items-end">
-      <div className="flex flex-wrap gap-2">
-        <span className="px-3 py-1 bg-green-600 text-white rounded-full text-xs md:text-sm">
-          Team: {teamData.registrationStatus}
-        </span>
-        <span className="px-3 py-1 bg-blue-600 text-white rounded-full text-xs md:text-sm">
-          Payment: {teamData.paymentStatus}
-        </span>
-      </div>
-
-      <div className="flex gap-2">
-        <button
-          onClick={() => setShowChangePasswordModal(true)}
-          className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-sm"
-        >
-          Change Password
-        </button>
-
-        <button
-          onClick={handleLogout}
-          className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm"
-        >
-          Logout
-        </button>
-      </div>
-    </div>
-  </div>
-
-  {/* Footer Branding */}
-  <div className="mt-5 pt-3 border-t border-gray-700 text-center text-xs text-gray-400 flex items-center justify-center gap-2">
-    Powered by{" "}
-    <a
-      href="https://beestack.in"
-      target="_blank"
-      rel="noopener noreferrer"
-      className="text-yellow-400 hover:underline"
-    >
-      <img
-      src="/beestack_text_logo.png"
-      alt="BeeStack"
-      className="h-4 md:h-5 w-auto"
-    />
-    </a>
-  </div>
-</div>
-
 
         {/* Add Member Button */}
         {canAddMember && (
@@ -1222,7 +1228,9 @@ function Dashboard() {
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
             <div className="bg-gray-800 rounded-xl p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto border-4 border-yellow-500">
               <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-bold text-green-400">Add New Team Member</h2>
+                <h2 className="text-2xl font-bold text-green-400">
+                  Add New Team Member
+                </h2>
                 <button
                   onClick={() => {
                     setShowAddMemberForm(false);
@@ -1254,11 +1262,15 @@ function Dashboard() {
                       value={newMemberData.name}
                       onChange={handleNewMemberInputChange}
                       className={`w-full px-4 py-2 bg-gray-700 text-white border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent ${
-                        addMemberErrors.name ? 'border-red-500' : 'border-gray-600'
+                        addMemberErrors.name
+                          ? "border-red-500"
+                          : "border-gray-600"
                       }`}
                     />
                     {addMemberErrors.name && (
-                      <p className="text-red-400 text-sm mt-1">{addMemberErrors.name}</p>
+                      <p className="text-red-400 text-sm mt-1">
+                        {addMemberErrors.name}
+                      </p>
                     )}
                   </div>
 
@@ -1272,11 +1284,15 @@ function Dashboard() {
                       value={newMemberData.email}
                       onChange={handleNewMemberInputChange}
                       className={`w-full px-4 py-2 bg-gray-700 text-white border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent ${
-                        addMemberErrors.email ? 'border-red-500' : 'border-gray-600'
+                        addMemberErrors.email
+                          ? "border-red-500"
+                          : "border-gray-600"
                       }`}
                     />
                     {addMemberErrors.email && (
-                      <p className="text-red-400 text-sm mt-1">{addMemberErrors.email}</p>
+                      <p className="text-red-400 text-sm mt-1">
+                        {addMemberErrors.email}
+                      </p>
                     )}
                   </div>
 
@@ -1290,11 +1306,15 @@ function Dashboard() {
                       value={newMemberData.mobile}
                       onChange={handleNewMemberInputChange}
                       className={`w-full px-4 py-2 bg-gray-700 text-white border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent ${
-                        addMemberErrors.mobile ? 'border-red-500' : 'border-gray-600'
+                        addMemberErrors.mobile
+                          ? "border-red-500"
+                          : "border-gray-600"
                       }`}
                     />
                     {addMemberErrors.mobile && (
-                      <p className="text-red-400 text-sm mt-1">{addMemberErrors.mobile}</p>
+                      <p className="text-red-400 text-sm mt-1">
+                        {addMemberErrors.mobile}
+                      </p>
                     )}
                   </div>
 
@@ -1339,11 +1359,15 @@ function Dashboard() {
                       onChange={handleNewMemberInputChange}
                       accept="image/*"
                       className={`w-full px-4 py-2 bg-gray-700 text-white border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-500 file:text-white hover:file:bg-green-600 ${
-                        addMemberErrors.profilePic ? 'border-red-500' : 'border-gray-600'
+                        addMemberErrors.profilePic
+                          ? "border-red-500"
+                          : "border-gray-600"
                       }`}
                     />
                     {addMemberErrors.profilePic && (
-                      <p className="text-red-400 text-sm mt-1">{addMemberErrors.profilePic}</p>
+                      <p className="text-red-400 text-sm mt-1">
+                        {addMemberErrors.profilePic}
+                      </p>
                     )}
                     {newMemberData.profilePic && (
                       <p className="text-sm text-green-400 mt-1">
@@ -1377,11 +1401,11 @@ function Dashboard() {
                     disabled={isSubmittingMember}
                     className={`flex-1 px-6 py-3 bg-green-600 text-white rounded-lg font-medium transition-colors ${
                       isSubmittingMember
-                        ? 'opacity-70 cursor-not-allowed'
-                        : 'hover:bg-green-700'
+                        ? "opacity-70 cursor-not-allowed"
+                        : "hover:bg-green-700"
                     }`}
                   >
-                    {isSubmittingMember ? 'Adding Member...' : 'Add Member'}
+                    {isSubmittingMember ? "Adding Member..." : "Add Member"}
                   </button>
                 </div>
               </form>
@@ -1394,7 +1418,9 @@ function Dashboard() {
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
             <div className="bg-gray-800 rounded-xl p-6 max-w-md w-full border-4 border-yellow-500">
               <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-bold text-blue-400">Change Password</h2>
+                <h2 className="text-2xl font-bold text-blue-400">
+                  Change Password
+                </h2>
                 <button
                   onClick={() => {
                     setShowChangePasswordModal(false);
@@ -1422,11 +1448,15 @@ function Dashboard() {
                     value={passwordData.oldPassword}
                     onChange={handlePasswordInputChange}
                     className={`w-full px-4 py-2 bg-gray-700 text-white border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                      passwordErrors.oldPassword ? 'border-red-500' : 'border-gray-600'
+                      passwordErrors.oldPassword
+                        ? "border-red-500"
+                        : "border-gray-600"
                     }`}
                   />
                   {passwordErrors.oldPassword && (
-                    <p className="text-red-400 text-sm mt-1">{passwordErrors.oldPassword}</p>
+                    <p className="text-red-400 text-sm mt-1">
+                      {passwordErrors.oldPassword}
+                    </p>
                   )}
                 </div>
 
@@ -1440,11 +1470,15 @@ function Dashboard() {
                     value={passwordData.newPassword}
                     onChange={handlePasswordInputChange}
                     className={`w-full px-4 py-2 bg-gray-700 text-white border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                      passwordErrors.newPassword ? 'border-red-500' : 'border-gray-600'
+                      passwordErrors.newPassword
+                        ? "border-red-500"
+                        : "border-gray-600"
                     }`}
                   />
                   {passwordErrors.newPassword && (
-                    <p className="text-red-400 text-sm mt-1">{passwordErrors.newPassword}</p>
+                    <p className="text-red-400 text-sm mt-1">
+                      {passwordErrors.newPassword}
+                    </p>
                   )}
                 </div>
 
@@ -1458,11 +1492,15 @@ function Dashboard() {
                     value={passwordData.confirmNewPassword}
                     onChange={handlePasswordInputChange}
                     className={`w-full px-4 py-2 bg-gray-700 text-white border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                      passwordErrors.confirmNewPassword ? 'border-red-500' : 'border-gray-600'
+                      passwordErrors.confirmNewPassword
+                        ? "border-red-500"
+                        : "border-gray-600"
                     }`}
                   />
                   {passwordErrors.confirmNewPassword && (
-                    <p className="text-red-400 text-sm mt-1">{passwordErrors.confirmNewPassword}</p>
+                    <p className="text-red-400 text-sm mt-1">
+                      {passwordErrors.confirmNewPassword}
+                    </p>
                   )}
                 </div>
 
@@ -1487,11 +1525,11 @@ function Dashboard() {
                     disabled={isChangingPassword}
                     className={`flex-1 px-6 py-3 bg-blue-600 text-white rounded-lg font-medium transition-colors ${
                       isChangingPassword
-                        ? 'opacity-70 cursor-not-allowed'
-                        : 'hover:bg-blue-700'
+                        ? "opacity-70 cursor-not-allowed"
+                        : "hover:bg-blue-700"
                     }`}
                   >
-                    {isChangingPassword ? 'Changing...' : 'Change Password'}
+                    {isChangingPassword ? "Changing..." : "Change Password"}
                   </button>
                 </div>
               </form>
@@ -1504,7 +1542,9 @@ function Dashboard() {
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
             <div className="bg-gray-800 rounded-xl p-6 max-w-md w-full border-4 border-red-500">
               <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-bold text-red-400">Remove Member</h2>
+                <h2 className="text-2xl font-bold text-red-400">
+                  Remove Member
+                </h2>
                 <button
                   onClick={() => {
                     setShowDeleteMemberModal(false);
@@ -1520,10 +1560,15 @@ function Dashboard() {
 
               <div className="mb-6">
                 <p className="text-white text-lg mb-2">
-                  Are you sure you want to Remove <span className="font-bold text-red-400">{memberToDelete?.name}</span>?
+                  Are you sure you want to Remove{" "}
+                  <span className="font-bold text-red-400">
+                    {memberToDelete?.name}
+                  </span>
+                  ?
                 </p>
                 <p className="text-gray-400 text-sm">
-                  This action cannot be undone. Please enter your password to confirm.
+                  This action cannot be undone. Please enter your password to
+                  confirm.
                 </p>
               </div>
 
@@ -1540,7 +1585,7 @@ function Dashboard() {
                       setDeleteError("");
                     }}
                     className={`w-full px-4 py-2 bg-gray-700 text-white border rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent ${
-                      deleteError ? 'border-red-500' : 'border-gray-600'
+                      deleteError ? "border-red-500" : "border-gray-600"
                     }`}
                     placeholder="Enter your password"
                   />
@@ -1567,11 +1612,11 @@ function Dashboard() {
                     disabled={isDeletingMember}
                     className={`flex-1 px-6 py-3 bg-red-600 text-white rounded-lg font-medium transition-colors ${
                       isDeletingMember
-                        ? 'opacity-70 cursor-not-allowed'
-                        : 'hover:bg-red-700'
+                        ? "opacity-70 cursor-not-allowed"
+                        : "hover:bg-red-700"
                     }`}
                   >
-                    {isDeletingMember ? 'Removing...' : 'Remove Member'}
+                    {isDeletingMember ? "Removing..." : "Remove Member"}
                   </button>
                 </div>
               </form>
@@ -1864,7 +1909,9 @@ function Dashboard() {
                   )}
                   {isLead && teamData?.teamSize === 4 && (
                     <button
-                      onClick={() => handleDeleteMemberClick(teamData.m1Id, teamData.m1Name)}
+                      onClick={() =>
+                        handleDeleteMemberClick(teamData.m1Id, teamData.m1Name)
+                      }
                       className="px-4 py-2 rounded-lg font-medium bg-red-600 hover:bg-red-700 text-white transition-colors flex items-center gap-2"
                     >
                       <Trash2 size={16} />
@@ -2019,7 +2066,9 @@ function Dashboard() {
                   )}
                   {isLead && teamData?.teamSize === 4 && (
                     <button
-                      onClick={() => handleDeleteMemberClick(teamData.m2Id, teamData.m2Name)}
+                      onClick={() =>
+                        handleDeleteMemberClick(teamData.m2Id, teamData.m2Name)
+                      }
                       className="px-4 py-2 rounded-lg font-medium bg-red-600 hover:bg-red-700 text-white transition-colors flex items-center gap-2"
                     >
                       <Trash2 size={16} />
@@ -2174,7 +2223,9 @@ function Dashboard() {
                   )}
                   {isLead && teamData?.teamSize === 4 && (
                     <button
-                      onClick={() => handleDeleteMemberClick(teamData.m3Id, teamData.m3Name)}
+                      onClick={() =>
+                        handleDeleteMemberClick(teamData.m3Id, teamData.m3Name)
+                      }
                       className="px-4 py-2 rounded-lg font-medium bg-red-600 hover:bg-red-700 text-white transition-colors flex items-center gap-2"
                     >
                       <Trash2 size={16} />
