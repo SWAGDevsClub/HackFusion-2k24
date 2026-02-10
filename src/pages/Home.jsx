@@ -235,12 +235,12 @@ function Home() {
 
             {/* Registration Button */}
             <div className="flex flex-col items-center gap-2 justify-center">
-              {/* <button
+               <button
                 className="bg-green-500 py-2  px-6 rounded-full shadow-lg hover:bg-green-600 transition duration-300 font-squid cursor-pointer tracking-wide"
                 data-aos="fade-right"
               >
-                Registration Starting Soon
-              </button> */}
+                Registration Closed
+              </button> 
 
               <a
                 className="outline-none"
@@ -267,13 +267,13 @@ function Home() {
                 </button>
               </a> */}
             
-            <Link
+          {/*  <Link
               className="bg-green-500 py-2 px-6 rounded-full shadow-lg hover:bg-green-600 transition duration-300 font-squid cursor-pointer"
               data-aos="fade-right"
               to="/Register"
             >
               Register Now
-            </Link>
+            </Link>*/}
             <Link
               className="bg-red-500 py-2 px-6 rounded-full shadow-lg hover:bg-red-600 transition duration-300 font-squid cursor-pointer"
               data-aos="fade-right"
