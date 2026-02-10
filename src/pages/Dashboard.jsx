@@ -15,7 +15,7 @@ function Dashboard() {
     abstract: false,
   });
 
-  const [hideEditButtons, setHideEditButtons] = useState(true);
+  const [hideEditButtons, setHideEditButtons] = useState(false);
   const [imageEditMode, setImageEditMode] = useState({
     lead: false,
     member1: false,
