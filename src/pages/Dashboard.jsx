@@ -15,6 +15,7 @@ function Dashboard() {
     abstract: false,
   });
 
+  const [hideEditButtons, setHideEditButtons] = useState(true);
   const [imageEditMode, setImageEditMode] = useState({
     lead: false,
     member1: false,
@@ -1628,9 +1629,11 @@ function Dashboard() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Team Information Card */}
           <div className="bg-gray-800/70 overflow-auto rounded-xl p-6 border border-gray-700 shadow-lg border-yellow-500 border-4">
+             
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-bold text-white">Team Information</h2>
-              {isLead && (
+              
+              {isLead && hideEditButtons && (
                 <button
                   onClick={() =>
                     editMode.teamInfo
@@ -1702,7 +1705,7 @@ function Dashboard() {
           <div className="bg-gray-800/70 max-h-96 overflow-auto rounded-xl p-6 border border-gray-700 shadow-lg border-yellow-500 border-4">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-bold text-white">Project Abstract</h2>
-              {isLead && (
+              {isLead && hideEditButtons &&(
                 <button
                   onClick={() =>
                     editMode.abstract
@@ -1716,7 +1719,7 @@ function Dashboard() {
                   } text-white transition-colors`}
                 >
                   {editMode.abstract ? "Save" : "Edit"}
-                </button>
+                </button> 
               )}
             </div>
 
@@ -1750,7 +1753,7 @@ function Dashboard() {
                 )}
                 <h2 className="text-xl font-bold text-white">Team Lead</h2>
               </div>
-              {isLead && (
+              {isLead && hideEditButtons && (
                 <button
                   onClick={() =>
                     editMode.lead ? saveChanges("lead") : toggleEditMode("lead")
@@ -1892,7 +1895,7 @@ function Dashboard() {
                   <h2 className="text-xl font-bold text-white">Member 1</h2>
                 </div>
                 <div className="flex gap-2">
-                  {(isLead || userId === teamData.m1Id) && (
+                  {(isLead || userId === teamData.m1Id) && hideEditButtons &&(
                     <button
                       onClick={() =>
                         editMode.member1
@@ -1908,7 +1911,7 @@ function Dashboard() {
                       {editMode.member1 ? "Save" : "Edit"}
                     </button>
                   )}
-                  {isLead && teamData?.teamSize === 4 && (
+                  {isLead && teamData?.teamSize === 4 && hideEditButtons &&(
                     <button
                       onClick={() =>
                         handleDeleteMemberClick(teamData.m1Id, teamData.m1Name)
@@ -2049,7 +2052,7 @@ function Dashboard() {
                   <h2 className="text-xl font-bold text-white">Member 2</h2>
                 </div>
                 <div className="flex gap-2">
-                  {(isLead || userId === teamData.m2Id) && (
+                  {(isLead || userId === teamData.m2Id) && hideEditButtons && (
                     <button
                       onClick={() =>
                         editMode.member2
@@ -2065,7 +2068,7 @@ function Dashboard() {
                       {editMode.member2 ? "Save" : "Edit"}
                     </button>
                   )}
-                  {isLead && teamData?.teamSize === 4 && (
+                  {isLead && teamData?.teamSize === 4 && hideEditButtons &&(
                     <button
                       onClick={() =>
                         handleDeleteMemberClick(teamData.m2Id, teamData.m2Name)
@@ -2206,7 +2209,7 @@ function Dashboard() {
                   <h2 className="text-xl font-bold text-white">Member 3</h2>
                 </div>
                 <div className="flex gap-2">
-                  {(isLead || userId === teamData.m3Id) && (
+                  {(isLead || userId === teamData.m3Id) && hideEditButtons && (
                     <button
                       onClick={() =>
                         editMode.member3
@@ -2222,7 +2225,7 @@ function Dashboard() {
                       {editMode.member3 ? "Save" : "Edit"}
                     </button>
                   )}
-                  {isLead && teamData?.teamSize === 4 && (
+                  {isLead && teamData?.teamSize === 4 && hideEditButtons &&(
                     <button
                       onClick={() =>
                         handleDeleteMemberClick(teamData.m3Id, teamData.m3Name)
