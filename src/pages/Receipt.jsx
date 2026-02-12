@@ -362,6 +362,34 @@ function Receipt() {
               </table>
             </div>
           </div>
+
+          {/* Hackathon Dates Section */}
+<div className="mb-6 bg-gray-700/50 rounded-xl p-4 md:p-6">
+  <h3 className="text-xl font-bold text-white mb-4 flex items-center">
+    <svg
+      className="w-6 h-6 mr-2 text-yellow-400"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+        d="M8 7V3m8 4V3m-9 8h10m-11 9h12a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v11a2 2 0 002 2z"
+      />
+    </svg>
+    Hackathon Dates
+  </h3>
+
+  <div className="bg-gray-800/70 p-3 rounded-lg">
+    <span className="text-gray-400 text-sm">Event Duration:</span>
+    <p className="text-white font-semibold">
+      27 February 2026 to 1 March 2026
+    </p>
+  </div>
+</div>
+
           {/* Footer */}
           <div className="text-center mt-8 pt-6 border-t border-gray-700">
             <p className="text-sm text-gray-400">
