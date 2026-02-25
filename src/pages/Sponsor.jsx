@@ -43,6 +43,25 @@ export default function Sponsor() {
         <section className="text-gray-600 body-font">
           <div className="container px-4 mx-auto mb-28 max-sm:p-7">
             <h1 className="lg:text-xl max-sm:text-base font-bold title-font mb-2 text-white font-squid">
+              Platinum Sponsor
+            </h1>
+            <div className="flex flex-wrap -m-4">
+              <div className="lg:w-1/4 md:w-1/2 p-4 w-full">
+                <a className="block relative h-50 rounded overflow-hidden">
+                  <img
+                    alt="ecommerce"
+                    className="object-cover object-center pt-8 w-full h-full block"
+                    src="/cyberxdelta.jpeg"
+                  />
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="text-gray-600 body-font">
+          <div className="container px-4 mx-auto mb-28 max-sm:p-7">
+            <h1 className="lg:text-xl max-sm:text-base font-bold title-font mb-2 text-white font-squid">
               Technology Sponsor
             </h1>
             <div className="flex flex-wrap -m-4">
