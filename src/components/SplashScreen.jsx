@@ -1,90 +1,122 @@
-import React from 'react'
-import { useEffect ,useState} from 'react';
-import Loader from './loader';
-export default function SplashScreen({onEnd}) {
-    const [isVideoLoaded, setIsVideoLoaded] = useState(false);
-    const [isMobile, setIsMobile] = useState(false);
-    
-    // Preload critical assets while splash screen is showing
-    useEffect(() => {
-        // Preload images
-        const imagesToPreload = [
-            '/hero.png',
-            '/hero-img2.png',
-            '/hero-img3.png',
-            '/first.png',
-            '/second.png',
-            '/third.png',
-            '/logon.png',
-            '/hero-element1.webp',
-            '/hero-element2.png',
-            '/hero-element3.png',
-            '/swag_white.png',
-            '/GDG_White_logo.png',
-            '/footer-img.png',
-            '/pokedex.png',
-        ];
-        
-        imagesToPreload.forEach(src => {
-            const img = new Image();
-            img.src = src;
-        });
-        
-        // Preload videos
-        const videosToPreload = ['/intro2025.mp4'];
-        videosToPreload.forEach(src => {
-            const video = document.createElement('video');
-            video.src = src;
-            video.preload = 'auto';
-        });
-    }, []);
-    
-    useEffect(() => {
-        // If on mobile, show loader for fixed duration instead of video
-        let timer;
-        if (isMobile) {
-            timer = setTimeout(onEnd, 2000);
-        } else if (isVideoLoaded) {
-            timer = setTimeout(onEnd, 7000);
-        }
-        return () => clearTimeout(timer);
-    }, [isVideoLoaded, isMobile, onEnd]);
+import { useEffect, useState } from "react";
 
-    // detect mobile viewport (tailwind sm breakpoint ~= 640px)
-    useEffect(() => {
-        const mq = window.matchMedia('(max-width: 640px)');
-        const handler = (e) => setIsMobile(e.matches);
-        setIsMobile(mq.matches);
-        if (mq.addEventListener) mq.addEventListener('change', handler);
-        else mq.addListener(handler);
-        return () => {
-            if (mq.removeEventListener) mq.removeEventListener('change', handler);
-            else mq.removeListener(handler);
-        };
-    }, []);
-    const handleVideoLoad = () => {
-        setIsVideoLoaded(true);
+const FONT_HREF =
+  "https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap";
+
+export default function HackfusionSplash({
+  text = "HACKFUSION 4",
+  duration = 2000,
+  progress: controlled,
+  onEnd,
+  onComplete,
+}) {
+  const [auto, setAuto] = useState(0);
+  const [visible, setVisible] = useState(false); // fade in
+  const [leaving, setLeaving] = useState(false); // fade out
+  const isControlled = typeof controlled === "number";
+  const value = Math.min(100, Math.max(0, isControlled ? controlled : auto));
+
+  useEffect(() => {
+    if (document.querySelector(`link[href="${FONT_HREF}"]`)) return;
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = FONT_HREF;
+    document.head.appendChild(link);
+  }, []);
+
+  // fade in
+  useEffect(() => {
+    const id = requestAnimationFrame(() => setVisible(true));
+    return () => cancelAnimationFrame(id);
+  }, []);
+
+  // progress
+  useEffect(() => {
+    if (isControlled) return;
+    let raf;
+    const start = performance.now();
+    const tick = (now) => {
+      const t = Math.min(1, (now - start) / duration);
+      const eased = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+      setAuto(eased * 100);
+      if (t < 1) raf = requestAnimationFrame(tick);
     };
-    return (
-        <div className='bg-black h-screen flex items-center justify-center hide overflow-hidden'>
-            <div className='relative h-screen w-screen flex items-center justify-center hide overflow-hidden'>
-                {isMobile ? (
-                    <div className='absolute inset-0 flex items-center justify-center bg-black'>
-                        <Loader />
-                    </div>
-                ) : (
-                    <>
-                        <video src="/webintro.mp4" className='w-full h-full lg:object-cover sm:object-contain hide' onLoadedData={handleVideoLoad} autoPlay muted>
-                            Your browser does not support the video .
-                        </video>
-                        {!isVideoLoaded && (
-                            <div className='absolute inset-0 flex items-center justify-center bg-black'>
-                                <Loader />
-                            </div>
-                        )}
-                    </>
-                )}
-            </div>
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [duration, isControlled]);
+
+  // fade out, then tell the parent
+  useEffect(() => {
+    if (value < 100) return;
+    const pause = setTimeout(() => setLeaving(true), 600); // brief hold on a full bar
+    const done = setTimeout(() => {
+      (onEnd || onComplete)?.();
+    }, 300 + 700); // hold + fade duration
+    return () => {
+      clearTimeout(pause);
+      clearTimeout(done);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value >= 100]);
+
+  return (
+    <div
+      role="progressbar"
+      aria-label="Loading"
+      aria-valuemin={0}
+      aria-valuemax={100}
+      aria-valuenow={Math.round(value)}
+      style={{
+        ...styles.screen,
+        opacity: visible && !leaving ? 1 : 0,
+      }}
+    >
+      <div style={styles.center}>
+        <h1 style={styles.title}>{text}</h1>
+        <div style={styles.barOuter}>
+          <div style={{ ...styles.barFill, width: `${value}%` }} />
         </div>
-    )
+      </div>
+    </div>
+  );
 }
+
+const styles = {
+  screen: {
+    position: "fixed",
+    inset: 0,
+    zIndex: 9999,
+    background: "#EF323D",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontFamily: "'Press Start 2P', monospace",
+    color: "#fff",
+    transition: "opacity 400ms ease-in-out",
+  },
+  center: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    gap: "clamp(24px, 5vw, 48px)",
+    padding: "0 24px",
+    maxWidth: "100%",
+  },
+  title: {
+    margin: 0,
+    fontWeight: 400,
+    fontSize: "clamp(20px, 6vw, 56px)",
+    letterSpacing: "0.04em",
+    lineHeight: 1.2,
+    textAlign: "center",
+    color: "#fff",
+  },
+  barOuter: {
+    width: "min(80vw, 520px)",
+    height: "clamp(14px, 2.4vw, 22px)",
+    border: "4px solid #fff",
+    padding: 3,
+    boxSizing: "border-box",
+  },
+  barFill: { height: "100%", background: "#fff" },
+};
