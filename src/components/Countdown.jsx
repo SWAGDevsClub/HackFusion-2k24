@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from "motion/react"
 import gsap from "gsap"
 
 // TODO: set your real event start date (ISO format, with timezone)
-const EVENT_DATE = "2026-11-15T09:00:00+05:30"
+const EVENT_DATE = "2026-12-31T00:00:00+05:30"
 
 const pad = (n) => String(n).padStart(2, "0")
 

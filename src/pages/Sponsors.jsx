@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react'
 import Navbar from '../components/Navbar' 
+import ComingSoonToast from '../components/ComingSoonToast'
 
 /* ============================================================================
    HackFusion 4 – Sponsors page (single file, no Tailwind needed).
@@ -138,6 +139,11 @@ export default function Sponsors() {
 
   return (
     <div className="sp-root" ref={pageRef}>
+      <ComingSoonToast
+        pageName="SPONSORS"
+        title="COMING SOON"
+        subtitle="HackFusion 4 official sponsors and community partners will be revealed soon!"
+      />
       <style>{CSS}</style>
       <div className="sp-nav"><Navbar /></div>
 

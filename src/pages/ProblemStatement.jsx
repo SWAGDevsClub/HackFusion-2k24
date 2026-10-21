@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import Navbar from '../components/Navbar';
+import ComingSoonToast from '../components/ComingSoonToast';
 import StructureWrapper from '../components/StructureWrapper';
 import ProblemCard from '../components/ProblemCard';
 import MinecraftModal from '../components/MinecraftModal';
@@ -31,6 +32,11 @@ export default function ProblemStatement() {
 
   return (
     <div className="problem-statements-page">
+      <ComingSoonToast
+        pageName="PROBLEM STATEMENTS"
+        title="COMING SOON"
+        subtitle="The official challenge tracks, problem briefs, and judging rubrics will be unlocked soon!"
+      />
       <Navbar />
 
       <StructureWrapper>

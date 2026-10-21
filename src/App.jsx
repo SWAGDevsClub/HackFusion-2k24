@@ -5,6 +5,9 @@ const Home = lazy(() => import("./pages/Home"));
 const Contact = lazy(() => import("./pages/Contact"));
 const Faq = lazy(() => import("./pages/Faq"));
 const Sponsors = lazy(() => import("./pages/Sponsors"));
+const Schedule = lazy(() => import("./pages/Schedule"));
+const Login = lazy(() => import("./pages/Login"));
+const Registrations = lazy(() => import("./pages/Registrations"));
 import SplashScreen from "../src/components/SplashScreen"
 import ProblemStatement from "./pages/ProblemStatement";
 // import Schedule from "./pages/Schedule";
@@ -50,7 +53,10 @@ function App() {
               <Route path="/contact" element={<Contact />} /> {/* ADDED */}
               <Route path="/faq" element={<Faq />} />
               <Route path="/sponsors" element={<Sponsors />} />
+              <Route path="/schedule" element={<Schedule />} />
               <Route path="/problem-statement" element={<ProblemStatement />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Registrations />} />
               {/* <Route path="/registration" element={<RegistrationForm/>} />
               <Route path="/login" element={<Login/>} />
               <Route path="/dashboard" element={<Dashboard/>} />

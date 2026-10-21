@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import Navbar from "../components/Navbar";
+import ComingSoonToast from "../components/ComingSoonToast";
 import faqChargedCreeper from "../assets/digvijay's_assets/faq-charged-creeper.webp";
 import faqDirtBackground from "../assets/digvijay's_assets/faq-dirt-background.jpg";
 import faqTabSandTexture from "../assets/digvijay's_assets/faq-tab-sand-texture.webp";
@@ -92,7 +94,15 @@ export default function Faq() {
   const reduceMotion = useReducedMotion();
 
   return (
-    <section className="relative isolate h-svh overflow-hidden bg-[#294523] px-[clamp(1.25rem,4vw,4.5rem)] text-2xl [font-family:'Minecraft','VT323','Courier_New',monospace] text-[#fff4db] max-[540px]:px-4" aria-labelledby="faq-title">
+    <section className="relative isolate min-h-screen overflow-hidden bg-[#294523] px-[clamp(1.25rem,4vw,4.5rem)] text-2xl [font-family:'Minecraft','VT323','Courier_New',monospace] text-[#fff4db] max-[540px]:px-4" aria-labelledby="faq-title">
+      <ComingSoonToast
+        pageName="FAQ"
+        title="COMING SOON"
+        subtitle="The official HackFusion 4 FAQ and participant guidelines are currently being compiled!"
+      />
+      <div className="relative z-50">
+        <Navbar />
+      </div>
       <img className="pointer-events-none absolute inset-0 z-[-1] h-full w-full object-cover object-center" src={faqDirtBackground} alt="" aria-hidden="true" loading="lazy" decoding="async" draggable="false" />
       <div className="pointer-events-none absolute inset-0 z-0 bg-[linear-gradient(180deg,rgba(9,18,9,.46),rgba(18,12,9,.54)),rgba(8,11,8,.28)]" aria-hidden="true" />
       <picture className="pointer-events-none absolute inset-0 z-0 max-[768px]:hidden" aria-hidden="true">
@@ -105,8 +115,8 @@ export default function Faq() {
           draggable="false"
         />
       </picture>
-      <div className="relative z-[1] mx-auto flex h-full w-full min-w-0 max-w-[1400px] flex-col py-[clamp(2rem,6vh,5rem)]">
-        <p className="mb-2 text-[clamp(1rem,1.5vw,1.25rem)] font-bold tracking-[.2em] text-[#ffcb66] [text-shadow:2px_2px_#2b160c] max-[540px]:mb-1 max-[540px]:text-[.95rem] max-[540px]:tracking-[.14em]">HACKFUSION 3 · FIELD GUIDE</p>
+      <div className="relative z-[1] mx-auto flex h-full w-full min-w-0 max-w-[1400px] flex-col pt-24 pb-12 sm:pt-28">
+        <p className="mb-2 text-[clamp(1rem,1.5vw,1.25rem)] font-bold tracking-[.2em] text-[#ffcb66] [text-shadow:2px_2px_#2b160c] max-[540px]:mb-1 max-[540px]:text-[.95rem] max-[540px]:tracking-[.14em]">HACKFUSION · FIELD GUIDE</p>
         <h2 id="faq-title" className="faq-page-title mb-[clamp(1rem,2.5vh,2rem)] text-[clamp(2.65rem,6.2vw,5.5rem)] font-black leading-[1.04] tracking-[-.035em] text-[#fff4dc] [text-shadow:4px_5px_0_#35190d,0_8px_22px_rgba(0,0,0,.45)] [-webkit-text-stroke:.5px_rgba(69,32,14,.7)] max-[540px]:mb-3 max-[540px]:max-w-[16ch] max-[540px]:text-[clamp(1.9rem,8.5vw,2.6rem)] max-[540px]:leading-[1.06]">Frequently Asked Questions</h2>
         <div className="faq-scrollbar min-h-0 flex-1 overflow-y-auto overscroll-y-contain pr-2" data-lenis-prevent>
           <div className="grid gap-[clamp(.75rem,1.2vw,1.1rem)] pb-2 max-[540px]:gap-2.5">

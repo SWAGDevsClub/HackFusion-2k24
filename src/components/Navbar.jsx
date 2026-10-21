@@ -27,15 +27,19 @@ const MOBILE_LINKS = [...LEFT_LINKS, ...RIGHT_LINKS]
 // (roughly the height of the hanging signs; raise it to hide earlier, lower it to hide later)
 const NAV_HEIGHT = 110
 
+// lives at module level so it survives Navbar remounts / route changes,
+// but resets on a full page load (i.e. when the user enters the site)
+let introPlayed = false
+
 /* A single wooden sign hanging from two chains. Renders a link when `to` is given, otherwise a button. */
-function HangingSign({ to, index, children, square = false, onClick, label, expanded }) {
+function HangingSign({ to, index, children, square = false, onClick, label, expanded, skipIntro }) {
     const Tag = to ? MotionLink : motion.button
     const tagProps = to ? { to } : { type: "button", onClick, "aria-label": label, "aria-expanded": expanded }
 
     return (
         <motion.div
             className="pointer-events-auto"
-            initial={{ y: -180, opacity: 0 }}
+            initial={skipIntro ? false : { y: -180, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{
                 type: "spring",
@@ -115,6 +119,12 @@ export default function Navbar() {
     const [hovered, setHovered] = useState(false)
     const leaveTimer = useRef(null)
 
+    // true if the intro already played earlier in this session
+    const [skipIntro] = useState(() => introPlayed)
+    useEffect(() => {
+        introPlayed = true
+    }, [])
+
     // The hero stays pinned while Info slides over it, so "is the hero visible?" never turns false
     // at the right time. Instead, hide the desktop nav as soon as the top edge of the Info section
     // (the element with id="info") reaches the navbar area.
@@ -185,17 +195,17 @@ export default function Navbar() {
                     transition={{ type: "spring", stiffness: 260, damping: 26 }}
                 >
                     {LEFT_LINKS.map((l, i) => (
-                        <HangingSign key={l.label} to={l.to} index={i}>
+                        <HangingSign key={l.label} to={l.to} index={i} skipIntro={skipIntro}>
                             {l.label}
                         </HangingSign>
                     ))}
 
-                    <HangingSign to="/" index={2} square>
+                    <HangingSign to="/" index={2} square skipIntro={skipIntro}>
                         <GrassBlock />
                     </HangingSign>
 
                     {RIGHT_LINKS.map((l, i) => (
-                        <HangingSign key={l.label} to={l.to} index={i + 3}>
+                        <HangingSign key={l.label} to={l.to} index={i + 3} skipIntro={skipIntro}>
                             {l.label}
                         </HangingSign>
                     ))}
@@ -204,13 +214,14 @@ export default function Navbar() {
 
             {/* mobile nav: home sign on the left, hamburger sign on the right (always visible) */}
             <nav className="pointer-events-none fixed inset-x-0 top-0 z-50 flex items-start justify-between px-3 sm:hidden">
-                <HangingSign to="/" index={0} square>
+                <HangingSign to="/" index={0} square skipIntro={skipIntro}>
                     <GrassBlock />
                 </HangingSign>
 
                 <HangingSign
                     index={1}
                     square
+                    skipIntro={skipIntro}
                     onClick={() => setOpen((v) => !v)}
                     label={open ? "Close menu" : "Open menu"}
                     expanded={open}
