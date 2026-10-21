@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from "react"
 import { AnimatePresence, motion } from "motion/react"
 import { Link, useLocation } from "react-router-dom"
-import chainSignA from "../assets/pageassets-clean/nav-sign-chain-a.WebP"
-import chainSignB from "../assets/pageassets-clean/nav-sign-chain-b.WebP"
-import woodPlank from "../assets/pageassets-clean/plank-panel-wood-spare.Webp"
+import chainSignA from "../assets/pageassets-clean/nav-sign-chain-a.webp"
+import chainSignB from "../assets/pageassets-clean/nav-sign-chain-b.webp"
+import woodPlank from "../assets/pageassets-clean/plank-panel-wood-spare.webp"
 
 const MotionLink = motion.create(Link)
 const SIGN_IMAGES = [chainSignA, chainSignB]
