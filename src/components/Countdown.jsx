@@ -136,7 +136,7 @@ export default function Countdown({ targetDate = EVENT_DATE }) {
             {time.done ? (
                 <p className="mc-cd-label !text-base sm:!text-xl">The game has begun!</p>
             ) : (
-                <div className="flex items-start justify-center gap-1.5 sm:gap-4">
+                <div className="flex items-start justify-center scale-75 sm:scale-100 gap-1.5 sm:gap-4">
                     <Slot value={time.days} label="Days" />
                     <Colon />
                     <Slot value={time.hours} label="Hours" />
