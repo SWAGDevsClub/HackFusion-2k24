@@ -341,11 +341,11 @@ export default function HeroSection() {
                         visibility: "hidden",
                     }}
                 >
-                    <div className="flex flex-col md:flex-row items-center justify-center gap-4 sm:gap-6 md:gap-8 lg:gap-10 font-['Press_Start_2P',monospace] text-3xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl uppercase tracking-wider text-[#FFE600] text-center [text-shadow:3px_3px_0_#000,5px_5px_0_rgba(0,0,0,0.8),0_0_24px_rgba(255,215,0,0.4)] drop-shadow-[0_8px_16px_rgba(0,0,0,0.85)]">
+                    {/* <div className="flex flex-col md:flex-row items-center justify-center gap-4 sm:gap-6 md:gap-8 lg:gap-10 font-['Press_Start_2P',monospace] text-3xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl uppercase tracking-wider text-[#FFE600] text-center [text-shadow:3px_3px_0_#000,5px_5px_0_rgba(0,0,0,0.8),0_0_24px_rgba(255,215,0,0.4)] drop-shadow-[0_8px_16px_rgba(0,0,0,0.85)]">
                         <span>CODE.</span>
                         <span>COMPETE.</span>
                         <span>CONQUER.</span>
-                    </div>
+                    </div> */}
                 </div>
             </ScrollFrames>
         </section>
