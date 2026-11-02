@@ -11,8 +11,8 @@ import Navbar from "../components/Navbar"
 
 const questions = [
   {
-    question: "What is HackFusion 3?",
-    answer: "HackFusion 3 is a national 36-hour hackathon running from 29th to 31st December.",
+    question: "What is HackFusion 4?",
+    answer: "HackFusion 4 is a national 36-hour hackathon organised in late 2026",
   },
   {
     question: "What is the registration fee and refund policy?",

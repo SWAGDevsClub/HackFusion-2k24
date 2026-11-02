@@ -15,7 +15,7 @@ import bg from "../assets/schedulebg.jpg"
 const CHECKPOINTS = [
     {
         title: "Registrations",
-        date: "01 Nov – 15 Nov",
+        date: "05 Nov – 15 Nov",
         icon: "📜",
         blurb: "Register your team and claim your spot in the mine.",
         time: "Online · All day",
@@ -51,19 +51,19 @@ const CHECKPOINTS = [
     },
     {
         title: "Hacking Begins",
-        date: "12 Dec · 10:00 AM",
+        date: "29 Dec · 10:00 AM",
         icon: "⛏️",
         blurb: "24 hours on campus. Build, break, ship.",
-        time: "Main Auditorium",
+        time: "SGGSIE&T Campus",
         details: [
-            "Mentors available all night",
+            "Mentors available all time",
             "Food and refreshments provided",
-            "Mid-way check-in at 10:00 PM",
+            // "Mid-way check-in at 10:00 PM",
         ],
     },
     {
         title: "Demo & Results",
-        date: "13 Dec · 10:00 AM",
+        date: "31 Dec · 5:00 PM",
         icon: "💎",
         blurb: "Pitch to the judges and find out who wins.",
         time: "5 min pitch + 3 min Q&A",

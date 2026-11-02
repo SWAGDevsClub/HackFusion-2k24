@@ -9,7 +9,6 @@ import SplashGate from "./components/SplashGate";
 import Register from "./pages/Registration";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
-import ResetPassword from "./pages/ResetPassword";
 
 import SmoothScroll from "./components/SmoothScroll";
 import ScrollToTop from "./components/ScrollToTop";
@@ -26,15 +25,15 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/home" element={<Home />} />
-              <Route path="/contact" element={<Contact />} /> {/* ADDED */}
+              <Route path="/contact" element={<Contact />} />
               <Route path="/faq" element={<Faq />} />
               <Route path="/sponsors" element={<Sponsors />} />
               <Route path="/problem-statement" element={<ProblemStatement />} />
               <Route path="/register" element={<Register />} />
               <Route path="/login" element={<Login />} />
               <Route path="/dashboard" element={<Dashboard/>} />
-              <Route path="/reset-password" element={<ResetPassword />} />
-              <Route path="/forgot-password" element={<ResetPassword />} />
+              <Route path="/reset-password" element={<Login initialFlipped={true} />} />
+              <Route path="/forgot-password" element={<Login initialFlipped={true} />} />
             </Routes>
           </Suspense>
         </SmoothScroll>

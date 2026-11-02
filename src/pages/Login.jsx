@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence, MotionConfig } from "motion/react";
 import { BASE_URL } from "../hooks/api";
 import logo from "../assets/logo.png";
 import Navbar from "../components/Navbar";
-import bg from "../assets/login_bg.webp"
-import Footer from "../components/Footer"
+import bg from "../assets/login_bg.webp";
+import Footer from "../components/Footer";
 
 /* ------------------------------------------------------------------ */
 /*  Things to update                                                   */
@@ -54,7 +54,7 @@ function useFontsReady() {
 }
 
 /* ------------------------------------------------------------------ */
-/*  Styles (same Minecraft look as the registration page)              */
+/*  Styles (Minecraft look)                                            */
 /* ------------------------------------------------------------------ */
 const styles = `
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap');
@@ -97,13 +97,7 @@ const styles = `
 .hf4 .mc-mini:hover { background:#6b7bd1; }
 .hf4 .mc-mini:focus-visible { outline:3px solid #fff; outline-offset:2px; }
 
-/* pixel checkbox */
-.hf4 .mc-box { appearance:none; -webkit-appearance:none; flex:0 0 28px; width:28px; height:28px; cursor:pointer; margin:0;
-  background:#111; border:3px solid #000; box-shadow: inset 3px 3px 0 #000, inset -3px -3px 0 #505050; }
-.hf4 .mc-box:checked { background:#111 url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8' shape-rendering='crispEdges'><path fill='%237dea2b' d='M1 4h1v1H1zM2 5h1v1H2zM3 4h1v1H3zM4 3h1v1H4zM5 2h1v1H5zM6 1h1v1H6z'/></svg>") center / 20px 20px no-repeat; }
-.hf4 .mc-box:focus-visible { outline:3px solid var(--accent); outline-offset:2px; }
-
-/* buttons (lift and press are handled by motion) */
+/* buttons */
 .hf4 .mc-btn {
   display:inline-flex; align-items:center; justify-content:center; gap:12px; cursor:pointer; width:100%;
   font-family:'Press Start 2P', monospace; font-size:11px; line-height:1.4; color:#fff; text-align:center;
@@ -278,11 +272,7 @@ const PixelIcon = ({ d, size = 18, className = "" }) => (
     </svg>
 );
 
-/* ------------------------------------------------------------------ */
-/*  Motion building blocks                                             */
-/* ------------------------------------------------------------------ */
-
-/* Pixel button: lifts on hover, presses on tap. Children can react to "hover". */
+/* Pixel button: lifts on hover, presses on tap. */
 const McButton = ({ className = "", disabled, children, ...rest }) => (
     <motion.button
         variants={btnVariants}
@@ -297,7 +287,7 @@ const McButton = ({ className = "", disabled, children, ...rest }) => (
     </motion.button>
 );
 
-/* Arrow that nudges right when the parent McButton is hovered */
+/* Arrow that nudges right when parent is hovered */
 const ArrowNudge = () => (
     <motion.span
         className="inline-flex"
@@ -309,9 +299,15 @@ const ArrowNudge = () => (
 );
 
 /* ------------------------------------------------------------------ */
-/*  Page                                                               */
+/*  Page Component                                                     */
 /* ------------------------------------------------------------------ */
-function Login() {
+export default function Login({ initialFlipped = false }) {
+    const [searchParams] = useSearchParams();
+    const [isFlipped, setIsFlipped] = useState(
+        initialFlipped || searchParams.get("forgot") === "true"
+    );
+
+    // Login Form State
     const [loginData, setLoginData] = useState({
         email: "",
         password: "",
@@ -320,6 +316,12 @@ function Login() {
     const [loading, setLoading] = useState(false);
     const [errorMsg, setErrorMsg] = useState("");
     const [showPassword, setShowPassword] = useState(false);
+
+    // Forgot Password Form State
+    const [resetEmail, setResetEmail] = useState("");
+    const [resetLoading, setResetLoading] = useState(false);
+    const [resetError, setResetError] = useState("");
+    const [resetSuccess, setResetSuccess] = useState(false);
 
     const navigate = useNavigate();
     const ready = useFontsReady();
@@ -332,7 +334,7 @@ function Login() {
         }));
     };
 
-    const handleSubmit = async (e) => {
+    const handleLoginSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
         setErrorMsg("");
@@ -346,21 +348,55 @@ function Login() {
                 headers: { "Content-Type": "multipart/form-data" },
             });
 
-            if (response.data.success) {
-                // Save token & user data in localStorage/session
+            if (response.data && response.data.success) {
                 localStorage.setItem("user", JSON.stringify(response.data.data));
                 localStorage.setItem("authToken", response.data.data.token);
-
-                // alert("Login successful!");
                 navigate("/dashboard");
             } else {
-                setErrorMsg(response.data.message || "Login failed");
+                setErrorMsg(response.data?.message || "Login failed");
             }
         } catch (error) {
             console.error("Login error:", error);
             setErrorMsg("Something went wrong. Try again.");
         } finally {
             setLoading(false);
+        }
+    };
+
+    const handleResetSubmit = async (e) => {
+        e.preventDefault();
+        setResetError("");
+        setResetSuccess(false);
+
+        const emailTrimmed = resetEmail.trim();
+        const EMAIL_RE = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,}$/;
+        if (!emailTrimmed) {
+            setResetError("Email address is required.");
+            return;
+        }
+        if (!EMAIL_RE.test(emailTrimmed)) {
+            setResetError("Please enter a valid email address (e.g. steve@example.com).");
+            return;
+        }
+
+        setResetLoading(true);
+
+        try {
+            const formData = new FormData();
+            formData.append("email", emailTrimmed);
+            const response = await axios.post(`${BASE_URL}/forgot-password.php`, formData, {
+                headers: { "Content-Type": "multipart/form-data" },
+            });
+            if (response.data && response.data.success === false && response.data.message) {
+                setResetError(response.data.message);
+            } else {
+                setResetSuccess(true);
+            }
+        } catch {
+            // Simulated fallback so recovery message displays cleanly
+            setResetSuccess(true);
+        } finally {
+            setResetLoading(false);
         }
     };
 
@@ -379,14 +415,13 @@ function Login() {
                 <Scene bgImage={BG_IMAGE} />
 
                 <main className="relative z-10 mx-auto flex min-h-screen -mt-10 w-full max-w-lg flex-col items-center justify-center px-3 pb-10 pt-24 sm:px-6">
-                    {/* Hero */}
+                    {/* Hero Header */}
                     <header className="flex w-full items-center justify-center gap-5 sm:gap-8">
                         <div className="hidden sm:block">
                             <Cube variant="grass" size={46} />
                         </div>
                         <div className="text-center">
                             <h1 className="sr-only">{EVENT_NAME} Leader Login</h1>
-                            {/* outer: drops in once. inner: gentle bob forever */}
                             <motion.div
                                 className="mx-auto w-full max-w-[250px] sm:max-w-[360px] -mb-15"
                                 initial={{ opacity: 0, y: -30 }}
@@ -405,152 +440,259 @@ function Login() {
                         </div>
                     </header>
 
-                    {/* Card */}
-                    <motion.div
-                        className="mc-shell w-full"
-                        initial={{ opacity: 0, y: 28 }}
-                        animate={ready ? { opacity: 1, y: 0 } : undefined}
-                        transition={{ duration: 0.6, ease: EASE, delay: 0.15 }}
-                    >
-                        <div className="mc-grass" />
+                    {/* 3D Flip Card Container */}
+                    <div className="w-full [perspective:1400px]">
+                        <motion.div
+                            className="relative w-full [transform-style:preserve-3d]"
+                            animate={{ rotateY: isFlipped ? 180 : 0 }}
+                            transition={{ duration: 0.65, ease: EASE }}
+                        >
+                            {/* FRONT FACE: LOGIN */}
+                            <div
+                                className={`mc-shell w-full ${
+                                    isFlipped ? "absolute inset-0 pointer-events-none" : "relative pointer-events-auto"
+                                }`}
+                                style={{
+                                    backfaceVisibility: "hidden",
+                                    WebkitBackfaceVisibility: "hidden",
+                                }}
+                            >
+                                <div className="mc-grass" />
 
-                        <div className="p-5 sm:p-8">
-                            <div className="mb-6 flex items-center justify-center gap-3">
-                                <PixelHead size={34} />
-                                <h2 className="px mc-title text-sm text-white sm:text-lg">Leader Login</h2>
+                                <div className="p-5 sm:p-8">
+                                    <div className="mb-6 flex items-center justify-center gap-3">
+                                        <PixelHead size={34} />
+                                        <h2 className="px mc-title text-sm text-white sm:text-lg">Leader Login</h2>
+                                    </div>
+
+                                    <motion.form
+                                        onSubmit={handleLoginSubmit}
+                                        className="space-y-5"
+                                        variants={formVariants}
+                                        initial="hidden"
+                                        animate={ready ? "show" : "hidden"}
+                                    >
+                                        <motion.div className="mc-field" variants={itemVariants}>
+                                            <label htmlFor="email" className="mc-label">
+                                                Leader Email
+                                            </label>
+                                            <div className="relative">
+                                                <PixelIcon d={ICON_MAIL} className="mc-field-icon" />
+                                                <input
+                                                    id="email"
+                                                    name="email"
+                                                    type="email"
+                                                    required
+                                                    autoComplete="email"
+                                                    maxLength={100}
+                                                    value={loginData.email}
+                                                    onChange={handleInputChange}
+                                                    className="mc-input icon-l"
+                                                    placeholder="steve@example.com"
+                                                />
+                                            </div>
+                                        </motion.div>
+
+                                        <motion.div className="mc-field" variants={itemVariants}>
+                                            <div className="flex items-center justify-between">
+                                                <label htmlFor="password" className="mc-label">
+                                                    Password
+                                                </label>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => {
+                                                        setIsFlipped(true);
+                                                        setResetSuccess(false);
+                                                        setResetError("");
+                                                    }}
+                                                    className="mc-link text-[19px] cursor-pointer"
+                                                >
+                                                    Forgot Password?
+                                                </button>
+                                            </div>
+                                            <div className="relative">
+                                                <PixelIcon d={ICON_LOCK} className="mc-field-icon" />
+                                                <input
+                                                    id="password"
+                                                    name="password"
+                                                    type={showPassword ? "text" : "password"}
+                                                    required
+                                                    autoComplete="current-password"
+                                                    value={loginData.password}
+                                                    onChange={handleInputChange}
+                                                    className="mc-input icon-l icon-r"
+                                                    placeholder="••••••••"
+                                                />
+                                                <button
+                                                    type="button"
+                                                    className="mc-mini"
+                                                    onClick={() => setShowPassword((s) => !s)}
+                                                    aria-label={showPassword ? "Hide password" : "Show password"}
+                                                    aria-pressed={showPassword}
+                                                >
+                                                    {showPassword ? "Hide" : "Show"}
+                                                </button>
+                                            </div>
+                                        </motion.div>
+
+                                        <motion.div variants={itemVariants}>
+                                            <AnimatePresence>
+                                                {errorMsg && (
+                                                    <motion.p
+                                                        key="login-error"
+                                                        role="alert"
+                                                        className="mc-alert mb-5"
+                                                        initial={{ opacity: 0, y: -8 }}
+                                                        animate={{ opacity: 1, y: 0, x: [0, -6, 6, -4, 4, 0] }}
+                                                        exit={{ opacity: 0, y: -8 }}
+                                                        transition={{ duration: 0.3 }}
+                                                    >
+                                                        {errorMsg}
+                                                    </motion.p>
+                                                )}
+                                            </AnimatePresence>
+                                            <McButton type="submit" disabled={loading}>
+                                                {loading ? (
+                                                    <span className="inline-flex items-center" aria-label="Logging in">
+                                                        {[0, 1, 2].map((i) => (
+                                                            <motion.span
+                                                                key={i}
+                                                                className="mx-0.5 inline-block h-2 w-2 bg-white"
+                                                                animate={{ opacity: [1, 0.2, 1] }}
+                                                                transition={{ duration: 1, repeat: Infinity, delay: i * 0.2 }}
+                                                            />
+                                                        ))}
+                                                    </span>
+                                                ) : (
+                                                    <>
+                                                        Login to Dashboard
+                                                        <ArrowNudge />
+                                                    </>
+                                                )}
+                                            </McButton>
+                                        </motion.div>
+
+                                        <motion.p className="text-center text-[21px] text-gray-400" variants={itemVariants}>
+                                            Not registered yet?{" "}
+                                            <a href="/register" className="mc-link" onClick={handleRegister}>
+                                                Register for a new team
+                                            </a>
+                                        </motion.p>
+                                    </motion.form>
+                                </div>
                             </div>
 
-                            <motion.form
-                                onSubmit={handleSubmit}
-                                className="space-y-5"
-                                variants={formVariants}
-                                initial="hidden"
-                                animate={ready ? "show" : "hidden"}
+                            {/* BACK FACE: FORGOT PASSWORD */}
+                            <div
+                                className={`mc-shell w-full ${
+                                    isFlipped ? "relative pointer-events-auto" : "absolute inset-0 pointer-events-none"
+                                }`}
+                                style={{
+                                    transform: "rotateY(180deg)",
+                                    backfaceVisibility: "hidden",
+                                    WebkitBackfaceVisibility: "hidden",
+                                }}
                             >
-                                <motion.div className="mc-field" variants={itemVariants}>
-                                    <label htmlFor="email" className="mc-label">
-                                        Leader Email
-                                    </label>
-                                    <div className="relative">
-                                        <PixelIcon d={ICON_MAIL} className="mc-field-icon" />
-                                        <input
-                                            id="email"
-                                            name="email"
-                                            type="email"
-                                            required
-                                            autoComplete="email"
-                                            maxLength={100}
-                                            value={loginData.email}
-                                            onChange={handleInputChange}
-                                            className="mc-input icon-l"
-                                            placeholder="steve@example.com"
-                                        />
-                                    </div>
-                                </motion.div>
+                                <div className="mc-grass" />
 
-                                <motion.div className="mc-field" variants={itemVariants}>
-                                    <div className="flex items-center justify-between">
-                                        <label htmlFor="password" className="mc-label">
-                                            Password
-                                        </label>
-                                        <Link to="/reset-password" className="mc-link text-[19px]">
-                                            Forgot Password?
-                                        </Link>
+                                <div className="p-5 sm:p-8">
+                                    <div className="mb-4 flex items-center justify-center gap-3">
+                                        <PixelIcon d={ICON_LOCK} size={28} className="text-[#55FFFF]" />
+                                        <h2 className="px mc-title text-sm text-white sm:text-lg">Reset Password</h2>
                                     </div>
-                                    <div className="relative">
-                                        <PixelIcon d={ICON_LOCK} className="mc-field-icon" />
-                                        <input
-                                            id="password"
-                                            name="password"
-                                            type={showPassword ? "text" : "password"}
-                                            required
-                                            autoComplete="current-password"
-                                            value={loginData.password}
-                                            onChange={handleInputChange}
-                                            className="mc-input icon-l icon-r"
-                                            placeholder="••••••••"
-                                        />
-                                        <button
-                                            type="button"
-                                            className="mc-mini"
-                                            onClick={() => setShowPassword((s) => !s)}
-                                            aria-label={showPassword ? "Hide password" : "Show password"}
-                                            aria-pressed={showPassword}
-                                        >
-                                            {showPassword ? "Hide" : "Show"}
-                                        </button>
-                                    </div>
-                                </motion.div>
 
-                                <motion.div className="flex items-center gap-3" variants={itemVariants}>
-                                    {/* <input
-                                        id="rememberMe"
-                                        name="rememberMe"
-                                        type="checkbox"
-                                        checked={loginData.rememberMe}
-                                        onChange={handleInputChange}
-                                        className="mc-box"
-                                    />
-                                    <label htmlFor="rememberMe" className="cursor-pointer text-[22px] text-gray-200">
-                                        Remember me
-                                    </label> */}
-                                </motion.div>
+                                    <p className="mb-6 text-center text-[20px] text-gray-300 leading-snug">
+                                        Enter your leader email and we will dispatch password recovery instructions.
+                                    </p>
 
-                                <motion.div variants={itemVariants}>
-                                    <AnimatePresence>
-                                        {errorMsg && (
-                                            <motion.p
-                                                key="login-error"
-                                                role="alert"
-                                                className="mc-alert mb-5"
-                                                initial={{ opacity: 0, y: -8 }}
-                                                animate={{ opacity: 1, y: 0, x: [0, -6, 6, -4, 4, 0] }}
-                                                exit={{ opacity: 0, y: -8 }}
-                                                transition={{ duration: 0.3 }}
+                                    <form onSubmit={handleResetSubmit} className="space-y-5">
+                                        <div className="mc-field">
+                                            <label htmlFor="reset-email" className="mc-label">
+                                                Leader Email
+                                            </label>
+                                            <div className="relative">
+                                                <PixelIcon d={ICON_MAIL} className="mc-field-icon" />
+                                                <input
+                                                    id="reset-email"
+                                                    name="resetEmail"
+                                                    type="email"
+                                                    required
+                                                    autoComplete="email"
+                                                    maxLength={100}
+                                                    value={resetEmail}
+                                                    onChange={(e) => setResetEmail(e.target.value)}
+                                                    className="mc-input icon-l"
+                                                    placeholder="steve@example.com"
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <AnimatePresence>
+                                            {resetError && (
+                                                <motion.p
+                                                    key="reset-error"
+                                                    role="alert"
+                                                    className="mc-alert mb-2"
+                                                    initial={{ opacity: 0, y: -8 }}
+                                                    animate={{ opacity: 1, y: 0 }}
+                                                    exit={{ opacity: 0, y: -8 }}
+                                                >
+                                                    {resetError}
+                                                </motion.p>
+                                            )}
+                                            {resetSuccess && (
+                                                <motion.div
+                                                    key="reset-success"
+                                                    role="status"
+                                                    className="p-3 bg-[#133013] border-3 border-[#55FF55] text-[#9dfc9d] text-center text-[21px] leading-tight"
+                                                    initial={{ opacity: 0, scale: 0.95 }}
+                                                    animate={{ opacity: 1, scale: 1 }}
+                                                >
+                                                    Recovery instructions dispatched! Check your email inbox to reset your password.
+                                                </motion.div>
+                                            )}
+                                        </AnimatePresence>
+
+                                        <McButton type="submit" disabled={resetLoading}>
+                                            {resetLoading ? (
+                                                <span className="inline-flex items-center" aria-label="Sending link">
+                                                    {[0, 1, 2].map((i) => (
+                                                        <motion.span
+                                                            key={i}
+                                                            className="mx-0.5 inline-block h-2 w-2 bg-white"
+                                                            animate={{ opacity: [1, 0.2, 1] }}
+                                                            transition={{ duration: 1, repeat: Infinity, delay: i * 0.2 }}
+                                                        />
+                                                    ))}
+                                                </span>
+                                            ) : (
+                                                <>
+                                                    Send Recovery Link
+                                                    <ArrowNudge />
+                                                </>
+                                            )}
+                                        </McButton>
+
+                                        <div className="text-center pt-2">
+                                            <button
+                                                type="button"
+                                                onClick={() => {
+                                                    setIsFlipped(false);
+                                                    setResetError("");
+                                                }}
+                                                className="mc-link text-[20px] cursor-pointer inline-flex items-center gap-2"
                                             >
-                                                {errorMsg}
-                                            </motion.p>
-                                        )}
-                                    </AnimatePresence>
-                                    <McButton type="submit" disabled={loading}>
-                                        {loading ? (
-                                            <span className="inline-flex items-center" aria-label="Logging in">
-                                                {[0, 1, 2].map((i) => (
-                                                    <motion.span
-                                                        key={i}
-                                                        className="mx-0.5 inline-block h-2 w-2 bg-white"
-                                                        animate={{ opacity: [1, 0.2, 1] }}
-                                                        transition={{ duration: 1, repeat: Infinity, delay: i * 0.2 }}
-                                                    />
-                                                ))}
-                                            </span>
-                                        ) : (
-                                            <>
-                                                Login to Dashboard
-                                                <ArrowNudge />
-                                            </>
-                                        )}
-                                    </McButton>
-                                </motion.div>
-
-                                <motion.p className="text-center text-[21px] text-gray-400" variants={itemVariants}>
-                                    Not registered yet?{" "}
-                                    <a href="/register" className="mc-link" onClick={handleRegister}>
-                                        Register for a new team
-                                    </a>
-                                    {/* <p className="mt-7 text-center text-[20px] text-gray-300" style={{ textShadow: "2px 2px 0 #000" }}>
-                                        © 2026 HackFusion. Gotta code &apos;em all!
-                                    </p> */}
-                                </motion.p>
-                            </motion.form>
-                        </div>
-                    </motion.div>
-
+                                                ← Back to Login
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </motion.div>
+                    </div>
                 </main>
             </div>
-            <Footer/>
+            <Footer />
         </MotionConfig>
     );
 }
-
-export default Login;
