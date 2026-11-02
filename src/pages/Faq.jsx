@@ -1,15 +1,18 @@
-import { useState } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import Navbar from "../components/Navbar";
-import ComingSoonToast from "../components/ComingSoonToast";
-import faqChargedCreeper from "../assets/digvijay's_assets/faq-charged-creeper.webp";
-import faqDirtBackground from "../assets/digvijay's_assets/faq-dirt-background.jpg";
+import { useEffect, useRef, useState } from "react";
+import {
+  AnimatePresence,
+  motion,
+  useReducedMotion,
+} from "motion/react";
+import faqSunsetBackground from "../assets/digvijay's_assets/faq-sunset-background.webp";
+import faqBlossomTree from "../assets/digvijay's_assets/faq-cherry-blossom-tree.webp";
 import faqTabSandTexture from "../assets/digvijay's_assets/faq-tab-sand-texture.webp";
+import Navbar from "../components/Navbar"
 
 const questions = [
   {
     question: "What is HackFusion 3?",
-    answer: "HackFusion 3 is a national 36-hour hackathon running from 27 February to 1 March.",
+    answer: "HackFusion 3 is a national 36-hour hackathon running from 29th to 31st December.",
   },
   {
     question: "What is the registration fee and refund policy?",
@@ -32,7 +35,7 @@ const questions = [
     answer: "Students from any academic year and branch can participate.",
   },
   {
-    question: "Is a girl team member required?",
+    question: "Is a girl team member compulsory?",
     answer: "No.",
   },
   {
@@ -41,7 +44,7 @@ const questions = [
   },
   {
     question: "What is the last date to register?",
-    answer: "The stated deadline is 15 February 2026.",
+    answer: "The stated deadline is yet to be decleared",
   },
   {
     question: "Can we leave the venue during the hackathon?",
@@ -89,58 +92,460 @@ const questions = [
   },
 ];
 
+const CSS = `
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+/* stone-ish scroll bar */
+.faq-scroll { scrollbar-width: thin; scrollbar-color: transparent transparent; scroll-behavior: smooth; }
+.faq-section.cursor-active .faq-scroll { scrollbar-color: #8b8b8b transparent; }
+.faq-btn span:nth-child(2) { min-width: 0; overflow-wrap: anywhere; }
+.faq-tip { overflow-wrap: anywhere; }
+.faq-scroll::-webkit-scrollbar { width: 16px; }
+.faq-scroll::-webkit-scrollbar-track { background: transparent; }
+.faq-scroll::-webkit-scrollbar-thumb {
+  background: transparent;
+  border: 3px solid transparent;
+  background-clip: padding-box;
+  transition: background-color .25s ease;
+}
+.faq-section.cursor-active .faq-scroll::-webkit-scrollbar-thumb {
+  background-color: #8b8b8b;
+}
+.faq-page-title {
+  padding: 12px clamp(12px, 2vw, 20px);
+  border: 3px solid #000;
+  background-image:
+    linear-gradient(180deg, rgba(60,36,16,.55), rgba(30,18,8,.68)),
+    var(--title-tex);
+  background-size: auto, 900px;
+  background-position: center;
+  box-shadow:
+    inset 3px 3px 0 rgba(255,235,190,.28),
+    inset -3px -3px 0 rgba(0,0,0,.4),
+    0 6px 0 rgba(0,0,0,.5);
+}
+.faq-heading {
+  max-height: 240px;
+  overflow: hidden;
+  transition: max-height .3s ease, opacity .25s ease;
+}
+.faq-heading.is-collapsed {
+  max-height: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* question panel */
+.faq-card {
+  position: relative;
+  width: 100%;
+  margin-inline: auto;
+  border: 3px solid #000;
+  background-image:
+    linear-gradient(180deg, rgba(60,36,16,.55), rgba(30,18,8,.68)),
+    var(--tex);
+  background-size: auto, 900px;
+  background-position: center;
+  box-shadow:
+    inset 3px 3px 0 rgba(255,235,190,.28),
+    inset -3px -3px 0 rgba(0,0,0,.4),
+    0 6px 0 rgba(0,0,0,.5);
+  transition: filter .15s steps(3), box-shadow .15s steps(3);
+}
+.faq-card:hover { filter: brightness(1.15); }
+.faq-card.is-open {
+  box-shadow:
+    inset 3px 3px 0 rgba(255,235,190,.35),
+    inset -3px -3px 0 rgba(0,0,0,.4),
+    0 6px 0 rgba(0,0,0,.5);
+}
+
+.faq-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 11px 12px;
+  text-align: left;
+  background: transparent;
+  border: 0;
+  color: #fff;
+  font: inherit;
+  font-size: 10px;
+  line-height: 1.6;
+  text-shadow: 2px 2px 0 #000;
+  cursor: pointer;
+}
+.faq-btn:focus-visible { outline: none; }
+.faq-btn:focus-visible span:nth-child(2) {
+  text-decoration: underline;
+  text-decoration-color: #ffe48a;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+@media (min-width: 640px) {
+  .faq-btn { font-size: 12px; padding: 13px 16px; gap: 12px; }
+}
+
+/* pink "XP" number badge */
+.faq-badge {
+  flex-shrink: 0;
+  min-width: 34px;
+  padding: 7px 5px 5px;
+  text-align: center;
+  font-size: 9px;
+  color: #fff;
+  background: linear-gradient(180deg, #ff8ec7 0%, #ea5ea5 100%);
+  border: 2px solid #000;
+  box-shadow: inset 2px 2px 0 #ffc2dd, inset -2px -2px 0 #a6276a;
+  text-shadow: 2px 2px 0 #5d0f36;
+}
+
+/* +/- button */
+.faq-toggle {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  font-size: 14px;
+  color: #fff;
+  background: #8b8b8b;
+  border: 3px solid #000;
+  box-shadow: inset 2px 2px 0 #c6c6c6, inset -2px -2px 0 #555;
+  text-shadow: 2px 2px 0 #3f3f3f;
+}
+.faq-btn:hover .faq-toggle { background: #7b8fd1; }
+@media (max-width: 640px) {
+  .faq-scroll::-webkit-scrollbar { width: 8px; }
+}
+@media (max-width: 420px) {
+  .faq-btn { gap: 8px; padding: 10px 8px; font-size: clamp(8px, 2.55vw, 10px); line-height: 1.55; }
+  .faq-badge { min-width: 32px; padding: 7px 4px 5px; font-size: 8px; border-width: 2px; }
+  .faq-toggle { width: 30px; height: 30px; border-width: 3px; font-size: 14px; flex-shrink: 0; }
+  .faq-tip { margin: 0 8px 10px; padding: 10px; border-width: 3px; font-size: 9px; line-height: 1.8; }
+}
+@media (max-width: 350px) {
+  .faq-btn { gap: 6px; padding: 8px 6px; font-size: 8px; }
+  .faq-badge { min-width: 28px; padding: 6px 3px 4px; }
+  .faq-toggle { width: 26px; height: 26px; border-width: 2px; }
+  .faq-tip { margin-inline: 6px; padding: 8px; font-size: 8px; }
+}
+
+/* answer shown as an item tooltip */
+.faq-tip {
+  margin: 0 12px 12px;
+  padding: 11px;
+  font-size: 9px;
+  line-height: 2;
+  color: #fff;
+  background: rgba(16, 0, 16, .94);
+  border: 3px solid #8f245d;
+  box-shadow: inset 0 0 0 2px #e85a9d, 0 0 0 2px #100010;
+  text-shadow: 2px 2px 0 #3f3f3f;
+}
+@media (min-width: 640px) {
+  .faq-tip { margin: 0 16px 16px; padding: 14px; font-size: 11px; }
+}
+
+@media (max-width: 420px) {
+  .faq-btn { gap: 8px; padding: 10px 8px; font-size: clamp(8px, 2.55vw, 10px); line-height: 1.55; }
+  .faq-badge { min-width: 32px; padding: 7px 4px 5px; font-size: 8px; border-width: 2px; }
+  .faq-toggle { width: 30px; height: 30px; border-width: 3px; font-size: 14px; flex-shrink: 0; }
+  .faq-tip { margin: 0 8px 10px; padding: 10px; border-width: 3px; font-size: 9px; line-height: 1.8; }
+}
+@media (max-width: 350px) {
+  .faq-btn { gap: 6px; padding: 8px 6px; font-size: 8px; }
+  .faq-badge { min-width: 28px; padding: 6px 3px 4px; }
+  .faq-toggle { width: 26px; height: 26px; border-width: 2px; }
+  .faq-tip { margin-inline: 6px; padding: 8px; font-size: 8px; }
+}
+@media (max-height: 640px) {
+  .faq-scroll { padding-bottom: 6px; }
+}
+@media (max-width: 640px) {
+  .faq-section {
+    height: 100svh !important;
+    min-height: 0;
+    overflow: hidden !important;
+  }
+  .faq-content {
+    height: 100svh !important;
+    min-height: 0;
+    transform: none;
+    scale: 1;
+  }
+  .faq-scroll {
+    min-height: 0;
+    flex: 1 1 0%;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    overscroll-behavior-y: contain;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: #ff8bd1 transparent;
+  }
+  .faq-scroll::-webkit-scrollbar { display: block; width: 10px; }
+  .faq-scroll::-webkit-scrollbar-track { background: transparent; }
+  .faq-scroll::-webkit-scrollbar-thumb {
+    background: #ff8bd1;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+  .faq-blossom { display: none; }
+}
+`;
+
 export default function Faq() {
   const [openIndex, setOpenIndex] = useState(null);
+  const [cursorParticles, setCursorParticles] = useState([]);
+  const [cursorActive, setCursorActive] = useState(false);
+  const [titleHidden, setTitleHidden] = useState(false);
+  const [isMobileLayout, setIsMobileLayout] = useState(
+    () => window.matchMedia("(max-width: 640px)").matches,
+  );
   const reduceMotion = useReducedMotion();
+  const sectionRef = useRef(null);
+  const scrollRef = useRef(null);
+  const lastParticleTime = useRef(0);
+  const nextParticleId = useRef(0);
+  const cursorTimeout = useRef(null);
+  const parallaxFrame = useRef(null);
+  const targetScrollOffset = useRef(0);
+  const currentScrollOffset = useRef(0);
+
+  useEffect(() => () => clearTimeout(cursorTimeout.current), []);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    if (scrollRef.current) scrollRef.current.scrollTop = 0;
+  }, []);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 640px)");
+    const updateLayout = () => setIsMobileLayout(mediaQuery.matches);
+    mediaQuery.addEventListener("change", updateLayout);
+    return () => mediaQuery.removeEventListener("change", updateLayout);
+  }, []);
+
+  useEffect(() => {
+    const updateScrollOffset = () => {
+      const section = sectionRef.current;
+      if (!section) return;
+
+      targetScrollOffset.current = scrollRef.current?.scrollTop ?? 0;
+    };
+    const animateParallax = () => {
+      const section = sectionRef.current;
+      if (!section) {
+        parallaxFrame.current = null;
+        return;
+      }
+
+      const target = reduceMotion ? 0 : targetScrollOffset.current;
+      currentScrollOffset.current += (target - currentScrollOffset.current) * 0.12;
+      if (Math.abs(target - currentScrollOffset.current) < 0.1) {
+        currentScrollOffset.current = target;
+      }
+
+      const offset = currentScrollOffset.current;
+      section.style.setProperty("--faq-blossom-offset", `${-offset * 0.2}px`);
+      section.style.setProperty("--faq-title-offset", `${-offset * 0.03}px`);
+      section.style.setProperty("--faq-cards-offset", `${-offset * 0.008}px`);
+
+      if (offset !== target) {
+        parallaxFrame.current = requestAnimationFrame(animateParallax);
+      } else {
+        parallaxFrame.current = null;
+      }
+    };
+    const startParallax = () => {
+      updateScrollOffset();
+      if (parallaxFrame.current === null) {
+        parallaxFrame.current = requestAnimationFrame(animateParallax);
+      }
+    };
+    const scrollElement = scrollRef.current;
+    scrollElement?.addEventListener("scroll", startParallax, { passive: true });
+    window.addEventListener("scroll", startParallax, { passive: true });
+    window.addEventListener("resize", startParallax);
+    startParallax();
+
+    return () => {
+      scrollElement?.removeEventListener("scroll", startParallax);
+      window.removeEventListener("scroll", startParallax);
+      window.removeEventListener("resize", startParallax);
+      if (parallaxFrame.current !== null) {
+        cancelAnimationFrame(parallaxFrame.current);
+      }
+    };
+  }, [reduceMotion]);
+
+  const emitCursorParticles = (event) => {
+    const bounds = event.currentTarget.getBoundingClientRect();
+    const burst = Array.from({ length: 2 }, () => ({
+      id: nextParticleId.current++,
+      x: event.clientX - bounds.left + (Math.random() - 0.5) * 14,
+      y: event.clientY - bounds.top + (Math.random() - 0.5) * 14,
+      size: 4 + Math.random() * 5,
+      drift: (Math.random() - 0.5) * 36,
+      rise: 22 + Math.random() * 28,
+    }));
+
+    setCursorParticles((particles) => [...particles, ...burst].slice(-36));
+  };
+
+  const handlePointerMove = (event) => {
+    if (event.pointerType !== "mouse" && event.pointerType !== "pen" && event.pointerType !== "touch") return;
+    if (event.pointerType === "touch" && event.buttons === 0) return;
+
+    setCursorActive(true);
+    clearTimeout(cursorTimeout.current);
+    cursorTimeout.current = setTimeout(() => setCursorActive(false), 900);
+
+    if (reduceMotion) return;
+
+    const now = performance.now();
+    if (now - lastParticleTime.current < 55) return;
+    lastParticleTime.current = now;
+    emitCursorParticles(event);
+  };
+
+  const handlePointerDown = (event) => {
+    if (event.pointerType !== "touch" || reduceMotion) return;
+    lastParticleTime.current = performance.now();
+    emitCursorParticles(event);
+  };
+
+  const handleFaqScroll = (event) => {
+    if (isMobileLayout) {
+      setTitleHidden(event.currentTarget.scrollTop > 24);
+    }
+  };
 
   return (
-    <section className="relative isolate min-h-screen overflow-hidden bg-[#294523] px-[clamp(1.25rem,4vw,4.5rem)] text-2xl [font-family:'Minecraft','VT323','Courier_New',monospace] text-[#fff4db] max-[540px]:px-4" aria-labelledby="faq-title">
-      <ComingSoonToast
-        pageName="FAQ"
-        title="COMING SOON"
-        subtitle="The official HackFusion 4 FAQ and participant guidelines are currently being compiled!"
+    <section
+      ref={sectionRef}
+      className={`faq-section relative isolate h-svh overflow-hidden bg-[#1f3a1a] text-white [font-family:'Press_Start_2P',monospace] ${cursorActive ? "cursor-active" : ""}`}
+      aria-labelledby="faq-title"
+      onPointerMove={handlePointerMove}
+      onPointerDown={handlePointerDown}
+    >
+      <style>{CSS}</style>
+
+      <Navbar/>
+      {/* backdrop */}
+      <img
+        className="pointer-events-none absolute inset-0 z-[-1] h-full w-full object-cover object-center"
+        src={faqSunsetBackground}
+        alt=""
+        aria-hidden="true"
+        loading="lazy"
+        decoding="async"
+        draggable="false"
       />
-      <div className="relative z-50">
-        <Navbar />
-      </div>
-      <img className="pointer-events-none absolute inset-0 z-[-1] h-full w-full object-cover object-center" src={faqDirtBackground} alt="" aria-hidden="true" loading="lazy" decoding="async" draggable="false" />
-      <div className="pointer-events-none absolute inset-0 z-0 bg-[linear-gradient(180deg,rgba(9,18,9,.46),rgba(18,12,9,.54)),rgba(8,11,8,.28)]" aria-hidden="true" />
-      <picture className="pointer-events-none absolute inset-0 z-0 max-[768px]:hidden" aria-hidden="true">
-        <source media="(min-width: 769px)" srcSet={faqChargedCreeper} />
-        <img
-          className="absolute bottom-0 left-[clamp(8rem,16vw,15rem)] block w-[clamp(145px,16vw,250px)] scale-x-[-1] select-none [filter:drop-shadow(0_14px_18px_rgba(0,0,0,.72))_drop-shadow(0_0_24px_rgba(31,255,143,.28))]"
-          alt=""
-          loading="lazy"
-          decoding="async"
-          draggable="false"
-        />
-      </picture>
-      <div className="relative z-[1] mx-auto flex h-full w-full min-w-0 max-w-[1400px] flex-col pt-24 pb-12 sm:pt-28">
-        <p className="mb-2 text-[clamp(1rem,1.5vw,1.25rem)] font-bold tracking-[.2em] text-[#ffcb66] [text-shadow:2px_2px_#2b160c] max-[540px]:mb-1 max-[540px]:text-[.95rem] max-[540px]:tracking-[.14em]">HACKFUSION · FIELD GUIDE</p>
-        <h2 id="faq-title" className="faq-page-title mb-[clamp(1rem,2.5vh,2rem)] text-[clamp(2.65rem,6.2vw,5.5rem)] font-black leading-[1.04] tracking-[-.035em] text-[#fff4dc] [text-shadow:4px_5px_0_#35190d,0_8px_22px_rgba(0,0,0,.45)] [-webkit-text-stroke:.5px_rgba(69,32,14,.7)] max-[540px]:mb-3 max-[540px]:max-w-[16ch] max-[540px]:text-[clamp(1.9rem,8.5vw,2.6rem)] max-[540px]:leading-[1.06]">Frequently Asked Questions</h2>
-        <div className="faq-scrollbar min-h-0 flex-1 overflow-y-auto overscroll-y-contain pr-2" data-lenis-prevent>
-          <div className="grid gap-[clamp(.75rem,1.2vw,1.1rem)] pb-2 max-[540px]:gap-2.5">
+      <div
+        className="pointer-events-none absolute inset-0 z-0 bg-[linear-gradient(180deg,rgba(0,0,0,.12),rgba(0,0,0,.3))]"
+        aria-hidden="true"
+      />
+      <div
+        className="pointer-events-none absolute inset-0 z-0 bg-[rgba(236,72,153,.2)] mix-blend-soft-light"
+        aria-hidden="true"
+      />
+      <img
+        className="faq-blossom pointer-events-none absolute inset-y-0 left-0 z-[3] h-full w-auto max-w-[40vw] -translate-x-[40%] object-contain object-left-bottom select-none"
+        style={{ transform: "translateY(var(--faq-blossom-offset, 0px))" }}
+        src={faqBlossomTree}
+        alt=""
+        aria-hidden="true"
+        loading="lazy"
+        decoding="async"
+        draggable="false"
+      />
+      <img
+        className="faq-blossom pointer-events-none absolute inset-y-0 right-0 z-[3] h-full w-auto max-w-[40vw] translate-x-[40%] -scale-x-100 object-contain object-right-bottom select-none"
+        style={{ transform: "translateY(var(--faq-blossom-offset, 0px)) scaleX(-1)" }}
+        src={faqBlossomTree}
+        alt=""
+        aria-hidden="true"
+        loading="lazy"
+        decoding="async"
+        draggable="false"
+      />
+      {cursorParticles.map((particle) => (
+          <motion.span
+            key={particle.id}
+            className="pointer-events-none absolute z-[5] -translate-x-1/2 -translate-y-1/2 border border-[#ffb6dc] bg-[#ff8bd1] shadow-[0_0_8px_#ff4fb8] [image-rendering:pixelated]"
+            style={{ left: particle.x, top: particle.y, width: particle.size, height: particle.size }}
+            initial={{ opacity: 0, scale: 0.3 }}
+            animate={{
+              x: particle.drift,
+              y: -particle.rise,
+              opacity: [0, 1, 0],
+              scale: [0.3, 1, 0],
+            }}
+            transition={{ duration: 0.7, ease: "easeOut" }}
+            onAnimationComplete={() =>
+              setCursorParticles((particles) => particles.filter(({ id }) => id !== particle.id))
+            }
+            aria-hidden="true"
+          />
+        ))}
+
+      <div className="faq-content relative z-[4] mx-auto flex h-[108.7%] min-h-0 w-full max-w-[1100px] origin-top scale-[.92] flex-col px-[clamp(.75rem,3vw,2rem)] pb-[clamp(.5rem,1.5vh,1rem)] pt-[clamp(8rem,16vh,10rem)] sm:px-8">
+        {/* heading */}
+        <motion.div
+          className={`faq-heading shrink-0 ${isMobileLayout && titleHidden ? "is-collapsed" : ""}`}
+          style={{ translate: "0 var(--faq-title-offset, 0px)" }}
+          initial={reduceMotion ? false : { opacity: 0, y: -30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+        >
+          <h2
+            id="faq-title"
+            className="faq-page-title mb-10 max-w-full text-center text-pretty text-[clamp(1.5rem,4.4vw,3.2rem)] font-extrabold leading-[1.5] text-[#fff4dc] [text-shadow:3px_3px_0_#35190d,0_8px_22px_rgba(0,0,0,.45)] max-[640px]:!text-[clamp(1.15rem,5vw,1.65rem)] max-[640px]:!leading-[1.6]"
+            style={{ "--title-tex": `url("${faqTabSandTexture}")` }}
+          >
+            Frequently Asked Questions
+          </h2>
+        </motion.div>
+
+        {/* list */}
+        <div
+          ref={scrollRef}
+          className="faq-scroll mx-auto min-h-0 w-[80%] flex-1 overflow-x-hidden overscroll-y-contain pb-3 pt-1 max-[640px]:w-[92%]"
+          style={{ translate: "0 var(--faq-cards-offset, 0px)" }}
+          data-lenis-prevent
+          onScroll={handleFaqScroll}
+        >
+          <div className="grid gap-3 pb-3 sm:gap-4">
             {questions.map(({ question, answer }, index) => {
               const isOpen = openIndex === index;
               const answerId = `faq-answer-${index + 1}`;
               return (
-                <article
-                  className={`overflow-hidden border-[3px] bg-[#58331f] bg-[length:auto,1400px_1400px] bg-center shadow-[inset_0_0_0_2px_rgba(226,162,99,.33),0_8px_0_#27140c,0_16px_25px_rgba(0,0,0,.44)] transition-[border-color,filter,transform] duration-[180ms] [transition-timing-function:steps(3)] hover:border-[#87471e] hover:brightness-[1.12] motion-reduce:transition-none max-[540px]:border-2 max-[540px]:shadow-[inset_0_0_0_2px_rgba(226,162,99,.33),0_4px_0_#27140c,0_8px_14px_rgba(0,0,0,.44)] ${isOpen ? "-translate-y-px border-[#87471e] brightness-[1.12]" : "border-[#321b10]"}`}
-                  style={{
-                    backgroundImage: `linear-gradient(180deg, rgba(76,50,20,.4), rgba(43,28,12,.48)), url("${faqTabSandTexture}")`,
-                  }}
+                <motion.article
                   key={question}
+                  className={`faq-card ${isOpen ? "is-open" : ""}`}
+                  style={{ "--tex": `url("${faqTabSandTexture}")` }}
+                  initial={reduceMotion ? false : { opacity: 0, y: 28 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ root: isMobileLayout ? undefined : scrollRef, once: true, amount: 0.2 }}
+                  transition={{ duration: 0.5, delay: Math.min(index * 0.025, 0.2), ease: "easeOut" }}
+                  whileHover={reduceMotion ? undefined : { x: 6 }}
                 >
                   <h3 className="m-0">
                     <button
-                      className="faq-question-button flex min-h-[clamp(80px,6.8vw,104px)] w-full cursor-pointer items-center justify-between gap-4 border-0 bg-transparent px-[clamp(1.1rem,2.8vw,2.3rem)] py-[clamp(.9rem,1.6vw,1.3rem)] text-left text-[clamp(1.6rem,2.9vw,2.25rem)] font-extrabold leading-[1.15] text-[#fff3dc] [font-family:'Minecraft','VT323','Courier_New',monospace] [text-shadow:2px_3px_#30180d,0_2px_8px_rgba(0,0,0,.4)] hover:[&_.faq-toggle]:border-[#fff1c9] hover:[&_.faq-toggle]:bg-[rgba(91,54,21,.88)] hover:[&_.faq-toggle]:shadow-[0_0_12px_rgba(255,216,137,.28)] focus-visible:outline-[3px] focus-visible:outline-[#ffe48a] focus-visible:outline-offset-[-7px] motion-reduce:transition-none max-[540px]:min-h-[52px] max-[540px]:gap-3 max-[540px]:px-3 max-[540px]:py-2.5 max-[540px]:text-[clamp(1.05rem,4.6vw,1.3rem)]"
+                      className="faq-btn"
                       type="button"
                       aria-expanded={isOpen}
                       aria-controls={answerId}
                       onClick={() => setOpenIndex(isOpen ? null : index)}
                     >
-                      <span className="min-w-0">{question}</span>
-                      <span className={`faq-toggle relative grid h-[clamp(38px,4.5vw,56px)] w-[clamp(38px,4.5vw,56px)] shrink-0 place-items-center rounded-full border-2 border-[rgba(255,232,183,.92)] bg-[rgba(57,35,17,.72)] shadow-[inset_0_0_0_2px_rgba(88,56,22,.85),0_2px_7px_rgba(23,13,5,.42)] transition-[background-color,border-color,box-shadow] duration-[180ms] ease-in motion-reduce:transition-none hover:border-[#fff1c9] hover:bg-[rgba(91,54,21,.88)] hover:shadow-[0_0_12px_rgba(255,216,137,.28)] before:absolute before:block before:h-0.5 before:w-[48%] before:rounded-sm before:bg-[#fff3d6] before:shadow-[0_1px_2px_rgba(29,17,8,.7)] before:content-[''] max-[540px]:h-[28px] max-[540px]:w-[28px] ${isOpen ? "border-[#fff1c9] bg-[rgba(91,54,21,.88)] shadow-[0_0_12px_rgba(255,216,137,.28)]" : ""}`} aria-hidden="true"><i className={`absolute block h-[48%] w-0.5 rounded-sm bg-[#fff3d6] shadow-[0_1px_2px_rgba(29,17,8,.7)] transition-transform duration-[180ms] motion-reduce:transition-none ${isOpen ? "rotate-90" : ""}`} /></span>
+                      <span className="faq-badge">{String(index + 1).padStart(2, "0")}</span>
+                      <span className="min-w-0 flex-1">{question}</span>
+                      <span className="faq-toggle" aria-hidden="true">
+                        {isOpen ? "-" : "+"}
+                      </span>
                     </button>
                   </h3>
                   <AnimatePresence initial={false}>
@@ -154,15 +559,16 @@ export default function Faq() {
                         exit={{ height: 0, opacity: 0 }}
                         transition={{ duration: reduceMotion ? 0 : 0.28, ease: "easeOut" }}
                       >
-                        <p className="faq-answer-text m-0 px-[clamp(1.25rem,3.5vw,3rem)] pb-[clamp(1.5rem,3vw,2.5rem)] text-[clamp(1.4rem,2.3vw,1.9rem)] font-semibold leading-[1.55] text-[#ffefcf] [font-family:'Minecraft','VT323','Courier_New',monospace] [text-shadow:1px_2px_#32190e,0_2px_7px_rgba(0,0,0,.7)] max-[540px]:px-3 max-[540px]:pb-4 max-[540px]:text-[1.15rem] max-[540px]:leading-[1.4]">{answer}</p>
+                        <p className="faq-tip">{answer}</p>
                       </motion.div>
                     )}
                   </AnimatePresence>
-                </article>
+                </motion.article>
               );
             })}
           </div>
         </div>
+
       </div>
     </section>
   );

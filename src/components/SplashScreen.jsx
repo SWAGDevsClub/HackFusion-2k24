@@ -73,8 +73,11 @@ export default function HackfusionSplash({
     >
       <div style={styles.center}>
         <h1 style={styles.title}>{text}</h1>
-        <div style={styles.barOuter}>
-          <div style={{ ...styles.barFill, width: `${value}%` }} />
+        <div style={styles.barRow}>
+          <div style={styles.barOuter}>
+            <div style={{ ...styles.barFill, width: `${value}%` }} />
+          </div>
+          <span style={styles.percent}>{Math.round(value)}%</span>
         </div>
       </div>
     </div>
@@ -101,6 +104,7 @@ const styles = {
     gap: "clamp(24px, 5vw, 48px)",
     padding: "0 24px",
     maxWidth: "100%",
+    boxSizing: "border-box",
   },
   title: {
     margin: 0,
@@ -111,12 +115,31 @@ const styles = {
     textAlign: "center",
     color: "#fff",
   },
+  // bar + percentage side by side
+  barRow: {
+    display: "flex",
+    alignItems: "center",
+    gap: "clamp(10px, 2vw, 20px)",
+    width: "min(88vw, 640px)",
+  },
+  // No fixed height here: the fill sets the height, so the bar can never collapse to 0 on small screens
+  // (the old clamp(14px, 2.4vw, 22px) minus 4px borders and 3px padding left 0px of fill on phones).
   barOuter: {
-    width: "min(80vw, 520px)",
-    height: "clamp(14px, 2.4vw, 22px)",
+    flex: 1,
+    minWidth: 0,
     border: "4px solid #fff",
     padding: 3,
     boxSizing: "border-box",
   },
-  barFill: { height: "100%", background: "#fff" },
+  barFill: {
+    height: "clamp(12px, 2vw, 18px)",
+    background: "#fff",
+  },
+  percent: {
+    minWidth: "4.2em",
+    textAlign: "right",
+    fontSize: "clamp(10px, 2.6vw, 18px)",
+    fontVariantNumeric: "tabular-nums",
+    color: "#fff",
+  },
 };

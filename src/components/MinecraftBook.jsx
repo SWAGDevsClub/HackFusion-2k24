@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import bookImg from "./book.webp";        // your exact book image (arrow removed)
-import nextImg from "./arrow_next.webp";  // the arrow, cut out of your image
-import prevImg from "./arrow_prev.webp";  // same arrow, mirrored
+import nextImg from "./arrow_next.webp";
+import prevImg from "./arrow_prev.webp";
 
 /* ------------------------------------------------------------------
    MinecraftBook — uses your screenshot as the book art, so it looks
@@ -12,8 +12,9 @@ import prevImg from "./arrow_prev.webp";  // same arrow, mirrored
    Geometry below is measured on the 736 x 904 image.
 ------------------------------------------------------------------- */
 
-const LINE_MS = 160;
-const LINE_STAGGER_MS = 0;
+const LINE_MS = 220;
+const LINE_STAGGER_MS = 85;
+const FADE_OUT_MS = 240;
 
 const IMG = { w: 736, h: 904 };
 const pct = (v, total) => `${(v / total) * 100}%`;
@@ -21,16 +22,24 @@ const pct = (v, total) => `${(v / total) * 100}%`;
 function PageText({ text, index, total, phase }) {
   const [title, ...lines] = text.split("\n");
   return (
-    <div className="absolute inset-0 text-[#1c1c1c]">
-      <div className="absolute top-[5.2%] right-[12%] text-[clamp(8px,2.4cqw,18px)] text-[#4a4a4a]">Page {index + 1} of {total}</div>
-      <div className="absolute left-[12.5%] right-[12%] top-[11%] bottom-[14%] overflow-hidden break-words" aria-live="polite">
-        <h2 className="mb-[.8em] text-[clamp(14px,4.2cqw,31px)] font-bold leading-[1.25] text-[#4a2a18]">{title}</h2>
-        <div className="whitespace-pre-wrap text-[clamp(10px,3cqw,22px)] leading-[1.5]">
-          {lines.map((line, lineIndex) => (
-            <span className={`block min-h-[1.5em] ${phase === "out" ? "[animation:mcb-line-out_160ms_ease-in_forwards] [animation-delay:calc(var(--line-index)_*_35ms)]" : phase === "in" ? "opacity-0 [animation:mcb-line-in_160ms_ease-out_forwards] [animation-delay:calc(var(--line-index)_*_35ms)]" : ""} motion-reduce:[animation-duration:1ms] motion-reduce:[animation-delay:0ms]`} key={`${index}-${lineIndex}`} style={{ "--line-index": lineIndex }}>
-              {line || " "}
-            </span>
-          ))}
+    <div className="absolute inset-0 text-[#2c1d11]">
+      <div className={`absolute top-[6.5%] right-[14%] text-[clamp(9px,2.2cqw,14px)] text-[#5c4033] font-bold ${phase === "hidden" ? "opacity-0" : ""}`}>Page {index + 1} of {total}</div>
+      <div className="absolute left-[13.5%] right-[12.5%] top-[11.5%] bottom-[12.5%] overflow-hidden break-words max-[600px]:left-[11%] max-[600px]:right-[11%] max-[600px]:top-[9.5%] max-[600px]:bottom-[10%]" aria-live="polite">
+        <h2 className={`mb-[.7em] text-center text-[clamp(13px,3.8cqw,24px)] font-bold min-[601px]:text-[clamp(11px,3.2cqw,21px)] leading-[1.3] text-[#3b1d0e] tracking-[0.05em] uppercase max-[600px]:text-[clamp(10px,3.1cqw,16px)] max-[600px]:leading-[1.2] ${phase === "hidden" ? "opacity-0" : phase === "out" ? "[animation:mcb-line-out_220ms_ease-in_forwards]" : phase === "in" ? "opacity-0 [animation:mcb-line-in_220ms_ease-out_forwards]" : ""} motion-reduce:[animation-duration:1ms]`}>{title}</h2>
+        <div className="whitespace-pre-wrap text-[clamp(9px,2.5cqw,17px)] leading-[1.65] min-[601px]:text-[clamp(8.5px,2.2cqw,15px)] break-words [overflow-wrap:anywhere] max-[600px]:text-[clamp(7.5px,2.1cqw,12.5px)] max-[600px]:leading-[1.45]">
+          {lines.map((line, lineIndex) => {
+            const isBullet = line.trim().startsWith("-");
+            const isSubBullet = line.trim().startsWith("  -") || line.trim().startsWith("-   -") || (line.startsWith("  ") && line.trim().startsWith("-"));
+            return (
+              <span 
+                className={`block min-h-[1.4em] max-[600px]:min-h-[1.2em] break-words [overflow-wrap:anywhere] ${isBullet ? "pl-[1.2em] -indent-[1.2em] my-[0.15em]" : ""} ${isSubBullet ? "pl-[2.4em] -indent-[1.2em] my-[0.1em] text-[#422c1b]" : ""} ${phase === "hidden" ? "opacity-0" : phase === "out" ? "[animation:mcb-line-out_220ms_ease-in_forwards]" : phase === "in" ? "opacity-0 [animation:mcb-line-in_220ms_ease-out_forwards] [animation-delay:calc(var(--line-index)_*_85ms)]" : ""} motion-reduce:[animation-duration:1ms] motion-reduce:[animation-delay:0ms]`} 
+                key={`${index}-${lineIndex}`} 
+                style={{ "--line-index": lineIndex + 1 }}
+              >
+                {line.replace(/^\s*-\s*/, "• ")}
+              </span>
+            );
+          })}
         </div>
       </div>
     </div>
@@ -112,34 +121,99 @@ SWAG@SGGS.AC.IN | GDG@SGGS.AC.IN`,
   ],
 }) {
   const [page, setPage] = useState(0);
-  const [transition, setTransition] = useState(null);
+  const [turn, setTurn] = useState(null);
+  const [revealPages, setRevealPages] = useState([]);
+  const [fadePages, setFadePages] = useState([]);
+  const [mobile, setMobile] = useState(() => typeof window !== "undefined" && window.matchMedia("(max-width: 600px)").matches);
   const timer = useRef(null);
+  const revealTimer = useRef(null);
+  const transitionLock = useRef(false);
   const total = pages.length;
+  const step = mobile ? 1 : 2;
 
-  useEffect(() => () => clearTimeout(timer.current), []);
+  useEffect(() => {
+    const query = window.matchMedia("(max-width: 600px)");
+    const update = () => setMobile(query.matches);
+    update();
+    query.addEventListener("change", update);
+    return () => query.removeEventListener("change", update);
+  }, []);
+
+  useEffect(() => () => {
+    clearTimeout(timer.current);
+    clearTimeout(revealTimer.current);
+  }, []);
 
   const go = (dir) => {
-    if (transition) return;
-    const to = page + (dir === "next" ? 1 : -1);
+    if (transitionLock.current) return;
+    const to = page + (dir === "next" ? step : -step);
     if (to < 0 || to >= total) return;
-    const outgoingDuration = Math.max(1, pages[page].split("\n").length) * LINE_STAGGER_MS + LINE_MS;
-    setTransition({ phase: "out", to });
+    transitionLock.current = true;
+    setRevealPages([]);
+    clearTimeout(revealTimer.current);
+    const outgoingPages = mobile ? [page] : [page, ...(page + 1 < total ? [page + 1] : [])];
+    setFadePages(outgoingPages);
     timer.current = window.setTimeout(() => {
-      setPage(to);
-      setTransition({ phase: "in", to });
-      const incomingDuration = Math.max(1, pages[to].split("\n").length) * LINE_STAGGER_MS + LINE_MS;
-      timer.current = window.setTimeout(() => setTransition(null), incomingDuration);
-    }, outgoingDuration);
+      setTurn({ from: page, to, dir });
+      timer.current = window.setTimeout(() => {
+        const visiblePages = mobile ? [to] : [to, ...(to + 1 < total ? [to + 1] : [])];
+        const longestPage = Math.max(...visiblePages.map((index) => Math.max(0, pages[index].split("\n").length - 1)));
+        setPage(to);
+        setTurn(null);
+        setFadePages([]);
+        setRevealPages(visiblePages);
+        revealTimer.current = window.setTimeout(() => {
+          setRevealPages([]);
+          transitionLock.current = false;
+        }, LINE_MS + longestPage * LINE_STAGGER_MS + 40);
+      }, 720);
+    }, FADE_OUT_MS);
   };
+  const pagePanel = (index, side) => (
+    <div key={`${side}-${index}`} className="relative h-full min-w-0 flex-1 [container-type:inline-size]">
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute inset-0 bg-center bg-no-repeat [background-size:100%_100%]" style={{ backgroundImage: `url(${bookImg})`, transform: side === "left" && !mobile ? "scaleX(-1)" : undefined }} />
+        <PageText text={pages[index]} index={index} total={total} phase={fadePages.includes(index) ? "out" : revealPages.includes(index) ? "in" : null} />
+      </div>
+      {page > 0 && (side === "left" || mobile) && !turn && (
+        <button className="absolute bottom-[3.5%] left-[15%] z-10 h-[6.2%] w-[14.5%] cursor-pointer border-0 bg-transparent p-0 transition-[filter] duration-[100ms] hover:brightness-125 active:translate-y-px focus-visible:outline-2 focus-visible:outline-dashed focus-visible:outline-[#7b2a1a]" onClick={() => go("prev")} aria-label="Previous page">
+          <img src={prevImg} alt="" className="h-full w-full object-contain" style={{ filter: "contrast(1.5) drop-shadow(0 2px 3px rgba(12,6,2,1)) drop-shadow(0 0 5px rgba(18,9,2,.95)) drop-shadow(0 0 4px rgba(244,173,61,.45))" }} />
+        </button>
+      )}
+      {side === "right" && page + step < total && !turn && (
+        <button className="absolute bottom-[3.5%] right-[15%] z-10 h-[6.2%] w-[14.5%] cursor-pointer border-0 bg-transparent p-0 transition-[filter] duration-[100ms] hover:brightness-125 active:translate-y-px focus-visible:outline-2 focus-visible:outline-dashed focus-visible:outline-[#7b2a1a]" onClick={() => go("next")} aria-label="Next page">
+          <img src={nextImg} alt="" className="h-full w-full object-contain" style={{ filter: "contrast(1.5) drop-shadow(0 2px 3px rgba(12,6,2,1)) drop-shadow(0 0 5px rgba(18,9,2,.95)) drop-shadow(0 0 4px rgba(244,173,61,.45))" }} />
+        </button>
+      )}
+    </div>
+  );
+  const turnFront = turn ? (mobile ? turn.from : turn.dir === "next" ? Math.min(turn.from + 1, total - 1) : turn.from) : 0;
+  const turnBack = turn ? (mobile ? turn.to : turn.dir === "next" ? Math.min(turn.to, total - 1) : Math.min(turn.to + 1, total - 1)) : 0;
 
   return (
-    <div className="relative mx-auto w-full select-none [aspect-ratio:736/904] [container-type:inline-size] [perspective:1500px] [font-family:'Press_Start_2P',monospace]">
-        <div className="absolute inset-0 bg-center bg-no-repeat [background-size:100%_100%]" style={{ backgroundImage: `url(${bookImg})` }}>
-          <PageText text={pages[page]} index={page} total={total} phase={transition?.phase} />
-        </div>
+    <div className={`relative mx-auto flex h-full w-full select-none [perspective:1800px] [font-family:'Press_Start_2P',monospace] ${mobile ? "flex-col [aspect-ratio:736/904]" : "flex-row [aspect-ratio:1472/904]"}`}>
+      {mobile ? pagePanel(page, "right") : <>{pagePanel(page, "left")}{page + 1 < total && pagePanel(page + 1, "right")}</>}
 
-        {page > 0 && !transition && <button className="absolute z-10 cursor-pointer border-0 bg-transparent bg-center bg-no-repeat p-0 transition-[filter] duration-[80ms] hover:brightness-[.82] hover:contrast-[1.15] active:translate-y-px focus-visible:outline-2 focus-visible:outline-dashed focus-visible:outline-[#7b2a1a] focus-visible:outline-offset-0" style={{ width: pct(106, IMG.w), height: pct(56, IMG.h), top: pct(787, IMG.h), left: pct(110, IMG.w), backgroundImage: `url(${prevImg})`, backgroundSize: "100% 100%" }} onClick={() => go("prev")} aria-label="Previous page" />}
-        {page < total - 1 && !transition && <button className="absolute z-10 cursor-pointer border-0 bg-transparent bg-center bg-no-repeat p-0 transition-[filter] duration-[80ms] hover:brightness-[.82] hover:contrast-[1.15] active:translate-y-px focus-visible:outline-2 focus-visible:outline-dashed focus-visible:outline-[#7b2a1a] focus-visible:outline-offset-0" style={{ width: pct(106, IMG.w), height: pct(56, IMG.h), top: pct(787, IMG.h), left: pct(497, IMG.w), backgroundImage: `url(${nextImg})`, backgroundSize: "100% 100%" }} onClick={() => go("next")} aria-label="Next page" />}
+      {turn && (
+        <div
+          className={`mcb-page-roll absolute top-0 z-20 h-full overflow-visible [transform-style:preserve-3d] ${mobile ? "mcb-mobile-fold left-0 w-full" : turn.dir === "next" ? "left-1/2 w-1/2 origin-left" : "left-0 w-1/2 origin-right"}`}
+          style={{
+            transformOrigin: mobile ? (turn.dir === "next" ? "left center" : "right center") : undefined,
+            animation: `${mobile ? "mcb-mobile-fold" : "mcb-page-roll"}-${turn.dir} 720ms cubic-bezier(.42,0,.18,1) both`,
+          }}
+          aria-hidden="true"
+        >
+          <div className="absolute inset-0 overflow-hidden bg-[#fff8dc] [backface-visibility:hidden]">
+            <div className="absolute inset-0 bg-center bg-no-repeat [background-size:100%_100%]" style={{ backgroundImage: `url(${bookImg})`, transform: !mobile && turn.dir === "prev" ? "scaleX(-1)" : undefined }} />
+            <PageText text={pages[turnFront]} index={turnFront} total={total} phase="hidden" />
+          </div>
+          <div className="absolute inset-0 overflow-hidden bg-[#fff8dc] [transform:rotateY(180deg)] [backface-visibility:hidden]">
+            <div className="absolute inset-0 bg-center bg-no-repeat [background-size:100%_100%]" style={{ backgroundImage: `url(${bookImg})`, transform: !mobile && turn.dir === "next" ? "scaleX(-1)" : undefined }} />
+            <PageText text={pages[turnBack]} index={turnBack} total={total} phase="hidden" />
+          </div>
+        </div>
+      )}
+      <style>{`.mcb-mobile-fold{filter:drop-shadow(10px 0 12px rgba(0,0,0,.34))}.mcb-mobile-fold::before{content:"";position:absolute;inset:0;z-index:5;pointer-events:none;background:linear-gradient(90deg,transparent 55%,rgba(38,20,8,.08) 72%,rgba(22,10,4,.4) 96%,rgba(255,236,196,.3) 100%);opacity:0;animation:mcb-mobile-fold-shade 720ms cubic-bezier(.42,0,.18,1) both}@keyframes mcb-mobile-fold-shade{0%{opacity:0}28%{opacity:.45}58%{opacity:.9}100%{opacity:0}}@keyframes mcb-mobile-fold-next{0%{transform:rotateY(0) translateZ(0)}48%{transform:rotateY(-92deg) translateZ(8px)}100%{transform:rotateY(-180deg) translateZ(0)}}@keyframes mcb-mobile-fold-prev{0%{transform:rotateY(0) translateZ(0)}48%{transform:rotateY(92deg) translateZ(8px)}100%{transform:rotateY(180deg) translateZ(0)}}@keyframes mcb-line-in{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}@keyframes mcb-line-out{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(-4px)}}@keyframes mcb-page-roll-next{from{transform:rotateY(0)}to{transform:rotateY(-180deg)}}@keyframes mcb-page-roll-prev{from{transform:rotateY(0)}to{transform:rotateY(180deg)}}@media(prefers-reduced-motion:reduce){.mcb-page-roll{animation-duration:1ms!important}}`}</style>
     </div>
   );
 }

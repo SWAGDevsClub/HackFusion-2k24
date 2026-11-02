@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react"
 import { AnimatePresence, motion } from "motion/react"
-import { Link, useLocation } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 import chainSignA from "../assets/pageassets-clean/nav-sign-chain-a.webp"
 import chainSignB from "../assets/pageassets-clean/nav-sign-chain-b.webp"
 import woodPlank from "../assets/pageassets-clean/plank-panel-wood-spare.webp"
@@ -9,10 +9,11 @@ const MotionLink = motion.create(Link)
 const SIGN_IMAGES = [chainSignA, chainSignB]
 
 // change these paths to match your routes
+// `section` = scroll to the element with that id on the page `to` points at (instead of opening a new page)
 const LEFT_LINKS = [
-    { label: "Home", to: "/" },
-    { label: "Schedule", to: "/schedule" },
-    { label: "Sponsors", to: "/sponsors" },
+    { label: "Home", to: "/", section: "home" },
+    { label: "Schedule", to: "/", section: "schedule" },
+    // { label: "Sponsors", to: "/sponsors" },
 ]
 
 const RIGHT_LINKS = [
@@ -31,10 +32,23 @@ const NAV_HEIGHT = 110
 // but resets on a full page load (i.e. when the user enters the site)
 let introPlayed = false
 
+/* Scrolls to the element with this id. Returns false if it isn't on the page (yet). */
+function scrollToId(id) {
+    const el = document.getElementById(id)
+    if (!el) return false
+    // if you use Lenis for smooth scrolling it exposes window.lenis; otherwise use native smooth scroll
+    if (window.lenis?.scrollTo) {
+        window.lenis.scrollTo(el)
+    } else {
+        el.scrollIntoView({ behavior: "smooth", block: "start" })
+    }
+    return true
+}
+
 /* A single wooden sign hanging from two chains. Renders a link when `to` is given, otherwise a button. */
 function HangingSign({ to, index, children, square = false, onClick, label, expanded, skipIntro }) {
     const Tag = to ? MotionLink : motion.button
-    const tagProps = to ? { to } : { type: "button", onClick, "aria-label": label, "aria-expanded": expanded }
+    const tagProps = to ? { to, onClick } : { type: "button", onClick, "aria-label": label, "aria-expanded": expanded }
 
     return (
         <motion.div
@@ -67,8 +81,8 @@ function HangingSign({ to, index, children, square = false, onClick, label, expa
                     />
                     <span
                         className={`absolute inset-x-[8%] flex items-center justify-center text-center font-['Press_Start_2P',monospace] text-[7px] uppercase leading-tight tracking-[0.5px] text-black [text-shadow:1px_1px_0_rgba(255,255,255,0.3)] sm:text-[10px] ${square
-                                ? "top-[58%] bottom-[6%]"
-                                : "top-[61%] bottom-[8%] sm:group-hover:animate-[sign-bob_0.5s_ease-in-out_infinite]"
+                            ? "top-[58%] bottom-[6%]"
+                            : "top-[61%] bottom-[8%] sm:group-hover:animate-[sign-bob_0.5s_ease-in-out_infinite]"
                             }`}
                     >
                         {children}
@@ -112,9 +126,13 @@ function BurgerIcon({ open }) {
     )
 }
 
+
+
 export default function Navbar() {
     const [open, setOpen] = useState(false)
-    const { pathname } = useLocation()
+    const location = useLocation()
+    const { pathname } = location
+    const navigate = useNavigate()
     const [pastHero, setPastHero] = useState(false)
     const [hovered, setHovered] = useState(false)
     const leaveTimer = useRef(null)
@@ -124,6 +142,73 @@ export default function Navbar() {
     useEffect(() => {
         introPlayed = true
     }, [])
+
+    useEffect(() => {
+        const targetId = location.state?.scrollTo;
+        if (!targetId) return;
+
+        let cancelled = false;
+        let rafId;
+        let attempts = 0;
+
+        const findTarget = () => {
+            if (cancelled) return;
+
+            const target = document.getElementById(targetId);
+
+            if (!target) {
+                if (attempts++ < 180) {
+                    rafId = requestAnimationFrame(findTarget);
+                }
+                return;
+            }
+
+            // Allow the Home page and sticky hero layout to settle.
+            if (attempts++ < 5) {
+                rafId = requestAnimationFrame(findTarget);
+                return;
+            }
+
+            if (window.lenis?.scrollTo) {
+                window.lenis.resize();
+                window.lenis.scrollTo(target, {
+                    duration: 1.2,
+                    force: true,
+                });
+            } else {
+                target.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start",
+                });
+            }
+
+            // Clear the state after initiating the scroll.
+            navigate(location.pathname, {
+                replace: true,
+                state: null,
+            });
+        };
+
+        rafId = requestAnimationFrame(findTarget);
+
+        return () => {
+            cancelled = true;
+            cancelAnimationFrame(rafId);
+        };
+    }, [location.key, location.state, location.pathname, navigate]);
+
+    // Section links (e.g. Schedule): scroll if we're already on that page,
+    // otherwise go there first and let the effect below do the scrolling once it has rendered.
+    const handleNav = (e, link) => {
+        if (!link.section) return // normal page link, let react-router handle it
+        e.preventDefault()
+        const onThatPage = pathname === link.to || (link.to === "/" && pathname === "/home")
+        if (onThatPage) {
+            scrollToId(link.section)
+        } else {
+            navigate(link.to, { state: { scrollTo: link.section } })
+        }
+    }
 
     // The hero stays pinned while Info slides over it, so "is the hero visible?" never turns false
     // at the right time. Instead, hide the desktop nav as soon as the top edge of the Info section
@@ -195,7 +280,13 @@ export default function Navbar() {
                     transition={{ type: "spring", stiffness: 260, damping: 26 }}
                 >
                     {LEFT_LINKS.map((l, i) => (
-                        <HangingSign key={l.label} to={l.to} index={i} skipIntro={skipIntro}>
+                        <HangingSign
+                            key={l.label}
+                            to={l.to}
+                            index={i}
+                            skipIntro={skipIntro}
+                            onClick={(e) => handleNav(e, l)}
+                        >
                             {l.label}
                         </HangingSign>
                     ))}
@@ -205,7 +296,13 @@ export default function Navbar() {
                     </HangingSign>
 
                     {RIGHT_LINKS.map((l, i) => (
-                        <HangingSign key={l.label} to={l.to} index={i + 3} skipIntro={skipIntro}>
+                        <HangingSign
+                            key={l.label}
+                            to={l.to}
+                            index={i + 3}
+                            skipIntro={skipIntro}
+                            onClick={(e) => handleNav(e, l)}
+                        >
                             {l.label}
                         </HangingSign>
                     ))}
@@ -237,7 +334,7 @@ export default function Navbar() {
                         {/* dim backdrop, tap to close */}
                         <motion.div
                             key="backdrop"
-                            className="fixed inset-0 z-40 bg-black/50 sm:hidden"
+                            className="fixed inset-0 z-40 bg-black/50 sm:hidden backdrop-blur-[3px] overflow-hidden touch-none"
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
@@ -272,7 +369,10 @@ export default function Navbar() {
                                             <MotionLink
                                                 key={l.label}
                                                 to={l.to}
-                                                onClick={() => setOpen(false)}
+                                                onClick={(e) => {
+                                                    setOpen(false)
+                                                    handleNav(e, l)
+                                                }}
                                                 className="block w-full cursor-pointer border-4 border-black bg-[#7d7d7d] px-4 py-3 text-center font-['Press_Start_2P',monospace] text-[10px] uppercase leading-snug text-white [text-shadow:2px_2px_0_rgba(0,0,0,0.55)] shadow-[inset_4px_4px_0_rgba(255,255,255,0.38),inset_-4px_-4px_0_rgba(0,0,0,0.38),0_4px_0_rgba(0,0,0,0.4)] transition-[filter] duration-150 ease-in-out hover:brightness-[1.2] active:brightness-[1.2]"
                                                 initial={{ opacity: 0, x: 24 }}
                                                 animate={{ opacity: 1, x: 0 }}

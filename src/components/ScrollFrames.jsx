@@ -18,6 +18,7 @@ export default function ScrollFrames({
     poster,
     scrollHeight = "400vh",
     holdScreens = 0,
+    onProgress,
 }) {
     const sectionRef = useRef(null);
     const canvasRef = useRef(null);
@@ -26,6 +27,11 @@ export default function ScrollFrames({
     const targetFrame = useRef(0);
     const readyRef = useRef(false);
     const [ready, setReady] = useState(false);
+    const onProgressRef = useRef(onProgress);
+
+    useEffect(() => {
+        onProgressRef.current = onProgress;
+    }, [onProgress]);
 
     const drawFrame = (index) => {
         const canvas = canvasRef.current;
@@ -79,7 +85,8 @@ export default function ScrollFrames({
         const resize = () => {
             const canvas = canvasRef.current;
             if (!canvas) return;
-            const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+            const maxDpr = window.matchMedia("(max-width: 767px)").matches ? 1 : 1.5;
+            const dpr = Math.min(window.devicePixelRatio || 1, maxDpr);
             canvas.width = window.innerWidth * dpr;
             canvas.height = window.innerHeight * dpr;
             drawFrame(targetFrame.current);
@@ -91,25 +98,43 @@ export default function ScrollFrames({
 
     // Keep the displayed frame in sync with the current scroll position.
     useEffect(() => {
-        let raf;
+        let raf = 0;
 
-        const tick = () => {
-            const section = sectionRef.current;
-            if (section && FRAME_COUNT) {
-                const { top, height } = section.getBoundingClientRect();
-                const holdHeight = holdScreens * window.innerHeight;
-                const scrollable = Math.max(height - window.innerHeight - holdHeight, 1);
-                const progress = clamp(-top / scrollable, 0, 1);
-                const target = progress * (FRAME_COUNT - 1);
-                const index = Math.round(target);
-                targetFrame.current = index;
-                if (index !== drawnFrame.current) drawFrame(index);
-            }
-            raf = requestAnimationFrame(tick);
+        const scheduleUpdate = () => {
+            if (raf) return;
+            raf = requestAnimationFrame(() => {
+                raf = 0;
+                const section = sectionRef.current;
+                if (section && FRAME_COUNT) {
+                    const { top, height } = section.getBoundingClientRect();
+                    const holdHeight = holdScreens * window.innerHeight;
+                    const scrollable = Math.max(height - window.innerHeight - holdHeight, 1);
+                    const progress = clamp(-top / scrollable, 0, 1);
+                    const target = progress * (FRAME_COUNT - 1);
+                    const index = Math.round(target);
+                    targetFrame.current = index;
+                    if (index !== drawnFrame.current) drawFrame(index);
+
+                    if (onProgressRef.current) {
+                        onProgressRef.current({
+                            progress,
+                            frame: target,
+                            frameIndex: index,
+                            frameCount: FRAME_COUNT,
+                        });
+                    }
+                }
+            });
         };
 
-        raf = requestAnimationFrame(tick);
-        return () => cancelAnimationFrame(raf);
+        scheduleUpdate();
+        window.addEventListener("scroll", scheduleUpdate, { passive: true });
+        window.addEventListener("resize", scheduleUpdate);
+        return () => {
+            window.removeEventListener("scroll", scheduleUpdate);
+            window.removeEventListener("resize", scheduleUpdate);
+            if (raf) cancelAnimationFrame(raf);
+        };
     }, [holdScreens]);
 
     return (
@@ -122,7 +147,7 @@ export default function ScrollFrames({
                 height: `calc(${scrollHeight} + ${(1 + holdScreens) * 100}vh)`,
             }}
         >
-            <div className="sticky top-0 h-screen w-full">
+            <div className="sticky top-0 h-screen w-full overflow-hidden">
                 {/* background */}
                 <div className="absolute inset-0 z-0 overflow-hidden">
                     {poster && (
