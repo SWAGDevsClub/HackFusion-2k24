@@ -61,11 +61,12 @@ export default function CherryBlossom({ children }) {
         let active = false
 
         const resize = () => {
-            const dpr = Math.min(window.devicePixelRatio || 1, 2)
+            const isMobile = window.innerWidth < 768
+            const dpr = isMobile ? 1 : Math.min(window.devicePixelRatio || 1, 1.5)
             w = window.innerWidth
             h = window.innerHeight
-            canvas.width = w * dpr
-            canvas.height = h * dpr
+            canvas.width = Math.round(w * dpr)
+            canvas.height = Math.round(h * dpr)
             ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
         }
 
@@ -110,7 +111,8 @@ export default function CherryBlossom({ children }) {
         const burst = () => {
             if (!active) return
 
-            const count = Math.random() < 0.5 ? 5 : 6
+            const isMobile = window.innerWidth < 768
+            const count = isMobile ? (Math.random() < 0.5 ? 2 : 3) : (Math.random() < 0.5 ? 5 : 6)
 
             // the whole bunch shares one start point (top right) and one end point (bottom left)
             const startX = rand(0.65 * w, 1.0 * w)
