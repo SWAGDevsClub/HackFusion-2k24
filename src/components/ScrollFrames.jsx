@@ -22,12 +22,15 @@ export default function ScrollFrames({
 }) {
     const sectionRef = useRef(null);
     const canvasRef = useRef(null);
-    const imagesRef = useRef([]);
+    const imagesRef = useRef(new Array(FRAME_COUNT));
     const drawnFrame = useRef(-1);
     const targetFrame = useRef(0);
+    const displayFrame = useRef(0);
     const readyRef = useRef(false);
     const [ready, setReady] = useState(false);
     const onProgressRef = useRef(onProgress);
+    const rafIdRef = useRef(0);
+    const geometryRef = useRef({ top: 0, height: 0, scrollable: 1 });
 
     useEffect(() => {
         onProgressRef.current = onProgress;
@@ -37,7 +40,7 @@ export default function ScrollFrames({
         const canvas = canvasRef.current;
         if (!canvas) return;
 
-        // fall back to the nearest earlier frame that has loaded
+        // Fall back to nearest earlier frame that has finished loading
         let i = index;
         while (i >= 0) {
             const im = imagesRef.current[i];
@@ -47,12 +50,18 @@ export default function ScrollFrames({
         if (i < 0) return;
 
         const img = imagesRef.current[i];
-        const ctx = canvas.getContext("2d");
-        const { width: cw, height: ch } = canvas;
+        const ctx = canvas.getContext("2d", { alpha: false, desynchronized: true });
+        if (!ctx) return;
+
+        const cw = canvas.width;
+        const ch = canvas.height;
         const scale = Math.max(cw / img.naturalWidth, ch / img.naturalHeight);
-        const w = img.naturalWidth * scale;
-        const h = img.naturalHeight * scale;
-        ctx.drawImage(img, (cw - w) / 2, (ch - h) / 2, w, h);
+        const w = Math.round(img.naturalWidth * scale);
+        const h = Math.round(img.naturalHeight * scale);
+        const x = Math.round((cw - w) / 2);
+        const y = Math.round((ch - h) / 2);
+
+        ctx.drawImage(img, x, y, w, h);
         drawnFrame.current = index;
 
         if (!readyRef.current) {
@@ -61,81 +70,175 @@ export default function ScrollFrames({
         }
     };
 
-    // preload frames in the background (non-blocking)
+    // Helper to load a single frame
+    const loadFrame = (idx) => {
+        if (idx < 0 || idx >= FRAME_COUNT) return;
+        if (imagesRef.current[idx]) return imagesRef.current[idx];
+
+        const img = new Image();
+        imagesRef.current[idx] = img;
+        img.onload = () => {
+            const currentIdx = Math.round(displayFrame.current);
+            if (idx === currentIdx || (idx === 0 && drawnFrame.current === -1)) {
+                drawFrame(currentIdx);
+            }
+        };
+        img.src = frameUrls[idx];
+        return img;
+    };
+
+    // Helper to preload a window around a given frame
+    const preloadWindow = (centerIdx, radiusAhead = 15, radiusBehind = 5) => {
+        const start = Math.max(0, centerIdx - radiusBehind);
+        const end = Math.min(FRAME_COUNT - 1, centerIdx + radiusAhead);
+        for (let j = start; j <= end; j++) {
+            loadFrame(j);
+        }
+    };
+
+    // Progressive loading:
+    // 1. Immediately load first 18 frames so initial view & zoom start are fast & smooth
+    // 2. Then load remaining frames progressively in small chunks in the background
     useEffect(() => {
-        imagesRef.current = frameUrls.map((src, i) => {
-            const img = new Image();
-            img.onload = () => {
-                // decode up front so drawing later doesn't stall
-                (img.decode ? img.decode() : Promise.resolve())
-                    .catch(() => { })
-                    .finally(() => {
-                        if (i === 0 || i === targetFrame.current) {
-                            drawFrame(targetFrame.current);
-                        }
-                    });
-            };
-            img.src = src;
-            return img;
-        });
+        // High priority first batch
+        for (let i = 0; i < Math.min(18, FRAME_COUNT); i++) {
+            loadFrame(i);
+        }
+
+        // Idle / progressive load for remaining frames
+        let nextIdx = 18;
+        let idleTimer = null;
+        const loadBatch = () => {
+            if (nextIdx >= FRAME_COUNT) return;
+            const batchEnd = Math.min(nextIdx + 6, FRAME_COUNT);
+            for (let i = nextIdx; i < batchEnd; i++) {
+                loadFrame(i);
+            }
+            nextIdx = batchEnd;
+            if (nextIdx < FRAME_COUNT) {
+                idleTimer = setTimeout(loadBatch, 60);
+            }
+        };
+
+        idleTimer = setTimeout(loadBatch, 400);
+
+        return () => {
+            if (idleTimer) clearTimeout(idleTimer);
+        };
     }, []);
 
-    // canvas size
+    // Canvas size
     useEffect(() => {
         const resize = () => {
             const canvas = canvasRef.current;
             if (!canvas) return;
-            const maxDpr = window.matchMedia("(max-width: 767px)").matches ? 1 : 1.5;
+            const maxDpr = window.innerWidth < 768 ? 1 : 1.5;
             const dpr = Math.min(window.devicePixelRatio || 1, maxDpr);
-            canvas.width = window.innerWidth * dpr;
-            canvas.height = window.innerHeight * dpr;
-            drawFrame(targetFrame.current);
+            canvas.width = Math.round(window.innerWidth * dpr);
+            canvas.height = Math.round(window.innerHeight * dpr);
+            drawFrame(Math.round(displayFrame.current));
         };
         resize();
         window.addEventListener("resize", resize);
         return () => window.removeEventListener("resize", resize);
     }, []);
 
-    // Keep the displayed frame in sync with the current scroll position.
+    // Cache section layout & measurements to avoid getBoundingClientRect layout thrashing on scroll
     useEffect(() => {
-        let raf = 0;
-
-        const scheduleUpdate = () => {
-            if (raf) return;
-            raf = requestAnimationFrame(() => {
-                raf = 0;
-                const section = sectionRef.current;
-                if (section && FRAME_COUNT) {
-                    const { top, height } = section.getBoundingClientRect();
-                    const holdHeight = holdScreens * window.innerHeight;
-                    const scrollable = Math.max(height - window.innerHeight - holdHeight, 1);
-                    const progress = clamp(-top / scrollable, 0, 1);
-                    const target = progress * (FRAME_COUNT - 1);
-                    const index = Math.round(target);
-                    targetFrame.current = index;
-                    if (index !== drawnFrame.current) drawFrame(index);
-
-                    if (onProgressRef.current) {
-                        onProgressRef.current({
-                            progress,
-                            frame: target,
-                            frameIndex: index,
-                            frameCount: FRAME_COUNT,
-                        });
-                    }
-                }
-            });
+        const updateGeometry = () => {
+            const section = sectionRef.current;
+            if (!section) return;
+            const rect = section.getBoundingClientRect();
+            const scrollTop = window.scrollY || document.documentElement.scrollTop || 0;
+            const top = rect.top + scrollTop;
+            const height = section.offsetHeight || rect.height;
+            const holdHeight = holdScreens * window.innerHeight;
+            const scrollable = Math.max(height - window.innerHeight - holdHeight, 1);
+            geometryRef.current = { top, height, scrollable };
         };
 
-        scheduleUpdate();
-        window.addEventListener("scroll", scheduleUpdate, { passive: true });
-        window.addEventListener("resize", scheduleUpdate);
-        return () => {
-            window.removeEventListener("scroll", scheduleUpdate);
-            window.removeEventListener("resize", scheduleUpdate);
-            if (raf) cancelAnimationFrame(raf);
-        };
+        updateGeometry();
+        window.addEventListener("resize", updateGeometry);
+        return () => window.removeEventListener("resize", updateGeometry);
     }, [holdScreens]);
+
+    // Smooth animation loop + scroll tracking
+    useEffect(() => {
+        let isRunning = false;
+
+        const loop = () => {
+            const target = targetFrame.current;
+            const current = displayFrame.current;
+            const diff = target - current;
+
+            // Interpolate smoothly: lerp factor ~0.22 eliminates mobile touch scroll jitter
+            // while feeling snappy and responsive
+            if (Math.abs(diff) > 0.005) {
+                displayFrame.current += diff * 0.22;
+                if (Math.abs(target - displayFrame.current) < 0.01) {
+                    displayFrame.current = target;
+                }
+            } else {
+                displayFrame.current = target;
+            }
+
+            const currFrame = displayFrame.current;
+            const index = Math.round(currFrame);
+
+            if (index !== drawnFrame.current) {
+                drawFrame(index);
+            }
+
+            if (onProgressRef.current) {
+                const progress = clamp(currFrame / (FRAME_COUNT - 1), 0, 1);
+                onProgressRef.current({
+                    progress,
+                    frame: currFrame,
+                    frameIndex: index,
+                    frameCount: FRAME_COUNT,
+                });
+            }
+
+            if (Math.abs(target - displayFrame.current) > 0.005) {
+                rafIdRef.current = requestAnimationFrame(loop);
+            } else {
+                isRunning = false;
+                rafIdRef.current = 0;
+            }
+        };
+
+        const startLoop = () => {
+            if (!isRunning) {
+                isRunning = true;
+                rafIdRef.current = requestAnimationFrame(loop);
+            }
+        };
+
+        const onScroll = () => {
+            const { top, scrollable } = geometryRef.current;
+            const scrollTop = window.scrollY || document.documentElement.scrollTop || 0;
+            const currentTop = top - scrollTop;
+            const progress = clamp(-currentTop / scrollable, 0, 1);
+            const target = progress * (FRAME_COUNT - 1);
+            targetFrame.current = target;
+
+            // Ensure upcoming frames are loaded
+            preloadWindow(Math.round(target), 15, 5);
+
+            startLoop();
+        };
+
+        // Initial update
+        onScroll();
+
+        window.addEventListener("scroll", onScroll, { passive: true });
+        return () => {
+            window.removeEventListener("scroll", onScroll);
+            if (rafIdRef.current) {
+                cancelAnimationFrame(rafIdRef.current);
+            }
+        };
+    }, []);
 
     return (
         <div

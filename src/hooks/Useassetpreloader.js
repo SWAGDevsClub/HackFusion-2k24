@@ -8,9 +8,13 @@ import { useEffect, useState } from "react";
  *
  * Vite 5+ syntax. On Vite 3/4 use: { eager: true, as: "url" }
  */
-const ASSET_URLS = Object.values(
-  import.meta.glob("../assets/**/*", { eager: true, query: "?url", import: "default" })
-);
+const assetEntries = import.meta.glob("../assets/**/*", { eager: true, query: "?url", import: "default" });
+// Exclude the 190 heavy hero sequence frames from the general asset preloader
+// so the splash screen loads quickly and doesn't exhaust mobile device memory.
+// Only keep the first frame as the poster.
+const ASSET_URLS = Object.entries(assetEntries)
+  .filter(([path]) => !path.includes("HeroFrames/frames3/frame_") || path.endsWith("frame_001.webp"))
+  .map(([, url]) => url);
 
 const IMAGE_RE = /\.(png|jpe?g|gif|webp|avif|svg|bmp|ico)(\?.*)?$/i;
 const FONT_RE = /\.(woff2?|ttf|otf)(\?.*)?$/i;

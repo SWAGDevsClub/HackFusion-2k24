@@ -171,8 +171,10 @@ export default function HeroSection() {
 
     // Dynamically calculate the transform-origin exactly between
     // the "View Problem Statement" and "Login" buttons.
+    // Guarded to only measure when unscaled to prevent reflow and distortion.
     const updateOrigin = useCallback(() => {
         if (!zoomContainerRef.current || !problemBtnRef.current || !loginBtnRef.current) return
+        if (currentFrameRef.current > 0.5) return
 
         const pRect = problemBtnRef.current.getBoundingClientRect()
         const lRect = loginBtnRef.current.getBoundingClientRect()
@@ -201,9 +203,8 @@ export default function HeroSection() {
         // ----------------------------------------------------
         const container = zoomContainerRef.current
         if (container) {
-            const maxScale = window.matchMedia("(max-width: 767px)").matches
-                ? MOBILE_MAX_SCALE
-                : MAX_SCALE
+            const isMobile = window.innerWidth < 768
+            const maxScale = isMobile ? MOBILE_MAX_SCALE : MAX_SCALE
 
             if (frame <= 0.5) {
                 container.style.transform = ""
@@ -217,10 +218,10 @@ export default function HeroSection() {
                     container.style.opacity = "0"
                     container.style.visibility = "hidden"
                     container.style.pointerEvents = "none"
-                    container.style.transform = `scale(${maxScale})`
+                    container.style.transform = `scale3d(${maxScale}, ${maxScale}, 1)`
                 } else {
                     container.style.visibility = "visible"
-                    container.style.pointerEvents = pZoom > 0.85 ? "none" : "auto"
+                    container.style.pointerEvents = pZoom > 0.05 ? "none" : "auto"
 
                     const scale = 1 + Math.pow(pZoom, 2.2) * (maxScale - 1)
 
@@ -231,7 +232,8 @@ export default function HeroSection() {
                     }
 
                     container.style.opacity = opacity.toFixed(3)
-                    container.style.transform = `scale(${scale.toFixed(3)})`
+                    // Hardware accelerated 3D transform to keep on GPU composite layer
+                    container.style.transform = `scale3d(${scale.toFixed(3)}, ${scale.toFixed(3)}, 1) translateZ(0)`
                 }
             }
         }
@@ -259,7 +261,9 @@ export default function HeroSection() {
         // Measure after initial button entrance transition has completed
         const timer = setTimeout(updateOrigin, 800)
         const onResize = () => {
-            updateOrigin()
+            if (currentFrameRef.current <= 0.5) {
+                updateOrigin()
+            }
             handleProgress({ frame: currentFrameRef.current })
         }
         window.addEventListener("resize", onResize)
@@ -276,7 +280,7 @@ export default function HeroSection() {
                 {/* Initial Hero UI (Zooms out and clears by frame 80) */}
                 <div
                     ref={zoomContainerRef}
-                    className="flex h-full w-full flex-col items-center justify-center gap-6 px-4 pt-28 pb-16 sm:gap-8"
+                    className="flex h-full w-full flex-col items-center justify-center gap-6 px-4 pt-28 pb-16 sm:gap-8 will-change-[transform,opacity] transform-gpu [backface-visibility:hidden] [contain:layout_style]"
                     style={{
                         transformOrigin: `${originRef.current.x}% ${originRef.current.y}%`,
                     }}
@@ -284,23 +288,14 @@ export default function HeroSection() {
                     <motion.img
                         src={Logo}
                         alt="HackFusion"
-                        className="h-50 sm:h-56 md:h-75 drop-shadow-[0_10px_0_rgba(0,0,0,0.35)] -mt-20 md:mt-0"
+                        className="h-50 sm:h-56 md:h-75 drop-shadow-[0_10px_0_rgba(0,0,0,0.35)] -mt-20 md:mt-0 will-change-transform"
                         initial={{ opacity: 0, scale: 0.7 }}
-                        animate={{ opacity: 1, scale: 1, y: [0, -10, 0] }}
+                        animate={{ opacity: 1, scale: 1 }}
                         transition={{
                             opacity: { duration: 0.6 },
                             scale: { type: "spring", stiffness: 120, damping: 12 },
                         }}
                     />
-
-                    {/* <motion.p
-                        className="text-center text-[11px] text-yellow-300 sm:text-sm md:text-base -mt-17 md:-mt-25 mb-5 font-['Press_Start_2P',monospace] [text-shadow:3px_3px_0_rgb(0,0,0)]"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 0.5, duration: 0.8 }}
-                    >
-                        "Code. Compete. Survive."
-                    </motion.p> */}
 
                     <div className="flex flex-col items-center gap-4 sm:flex-col sm:gap-5 md:-mt-20">
                         <McButton

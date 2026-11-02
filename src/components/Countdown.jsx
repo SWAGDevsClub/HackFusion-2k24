@@ -56,13 +56,9 @@ function Slot({ value, label, accent }) {
 
 function Colon() {
     return (
-        <motion.span
-            className="mc-cd-colon"
-            animate={{ opacity: [1, 0.15, 1] }}
-            transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-        >
+        <span className="mc-cd-colon">
             :
-        </motion.span>
+        </span>
     )
 }
 
@@ -94,6 +90,10 @@ export default function Countdown({ targetDate = EVENT_DATE }) {
     return (
         <div ref={root} className="flex flex-col items-center">
             <style>{`
+                @keyframes mc-cd-blink {
+                    0%, 100% { opacity: 1; }
+                    50% { opacity: 0.2; }
+                }
                 .mc-cd-slot {
                     font-family: 'Press Start 2P', monospace;
                     font-size: 22px;
@@ -105,7 +105,7 @@ export default function Countdown({ targetDate = EVENT_DATE }) {
                         #2b2b2b;
                     border: 4px solid;
                     border-color: #111 #7a7a7a #7a7a7a #111;
-                    box-shadow: 0 8px 0 rgba(0,0,0,.45), 0 0 24px rgba(0,0,0,.4);
+                    box-shadow: 0 8px 0 rgba(0,0,0,.45);
                     text-shadow: 3px 3px 0 #000;
                 }
                 .mc-cd-label {
@@ -122,6 +122,7 @@ export default function Countdown({ targetDate = EVENT_DATE }) {
                     color: #fff;
                     text-shadow: 3px 3px 0 #000;
                     padding-top: 16px;
+                    animation: mc-cd-blink 1s steps(1) infinite;
                 }
                 @media (min-width: 640px) {
                     .mc-cd-slot { font-size: 36px; padding: 20px 18px; }
