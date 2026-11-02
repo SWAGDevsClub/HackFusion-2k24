@@ -8,7 +8,7 @@ export default function ComingSoonToast({
 }) {
   return (
     <div
-      className="fixed inset-0 z-[45] flex items-center justify-center p-4 bg-black/85 backdrop-blur-md select-none overflow-y-auto"
+      className="fixed inset-0 z-[45] flex items-center justify-center p-4 bg-black backdrop-blur-md select-none overflow-y-auto"
       role="alertdialog"
       aria-modal="true"
       aria-label={`${pageName || "Page"} Coming Soon`}

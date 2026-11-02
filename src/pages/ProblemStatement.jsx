@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion, MotionConfig } from 'motion/react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import ComingSoonToast from '../components/ComingSoonToast';
 import bgImage from '../assets/ps_bg.webp';
 
 const BG_IMAGE = bgImage;
@@ -151,6 +152,13 @@ export default function ProblemStatement() {
     <MotionConfig reducedMotion="user">
       <div className="ps-page relative flex min-h-screen flex-col overflow-x-hidden text-white">
         <style>{CSS}</style>
+
+        {/* Coming Soon Toast Overlay */}
+        <ComingSoonToast
+          pageName="Problem Statement"
+          title="COMING SOON"
+          subtitle="Official HackFusion 4.0 problem statements and challenges will be revealed soon!"
+        />
 
         {/* Background & Atmosphere */}
         <div
