@@ -44,7 +44,7 @@ function FloatLayer({ item }) {
   const filter = [baseFilter, "drop-shadow(0 3px 5px rgba(0,0,0,.24))"].filter(Boolean).join(" ");
   // --float-scale keeps the geodes inside the shortened amethyst section on both
   // desktop and mobile while preserving their relative vertical arrangement.
-  return <Layer section="s3" image={key} x={x} width={width} top={`calc(${y}vh * var(--float-scale, 1))`} speed={speed} z={z} filter={filter} opacity={opacity} className="world-bob" duration={`${duration}s`} delay={`-${delay}s`} />;
+  return <Layer section="s3" image={key} x={x} width={width} top={`calc(${y}vh * var(--float-scale, 1))`} speed={speed} z={Math.min(z, 9)} filter={filter} opacity={opacity} className="world-bob" duration={`${duration}s`} delay={`-${delay}s`} />;
 }
 export default function Info() {
   const worldRef = useRef(null);
@@ -64,7 +64,7 @@ export default function Info() {
     speed: Number(element.dataset.speed || 0),
   }));
   const geo = sections.map(() => ({ mid: 0, end: 0 }));
-  const grades = ["rgba(255,210,150,.12)", "rgba(10,5,0,.45)", "rgba(110,30,190,.3)", "rgba(0,0,0,0)"];
+  const grades = ["rgba(255,210,150,.12)", "rgba(10,5,0,.2)", "rgba(110,30,190,.3)", "rgba(0,0,0,0)"];
   let current = scrollY, target = scrollY, viewportHeight = innerHeight, raf = 0, resizeTimer, mounted = true, gradeIdx = -1;
 
   const schedule = () => { if (!raf && mounted) raf = requestAnimationFrame(draw); };
@@ -115,7 +115,7 @@ export default function Info() {
   return (
     <CascadeSection className="bg-transparent">
       <div id="info" className="relative isolate [overflow-x:clip] bg-[#050a1c] text-2xl text-[#f3f3f3] [font-family:'VT323',ui-monospace,monospace]">
-        <div className="pointer-events-none h-[427vh] w-full max-[600px]:!h-[248svh]" style={{ height }} aria-hidden="true" />
+        <div className="pointer-events-none h-[427vh] w-full max-[768px]:!h-[415svh] max-[600px]:!h-[248svh]" style={{ height }} aria-hidden="true" />
         <div className="absolute left-0 top-0 z-[1] w-full" ref={worldRef}>
           <section className="world-section relative h-[112vh] w-full overflow-visible max-[768px]:!h-[100svh]" style={{ background: "#2f7dff" }}>
             <Layer section="s1" image="sky" top="0%" height="130%" speed={-.12} z={1} className="max-[768px]:!top-[-8%] max-[768px]:!h-[124%] max-[768px]:[clip-path:inset(0_0_13%_0)]" />
@@ -123,10 +123,10 @@ export default function Info() {
               {[["cl0", -3, 34, "6vh", -.34, "31s"], ["cl1", 60, 36, "20vh", -.28, "44s"], ["cl2", 24, 28, "40vh", -.2, "37s"], ["cl3", 68, 30, "56vh", -.14, "50s"]].map(([image, x, width, top, speed, duration]) => <Layer key={image} section="s1" image={image} x={x} width={width} top={`calc(${top} + 25vh)`} speed={speed} z={image === "cl0" || image === "cl3" ? 8 : 2} className="world-drift" duration={duration} opacity={.92} />)}
             </div>
             <Layer section="s1" x={7} width={86} top="3%" speed={0} z={12} className="max-[768px]:!left-[4vw] max-[768px]:!top-[3%] max-[768px]:!w-[92vw]">
-              <h2 id="morning-heading" className="text-center text-[clamp(24px,3vw,48px)] font-bold leading-[1.45] text-[#fff5d8] [font-family:'Press_Start_2P',monospace] [text-shadow:3px_4px_0_#160b25,0_0_22px_#140a30] max-[768px]:text-[clamp(18px,4.8vw,23px)]">A Fusion of Ideas, Code, and Excitement!</h2>
+              <h2 id="morning-heading" className="text-center text-4xl font-bold leading-[1.45] text-[#fff5d8] [font-family:'Press_Start_2P',monospace] [text-shadow:3px_4px_0_#160b25,0_0_22px_#140a30] max-[768px]:text-[clamp(18px,4.8vw,23px)] pt-10 sm:pt-0">A Fusion of Ideas, Code, and Excitement!</h2>
             </Layer>
-            <Layer section="s1" image="morning-parchment-banner.webp" x={27} width={46} top="17%" speed={0} z={14} className="max-[768px]:!left-[8vw] max-[768px]:!top-[25%] max-[768px]:!w-[84vw]">
-              <div id="morning-description" className="absolute left-[18%] right-[18%] top-[7%] bottom-[8%] flex items-center justify-center overflow-hidden px-1 text-center text-[clamp(16px,1.2vw,20px)] font-bold leading-[1.5] text-[#3b2615] [font-family:'Press_Start_2P',monospace] [text-shadow:0_1px_0_rgba(255,255,220,.55)] max-[768px]:left-[15%] max-[768px]:right-[15%] max-[768px]:text-[clamp(11px,2.8vw,13px)] max-[768px]:leading-[1.25]">
+            <Layer section="s1" image="morning-parchment-banner.webp" x={27} width={46} top="17%" speed={0} z={14} className="max-[768px]:!left-[8vw] max-[768px]:!top-[25%] max-[768px]:!w-[84vw] scale-120 md:scale-100 mt-20 sm:mt-0">
+              <div id="morning-description" className="absolute left-[18%] right-[18%] top-[7%] bottom-[8%] flex items-center justify-center overflow-hidden px-1 text-center text-[clamp(15px,1.15vw,20px)] font-bold leading-[1.4] text-[#3b2615] [font-family:'Press_Start_2P',monospace] [text-shadow:0_1px_0_rgba(255,255,220,.55)] max-[768px]:left-[15%] max-[768px]:right-[15%] max-[768px]:text-[clamp(9px,2.35vw,11px)] max-[768px]:leading-[1.25]">
                 <p>Join <strong>Hackfusion 4</strong>, a national-level hackathon at <strong>SGGSIE&amp;T Nanded</strong>, where 100+ teams unite to innovate, code, and compete! Experience the fusion of ideas, technology, and excitement while connecting with passionate developers, expert mentors, and industry sponsors.</p>
               </div>
             </Layer>
@@ -148,10 +148,10 @@ export default function Info() {
           <div className="cave-torch-glow pointer-events-none absolute inset-0 mix-blend-screen animate-[cave-torch-flicker_2.6s_ease-in-out_infinite_alternate]"/>
         </Layer>
         <Layer section="s2" x={10} width={80} top="14%" speed={0} z={12} className="max-[600px]:!left-[5vw] max-[600px]:!top-[8%] max-[600px]:!w-[90vw]">
-          <h2 id="participate-heading" className="text-center text-[clamp(34px,4.4vw,66px)] font-bold leading-[1.45] text-[#fff1d4] [font-family:'Press_Start_2P',monospace] [text-shadow:3px_4px_0_#090b12,0_0_20px_#ff9a36] max-[600px]:text-[clamp(20px,5vw,25px)]">Why Participate?</h2>
+          <h2 id="participate-heading" className="text-center text-[clamp(30px,3.9vw,58px)] font-bold leading-[1.45] text-[#fff1d4] [font-family:'Press_Start_2P',monospace] [text-shadow:3px_4px_0_#090b12,0_0_20px_#ff9a36] max-[600px]:text-[clamp(19px,4.7vw,23px)] mt-20 md:mt-0">Why Participate?</h2>
         </Layer>
-        <Layer section="s2" image="cave-scroll-banner.webp" x={17} width={66} top="27%" speed={0} z={10} className="max-[600px]:!left-[2vw] max-[600px]:!top-[20%] max-[600px]:!w-[96vw]">
-          <div id="participate-description" className="absolute left-[18%] right-[18%] top-[10%] bottom-[8%] flex items-center justify-center overflow-hidden px-1 text-center text-[clamp(15px,1.25vw,20px)] font-bold leading-[1.8] text-[#f3f0ea] [font-family:'Press_Start_2P',monospace] [text-shadow:1px_2px_2px_#111] max-[600px]:left-[16%] max-[600px]:right-[16%] max-[600px]:top-[12%] max-[600px]:bottom-[12%] max-[600px]:text-[clamp(8px,2.1vw,10px)]">
+        <Layer section="s2" image="cave-scroll-banner.webp" x={17} width={66} top="27%" speed={0} z={10} className="max-[600px]:!left-[2vw] max-[600px]:!top-[20%] max-[600px]:!w-[96vw] mt-10 md:-mt-13">
+          <div id="participate-description" className="absolute left-[18%] right-[18%] top-[10%] bottom-[8%] flex items-center justify-center overflow-hidden px-1 text-center text-[clamp(15px,1.3vw,21px)] font-bold leading-[1.8] text-[#f3f0ea] [font-family:'Press_Start_2P',monospace] [text-shadow:1px_2px_2px_#111] max-[600px]:left-[16%] max-[600px]:right-[16%] max-[600px]:top-[12%] max-[600px]:bottom-[12%] max-[600px]:text-[clamp(10px,2.1vw,10px)] mt-2 md:mt-0">
             <p>Hackfusion 4 is where innovation meets opportunity. Turn bold ideas into real-world solutions, collaborate with brilliant minds, and learn from industry experts. Build, experiment, and make your mark. <strong className="text-[#ffd16a]">Think big. Code bold. Be the fusion!</strong></p>
           </div>
         </Layer>
@@ -159,10 +159,10 @@ export default function Info() {
       <section className="world-section relative h-[140vh] w-full overflow-visible [--float-scale:.9] max-[600px]:!h-[68svh] max-[600px]:[--float-scale:.44]" style={{background:"#10091f"}}>
         <Layer section="s3" image="geo" top="-6%" height="112%" speed={-.07} z={1} filter="brightness(.95)" className="max-[600px]:!top-[-14%] max-[600px]:!h-[128%]" imgClassName="max-[600px]:object-cover max-[600px]:object-center"/>
         <Layer section="s3" x={5} width={90} top="11%" speed={0} z={32} className="max-[600px]:!left-[5vw] max-[600px]:!top-0 max-[600px]:!w-[90vw]">
-          <h2 id="faq-heading" className="text-center text-[clamp(34px,4.4vw,66px)] font-bold leading-[1.45] text-[#fff1ff] [font-family:'Press_Start_2P',monospace] [text-shadow:3px_4px_0_#15092b,0_0_22px_#b45cff] max-[600px]:text-[clamp(20px,5vw,25px)]">Have Any Questions?</h2>
+          <h2 id="faq-heading" className="text-center text-[clamp(30px,3.9vw,58px)] font-bold leading-[1.45] text-[#fff1ff] [font-family:'Press_Start_2P',monospace] [text-shadow:3px_4px_0_#15092b,0_0_22px_#b45cff] max-[600px]:text-[clamp(19px,4.7vw,23px)]">Have Any Questions?</h2>
         </Layer>
         <Layer section="s3" image="amethyst-crystal-banner.webp" x={20} width={60} top="24%" speed={0} z={10} className="max-[600px]:!left-[2vw] max-[600px]:!top-[10%] max-[600px]:!w-[96vw]">
-          <div id="faq-description" className="absolute left-[18%] right-[18%] top-[10%] bottom-[8%] flex items-center justify-center overflow-hidden px-1 text-center text-[clamp(15px,1.25vw,20px)] font-bold leading-[1.8] text-[#f5edff] [font-family:'Press_Start_2P',monospace] [text-shadow:1px_2px_3px_#170923] max-[600px]:left-[14%] max-[600px]:right-[14%] max-[600px]:text-[clamp(8px,2.1vw,10px)]">
+          <div id="faq-description" className="absolute left-[18%] right-[18%] top-[10%] bottom-[8%] flex items-center justify-center overflow-hidden px-1 text-center text-[clamp(24px,1.3vw,21px)] font-bold leading-[1.8] text-[#f5edff] [font-family:'Press_Start_2P',monospace] [text-shadow:1px_2px_3px_#170923] max-[600px]:left-[14%] max-[600px]:right-[14%] max-[600px]:text-[clamp(12px,2.1vw,10px)] mt-6 pl-2">
             <p>Wondering how Hackfusion 4 works? Explore our FAQs for quick answers about registration, participation, and submissions. Still have questions? Reach out to us!</p>
           </div>
         </Layer>

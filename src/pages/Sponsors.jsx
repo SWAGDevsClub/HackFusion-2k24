@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 import Navbar from '../components/Navbar' 
-import ComingSoonToast from '../components/ComingSoonToast'
+import Footer from '../components/Footer'
 
 /* ============================================================================
    HackFusion 4 – Sponsors page (single file, no Tailwind needed).
@@ -139,11 +139,6 @@ export default function Sponsors() {
 
   return (
     <div className="sp-root" ref={pageRef}>
-      <ComingSoonToast
-        pageName="SPONSORS"
-        title="COMING SOON"
-        subtitle="HackFusion 4 official sponsors and community partners will be revealed soon!"
-      />
       <style>{CSS}</style>
       <div className="sp-nav"><Navbar /></div>
 
@@ -151,10 +146,10 @@ export default function Sponsors() {
       <div className="sp-layers" aria-hidden="true">
         <div className="sp-ly sp-back" ref={backRef} style={{ backgroundImage: `url(${BASE}layer-back.webp)` }} />
         <div className="sp-frame-layer" style={{ backgroundImage: `url(${BASE}layer-frame.webp)` }} />
-        <div className="sp-ly sp-front" ref={frontRef} style={{ backgroundImage: `url(${BASE}layer-front.webp)` }} />
+        {/* <div className="sp-ly sp-front" ref={frontRef} style={{ backgroundImage: `url(${BASE}layer-front.webp)` }} /> */}
       </div>
 
-      <header className="sp-header">
+      <header className="sp-header -mt-20">
         <h1>
           <img src={`${BASE}hackfusion-logo.webp`} alt={`${EVENT_NAME} Sponsorship`} width="1568" height="523" />
         </h1>
@@ -191,6 +186,7 @@ export default function Sponsors() {
           </div>
         </section>
       </main>
+      {/* <Footer/> */}
     </div>
   )
 }
