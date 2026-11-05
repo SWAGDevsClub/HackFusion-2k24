@@ -6,6 +6,8 @@ import logo from "../assets/logo.png";
 import bg from "../assets/reg_bg.webp"
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer"
+import ComingSoonToast from "../components/ComingSoonToast";
+import ComingSoonBanner from "../components/ComingSoonBanner";
 
 /* ------------------------------------------------------------------ */
 /*  Things to update for HackFusion 4                                  */
@@ -1143,6 +1145,22 @@ function Register() {
               <Cube variant="ore" size={58} reverse />
             </div>
           </header>
+
+          {/* Coming Soon Toast Overlay */}
+          <ComingSoonToast
+            pageName="Registration"
+            title="COMING SOON"
+            subtitle="Official HackFusion 4.0 team registrations will open soon!"
+          />
+
+          {/* Coming Soon Banner */}
+          <div className="mb-8">
+            <ComingSoonBanner
+              text="REGISTRATIONS OPENING SOON"
+              subtitle="Get your squads ready for HackFusion 4.0"
+              withChains={true}
+            />
+          </div>
 
           {/* Shell */}
           <motion.div
