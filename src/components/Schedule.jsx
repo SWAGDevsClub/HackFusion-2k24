@@ -15,34 +15,34 @@ import bg from "../assets/schedulebg.jpg"
 const CHECKPOINTS = [
     {
         title: "Registrations",
-        date: "05 Nov – 15 Nov",
+        date: "5th Nov – 1st Dec",
         icon: "📜",
         blurb: "Register your team and claim your spot in the mine.",
         time: "Online · All day",
         details: [
-            "Teams of 2 to 4 members",
+            "Teams of 3 or 4 members",
             "Fill the form on the Register page",
             "Confirmation mail within 24 hours",
         ],
     },
     {
-        title: "Idea Submission",
-        date: "16 Nov – 25 Nov",
+        title: "Abstract Submission",
+        date: "10th Nov – 1st Dec",
         icon: "🔦",
         blurb: "Submit your idea and the problem it solves.",
         time: "Deadline · 11:59 PM",
         details: [
             "One PDF, max 5 slides",
-            "Pick a track: Web, AI, Hardware or Open",
+            "Pick your track",
             "Late submissions are not accepted",
         ],
     },
     {
-        title: "Idea Evaluation",
-        date: "26 Nov – 30 Nov",
+        title: "shortlisted Results",
+        date: "5th Dec",
         icon: "⚖️",
         blurb: "Our panel reviews every idea and picks the finalists.",
-        time: "Results · 30 Nov, 6:00 PM",
+        time: "Results · 5th Dec, 6:00 PM",
         details: [
             "Scored on impact, feasibility and originality",
             "Shortlisted teams get an email",
@@ -51,9 +51,9 @@ const CHECKPOINTS = [
     },
     {
         title: "Hacking Begins",
-        date: "29 Dec · 10:00 AM",
+        date: "29th Dec · 10:00 AM",
         icon: "⛏️",
-        blurb: "24 hours on campus. Build, break, ship.",
+        blurb: "36 hours on campus. Build, break, ship.",
         time: "SGGSIE&T Campus",
         details: [
             "Mentors available all time",
@@ -63,7 +63,7 @@ const CHECKPOINTS = [
     },
     {
         title: "Demo & Results",
-        date: "31 Dec · 5:00 PM",
+        date: "31st Dec · 5:00 PM",
         icon: "💎",
         blurb: "Pitch to the judges and find out who wins.",
         time: "5 min pitch + 3 min Q&A",
