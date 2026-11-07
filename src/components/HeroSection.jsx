@@ -220,8 +220,8 @@ export default function HeroSection() {
                     container.style.pointerEvents = "none"
                     container.style.transform = `scale3d(${maxScale}, ${maxScale}, 1)`
                 } else {
-                    container.style.visibility = "visible"
-                    container.style.pointerEvents = pZoom > 0.05 ? "none" : "auto"
+
+                    // Visibility and pointerEvents are handled dynamically based on opacity below
 
                     const scale = 1 + Math.pow(pZoom, 2.2) * (maxScale - 1)
 
@@ -231,7 +231,17 @@ export default function HeroSection() {
                         opacity = Math.max(0, 1 - Math.pow(fadeT, 1.4))
                     }
 
-                    container.style.opacity = opacity.toFixed(3)
+                    // Keep hero buttons clickable throughout zoom until the content disappears
+                    if (opacity <= 0.02) {
+                        container.style.opacity = "0"
+                        container.style.visibility = "hidden"
+                        container.style.pointerEvents = "none"
+                    } else {
+    
+                        container.style.visibility = "visible"
+                        container.style.pointerEvents = "auto"
+                        container.style.opacity = opacity.toFixed(3)
+                    }
                     // Hardware accelerated 3D transform to keep on GPU composite layer
                     container.style.transform = `scale3d(${scale.toFixed(3)}, ${scale.toFixed(3)}, 1) translateZ(0)`
                 }
@@ -288,7 +298,7 @@ export default function HeroSection() {
                     <motion.img
                         src={Logo}
                         alt="HackFusion"
-                        className="h-50 sm:h-56 md:h-75 drop-shadow-[0_10px_0_rgba(0,0,0,0.35)] -mt-20 md:mt-0 will-change-transform"
+                        className="pointer-events-none select-none h-50 sm:h-56 md:h-75 drop-shadow-[0_10px_0_rgba(0,0,0,0.35)] -mt-20 md:mt-0 will-change-transform"
                         initial={{ opacity: 0, scale: 0.7 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{
