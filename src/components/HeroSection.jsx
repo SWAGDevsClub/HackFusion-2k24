@@ -367,7 +367,7 @@ export default function HeroSection() {
                         visibility: "hidden",
                     }}
                 >
-                    <div className="flex flex-col md:flex-row items-center justify-center gap-4 sm:gap-6 md:gap-8 lg:gap-10 font-['Press_Start_2P',monospace] text-3xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl uppercase tracking-wider text-center">
+                    <div className="flex flex-col md:flex-row items-center justify-center ml-6 sm:ml-0 gap-5 sm:gap-6 md:gap-8 lg:gap-10 font-['Press_Start_2P',monospace] text-3xl sm:text-5xl md:text-3xl lg:text-4xl xl:text-5xl uppercase tracking-wider text-center">
                         {["CODE.", "COMPETE.", "CONQUER."].map((word, wordIdx) => (
                             <span key={wordIdx} className="inline-flex pb-2 pr-2">
                                 {word.split("").map((char, charIdx) => (
