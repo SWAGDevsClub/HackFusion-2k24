@@ -1,10 +1,11 @@
-import { useCallback, useEffect, useRef } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { motion } from "motion/react"
 import { Link } from "react-router-dom"
 import firstFrame from "../assets/HeroFrames/frames3/frame_001.webp"
 import Logo from "../assets/logo.png"
 import Countdown from "../components/Countdown"
 import ScrollFrames from "./ScrollFrames"
+import ShinyText from "../animations/ShinyText"
 
 const REGISTRATION_OPEN = true
 const REGISTER_PATH = "/register"
@@ -15,6 +16,9 @@ const LOGIN_PATH = "/login"
 const ZOOM_OUT_FRAME = 80
 const MAX_SCALE = 6.5
 const MOBILE_MAX_SCALE = 2.5
+
+// Frame at which the grand hall tagline starts fading in / animating.
+const HALL_START_FRAME = 115
 
 const mcBtn = [
     "group relative w-full overflow-hidden border-4 border-black bg-[var(--bg)] text-center uppercase text-white",
@@ -126,7 +130,7 @@ function McButton({ to, children, color = "#7d7d7d", disabled = false, delay = 0
         initial: { opacity: 0, y: 20 },
         animate: { opacity: disabled ? 0.65 : 1, y: 0 },
         transition: { duration: 0.5 },
-        whileHover: disabled ? undefined : {  },
+        whileHover: disabled ? undefined : {},
         whileTap: disabled ? undefined : { scale: 0.96, y: 2 },
     }
 
@@ -168,6 +172,11 @@ export default function HeroSection() {
     const hallTextRef = useRef(null)
     const originRef = useRef({ x: 50, y: 54 })
     const currentFrameRef = useRef(0)
+
+    // Drives the tagline entrance animation so it plays only once the
+    // tagline is actually revealed by scrolling (not on page load).
+    const [hallActive, setHallActive] = useState(false)
+    const hallActiveRef = useRef(false)
 
     // Dynamically calculate the transform-origin exactly between
     // the "View Problem Statement" and "Login" buttons.
@@ -237,7 +246,7 @@ export default function HeroSection() {
                         container.style.visibility = "hidden"
                         container.style.pointerEvents = "none"
                     } else {
-    
+
                         container.style.visibility = "visible"
                         container.style.pointerEvents = "auto"
                         container.style.opacity = opacity.toFixed(3)
@@ -254,16 +263,23 @@ export default function HeroSection() {
         // ----------------------------------------------------
         const hallEl = hallTextRef.current
         if (hallEl) {
-            if (frame < 115) {
+            if (frame < HALL_START_FRAME) {
                 hallEl.style.opacity = "0"
                 hallEl.style.visibility = "hidden"
             } else {
                 hallEl.style.visibility = "visible"
 
                 // Fade in smoothly as camera passes past the doors (frame 115 to 126)
-                const fadeIn = Math.min(Math.max((frame - 115) / 11, 0), 1)
+                const fadeIn = Math.min(Math.max((frame - HALL_START_FRAME) / 11, 0), 1)
                 hallEl.style.opacity = fadeIn.toFixed(3)
             }
+        }
+
+        // Flip React state only when the flag changes (not every frame)
+        const shouldBeActive = frame >= HALL_START_FRAME
+        if (shouldBeActive !== hallActiveRef.current) {
+            hallActiveRef.current = shouldBeActive
+            setHallActive(shouldBeActive)
         }
     }, [])
 
@@ -351,11 +367,36 @@ export default function HeroSection() {
                         visibility: "hidden",
                     }}
                 >
-                    {/* <div className="flex flex-col md:flex-row items-center justify-center gap-4 sm:gap-6 md:gap-8 lg:gap-10 font-['Press_Start_2P',monospace] text-3xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl uppercase tracking-wider text-[#FFE600] text-center [text-shadow:3px_3px_0_#000,5px_5px_0_rgba(0,0,0,0.8),0_0_24px_rgba(255,215,0,0.4)] drop-shadow-[0_8px_16px_rgba(0,0,0,0.85)]">
-                        <span>CODE.</span>
-                        <span>COMPETE.</span>
-                        <span>CONQUER.</span>
-                    </div> */}
+                    <div className="flex flex-col md:flex-row items-center justify-center gap-4 sm:gap-6 md:gap-8 lg:gap-10 font-['Press_Start_2P',monospace] text-3xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl uppercase tracking-wider text-center">
+                        {["CODE.", "COMPETE.", "CONQUER."].map((word, wordIdx) => (
+                            <span key={wordIdx} className="inline-flex pb-2 pr-2">
+                                {word.split("").map((char, charIdx) => (
+                                    <motion.span
+                                        key={charIdx}
+                                        className="inline-block [filter:drop-shadow(4px_4px_0px_#000000)]"
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: hallActive ? 1 : 0 }}
+                                        transition={{
+                                            // fade in letter by letter; reset instantly when scrolling back up
+                                            duration: hallActive ? 0.7 : 0,
+                                            delay: hallActive ? 0.15 + (wordIdx * 3 + charIdx) * 0.06 : 0,
+                                            ease: "easeOut",
+                                        }}
+                                    >
+                                        <ShinyText
+                                            key={hallActive ? "on" : "off"}
+                                            text={char}
+                                            color="#FFE600"
+                                            shineColor="#FFFFFA"
+                                            speed={2.5}
+                                            delay={1}
+                                            glow={0.6}
+                                        />
+                                    </motion.span>
+                                ))}
+                            </span>
+                        ))}
+                    </div>
                 </div>
             </ScrollFrames>
         </section>
