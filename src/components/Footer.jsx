@@ -475,7 +475,7 @@ export default function Footer() {
   return (
     <footer
       aria-label="Site footer"
-      className="relative w-full [--p:3px] sm:[--p:4px]"
+      className="relative w-full [--p:3px] sm:[--p:4px] z-50"
       style={{ background: "transparent", marginTop: P(-3) }}
     >
       <WoodenSeam />
@@ -552,11 +552,11 @@ export default function Footer() {
               &copy; {year} HACKFUSION. ALL RIGHTS RESERVED.
             </p>
 
-            <p
+            {/* <p
               className={`${PIXEL_FONT} text-[7px] leading-relaxed text-[#A8E063] sm:text-[8px]`}
             >
               MADE WITH BLOCKS
-            </p>
+            </p> */}
           </div>
         </div>
       </div>

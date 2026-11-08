@@ -4,6 +4,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom"
 import chainSignA from "../assets/pageassets-clean/nav-sign-chain-a.webp"
 import chainSignB from "../assets/pageassets-clean/nav-sign-chain-b.webp"
 import woodPlank from "../assets/pageassets-clean/plank-panel-wood-spare.webp"
+import swag_logo from "../assets/swag.jpeg"
 
 const MotionLink = motion.create(Link)
 const SIGN_IMAGES = [chainSignA, chainSignB]
@@ -95,11 +96,8 @@ function HangingSign({ to, index, children, square = false, onClick, label, expa
 
 /* Small pixel grass block used as the centre "logo" sign */
 function GrassBlock() {
-    return (
-        <span
-            aria-label="Home"
-            className="block h-5 w-5 shrink-0 border-[3px] border-[#2a1808] bg-[#7b5230] [image-rendering:pixelated] [background-image:linear-gradient(#63b23b_0_34%,#3f7d24_34%_42%,transparent_42%),repeating-linear-gradient(90deg,rgba(0,0,0,0.15)_0_4px,transparent_4px_8px)] sm:h-[34px] sm:w-[34px]"
-        />
+    return (     
+        <img src={swag_logo} alt="swag_logo" className="block h-6 w-6 shrink-0" />     
     )
 }
 
@@ -265,7 +263,7 @@ export default function Navbar() {
 
             {/* desktop / tablet nav: shown in the hero, otherwise only on hover */}
             <div
-                className="pointer-events-none fixed inset-x-0 top-0 z-50 hidden sm:block"
+                className="pointer-events-none fixed inset-x-0 top-0 z-50 hidden md:block"
                 onMouseEnter={showNav}
                 onMouseLeave={hideNav}
                 onFocus={showNav}
@@ -291,9 +289,9 @@ export default function Navbar() {
                         </HangingSign>
                     ))}
 
-                    <HangingSign to="/" index={2} square skipIntro={skipIntro}>
+                    {/* <HangingSign to="/" index={2} square skipIntro={skipIntro}>
                         <GrassBlock />
-                    </HangingSign>
+                    </HangingSign> */}
 
                     {RIGHT_LINKS.map((l, i) => (
                         <HangingSign
@@ -310,7 +308,7 @@ export default function Navbar() {
             </div>
 
             {/* mobile nav: home sign on the left, hamburger sign on the right (always visible) */}
-            <nav className="pointer-events-none fixed inset-x-0 top-0 z-50 flex items-start justify-between px-3 sm:hidden">
+            <nav className="pointer-events-none fixed inset-x-0 top-0 z-50 flex items-start justify-between px-3 md:hidden">
                 <HangingSign to="/" index={0} square skipIntro={skipIntro}>
                     <GrassBlock />
                 </HangingSign>
