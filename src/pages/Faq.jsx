@@ -24,7 +24,7 @@ const questions = [
   },
   {
     question: "What are the stages of the hackathon?",
-    answer: "Stage 1 is abstract submission and PPT-based selection (PPT optional). Stage 2 is the grand finale at SGGSIE&T, Nanded, Maharashtra.",
+    answer: "Stage 1 is abstract submission and PPT-based selection. Stage 2 is the grand finale at SGGSIE&T, Nanded, Maharashtra.",
   },
   {
     question: "What should we bring to the hackathon?",
@@ -39,8 +39,8 @@ const questions = [
     answer: "No.",
   },
   {
-    question: "Are a PPT or abstract required?",
-    answer: "An abstract is required; a PPT is optional. Explain your approach to solving the problem statement.",
+    question: "Are a PPT & abstract required?",
+    answer: "Yes, abstract and PPT are both required. Explain your approach to solving the problem statement.",
   },
   {
     question: "What is the last date to register?",
