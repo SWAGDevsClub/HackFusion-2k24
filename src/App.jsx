@@ -9,6 +9,7 @@ import SplashGate from "./components/SplashGate";
 import Register from "./pages/Registration";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
+import ResetPassword from "./pages/ResetPassword";
 
 import SmoothScroll from "./components/SmoothScroll";
 import ScrollToTop from "./components/ScrollToTop";
@@ -32,7 +33,8 @@ function App() {
               <Route path="/register" element={<Register />} />
               <Route path="/login" element={<Login />} />
               <Route path="/dashboard" element={<Dashboard/>} />
-              <Route path="/reset-password" element={<Login initialFlipped={true} />} />
+              <Route path="/reset-password" element={<ResetPassword />} />
+              <Route path="/reset-password/:token" element={<ResetPassword />} />
               <Route path="/forgot-password" element={<Login initialFlipped={true} />} />
             </Routes>
           </Suspense>

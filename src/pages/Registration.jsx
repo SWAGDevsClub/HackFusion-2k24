@@ -1,30 +1,30 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { motion, AnimatePresence, MotionConfig } from "motion/react";
-import { BASE_URL } from "../hooks/api";
+import { BASE_URL, uploadToSwagServer } from "../hooks/api";
 import logo from "../assets/logo.png";
 import bg from "../assets/reg_bg.webp"
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer"
-import ComingSoonToast from "../components/ComingSoonToast";
-import ComingSoonBanner from "../components/ComingSoonBanner";
+import QR_IMAGE from "../assets/hackfusionpayment.png"
 
 /* ------------------------------------------------------------------ */
 /*  Things to update for HackFusion 4                                  */
 /* ------------------------------------------------------------------ */
 const EVENT_NAME = "HackFusion 4";
-const THEME = "AI in Healthcare"; // sent to register.php as "theme" - change if the theme changed
+const THEME = "Agentic AI for Intelligent Grievance Redressal"; // sent to backend as "theme"
 const REGISTRATION_FEE = 749;
 const PS_ROUTE = "/problem-statement"; // must match the <Route path> of ProblemStatement.jsx in your router
-const QR_IMAGE = "/hackfusionpayment.jpeg";
+const PPT_TEMPLATE_URL = "https://docs.google.com/presentation/d/1B4rz5M5U-V7qcySXisUqlYIv3D__50-gkGkBehU4xgg/edit?usp=sharing";
+// const QR_IMAGE = "../assets/hackfusionpayment.png";
 const BG_IMAGE = ""; // optional: import bg from "../assets/bg.jpg" and set BG_IMAGE = bg
 
 const ABSTRACT_MIN = 150;
 const ABSTRACT_MAX = 3000;
 const TEAM_NAME_MIN = 3;
 const TEAM_NAME_MAX = 30;
-const MAX_FILE_BYTES = 1 * 1024 * 1024; // 1MB
-const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
+const MAX_FILE_BYTES = 10 * 1024 * 1024; // 10MB
+const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/jpg"];
 
 const TAB_META = {
   teamSize: { label: "Team Size", accent: "#9aa0a6" },
@@ -97,6 +97,14 @@ const checkAbstract = (v) => {
     return `Abstract can be at most ${ABSTRACT_MAX} characters`;
   return null;
 };
+const checkUrl = (v, required = false, fieldName = "Link") => {
+  const t = (v || "").trim();
+  if (!t) return required ? `${fieldName} is required` : null;
+  if (!/^https?:\/\/.+/i.test(t)) {
+    return "Enter a valid URL starting with http:// or https://";
+  }
+  return null;
+};
 const checkTeamName = (v) => {
   const t = v.trim();
   if (!t) return "Team name is required";
@@ -130,7 +138,7 @@ const sanitize = (name, v) => {
       .replace(/^\s+/, "")
       .replace(/\s{2,}/g, " ")
       .slice(0, TEAM_NAME_MAX);
-  if (name === "city")
+  if (name === "city" || name === "state")
     return v
       .replace(/[^A-Za-z .'-]/g, "")
       .replace(/^\s+/, "")
@@ -138,8 +146,7 @@ const sanitize = (name, v) => {
       .slice(0, 50);
   if (name === "college")
     return v.replace(/^\s+/, "").replace(/\s{2,}/g, " ").slice(0, 100);
-  if (name === "coupon")
-    return v.toUpperCase().replace(/[^A-Z0-9_-]/g, "").slice(0, 20);
+  if (name === "pptLink" || name === "videoLink" || name === "receiptUrl") return v.trimStart();
   if (name === "password" || name === "confirmPassword")
     return v.replace(/\s/g, "").slice(0, 64);
   if (name === "abstract") return v.slice(0, ABSTRACT_MAX);
@@ -179,8 +186,6 @@ const getTabErrors = (tabId, d, size) => {
     )
       mobMsg = "This number is already used by another team member";
     set(`${p}Mobile`, mobMsg);
-
-    if (!d[`${p}Image`]) set(`${p}Image`, "Profile picture is required");
   };
 
   switch (tabId) {
@@ -207,6 +212,7 @@ const getTabErrors = (tabId, d, size) => {
     case "team":
       set("college", checkCollege(d.college));
       set("city", checkCity(d.city));
+      if (d.state) set("state", checkCity(d.state));
       if (!d.confirmEmail.trim())
         set("confirmEmail", "Confirm email is required");
       else if (
@@ -214,15 +220,17 @@ const getTabErrors = (tabId, d, size) => {
         d.leadEmail.trim().toLowerCase()
       )
         set("confirmEmail", "Email confirmation doesn't match lead email");
-      if (d.coupon && d.coupon.length < 3)
-        set("coupon", "Coupon code must be at least 3 characters");
       break;
     case "abstract":
       set("abstract", checkAbstract(d.abstract));
+      set("pptLink", checkUrl(d.pptLink, true, "PPT Google Drive link"));
+      if (d.videoLink && d.videoLink.trim()) {
+        set("videoLink", checkUrl(d.videoLink, false, "Video Google Drive link"));
+      }
       break;
     case "payment":
-      if (!d.paymentScreenshot)
-        set("paymentScreenshot", "Payment screenshot is required");
+      if (!d.paymentScreenshot && !d.receiptUrl)
+        set("paymentScreenshot", "Payment screenshot image is required");
       if (!d.transactionId.trim())
         set("transactionId", "Transaction ID is required");
       break;
@@ -624,13 +632,17 @@ const Field = ({
   required = true,
   hint,
   className = "",
+  labelAction,
   ...rest
 }) => (
   <div className={className}>
-    <label htmlFor={name} className="mc-label">
-      {label}
-      {required && <span className="text-red-400"> *</span>}
-    </label>
+    <div className="flex items-center justify-between gap-2">
+      <label htmlFor={name} className="mc-label">
+        {label}
+        {required && <span className="text-red-400"> *</span>}
+      </label>
+      {labelAction}
+    </div>
     <motion.input
       id={name}
       type={type}
@@ -677,7 +689,7 @@ const FileField = ({
   file,
   error,
   fileError,
-  hint = "JPG, PNG or WEBP. Maximum file size: 1MB",
+  hint = "PNG, JPG, JPEG or WEBP. Maximum file size: 10MB",
   className = "",
 }) => (
   <div className={className}>
@@ -715,84 +727,102 @@ const PersonTab = ({
   title,
   formData,
   errors,
-  fileErrors,
+  fileErrors: _fileErrors,
   onChange,
   onBlur,
+  swapEmailMobile = false,
   children,
-}) => (
-  <div>
-    <SectionTitle>{title}</SectionTitle>
-    <div className="grid grid-cols-1 gap-x-5 gap-y-5 md:grid-cols-2">
-      <Field
-        label="Full Name"
-        name={`${prefix}Name`}
-        value={formData[`${prefix}Name`]}
-        onChange={onChange}
-        onBlur={onBlur}
-        error={errors[`${prefix}Name`]}
-        autoComplete="off"
-        maxLength={60}
-        placeholder="As on your college ID"
-      />
-      <Field
-        label="Email"
-        type="email"
-        name={`${prefix}Email`}
-        value={formData[`${prefix}Email`]}
-        onChange={onChange}
-        onBlur={onBlur}
-        error={errors[`${prefix}Email`]}
-        autoComplete="off"
-        maxLength={100}
-        placeholder="name@example.com"
-      />
-      <Field
-        label="Mobile"
-        type="tel"
-        inputMode="numeric"
-        name={`${prefix}Mobile`}
-        value={formData[`${prefix}Mobile`]}
-        onChange={onChange}
-        onBlur={onBlur}
-        error={errors[`${prefix}Mobile`]}
-        autoComplete="off"
-        maxLength={10}
-        placeholder="10-digit number"
-      />
-      {children}
-      <SelectField
-        label="Gender"
-        name={`${prefix}Gender`}
-        value={formData[`${prefix}Gender`]}
-        onChange={onChange}
-        options={[
-          { value: "M", text: "Male" },
-          { value: "F", text: "Female" },
-          { value: "O", text: "Other" },
-        ]}
-      />
-      <SelectField
-        label="PWD (Person with Disability)"
-        name={`${prefix}Pwd`}
-        value={formData[`${prefix}Pwd`]}
-        onChange={onChange}
-        options={[
-          { value: "no", text: "No" },
-          { value: "yes", text: "Yes" },
-        ]}
-      />
-      <FileField
-        className="md:col-span-2"
-        label="Photo * (Don't upload a passport style photo, upload a cool photo 😎)"
-        name={`${prefix}Image`}
-        onChange={onChange}
-        file={formData[`${prefix}Image`]}
-        error={errors[`${prefix}Image`]}
-        fileError={fileErrors[`${prefix}Image`]}
-      />
+}) => {
+  const nameField = (
+    <Field
+      key="name"
+      label="Full Name"
+      name={`${prefix}Name`}
+      value={formData[`${prefix}Name`]}
+      onChange={onChange}
+      onBlur={onBlur}
+      error={errors[`${prefix}Name`]}
+      autoComplete="off"
+      maxLength={60}
+      placeholder="Full name"
+    />
+  );
+
+  const emailField = (
+    <Field
+      key="email"
+      label="Email"
+      type="email"
+      name={`${prefix}Email`}
+      value={formData[`${prefix}Email`]}
+      onChange={onChange}
+      onBlur={onBlur}
+      error={errors[`${prefix}Email`]}
+      autoComplete="off"
+      maxLength={100}
+      placeholder="name@example.com"
+    />
+  );
+
+  const mobileField = (
+    <Field
+      key="mobile"
+      label="Mobile"
+      type="tel"
+      inputMode="numeric"
+      name={`${prefix}Mobile`}
+      value={formData[`${prefix}Mobile`]}
+      onChange={onChange}
+      onBlur={onBlur}
+      error={errors[`${prefix}Mobile`]}
+      autoComplete="off"
+      maxLength={10}
+      placeholder="10-digit number"
+    />
+  );
+
+  return (
+    <div>
+      <SectionTitle>{title}</SectionTitle>
+      <div className="grid grid-cols-1 gap-x-5 gap-y-5 md:grid-cols-2">
+        {nameField}
+        {swapEmailMobile ? (
+          <>
+            {mobileField}
+            {emailField}
+          </>
+        ) : (
+          <>
+            {emailField}
+            {mobileField}
+          </>
+        )}
+        {children}
+        <SelectField
+          label="Gender"
+          name={`${prefix}Gender`}
+          value={formData[`${prefix}Gender`]}
+          onChange={onChange}
+          options={[
+            { value: "M", text: "Male" },
+            { value: "F", text: "Female" },
+            { value: "O", text: "Other" },
+          ]}
+        />
+        <SelectField
+          label="PWD (Person with Disability)"
+          name={`${prefix}Pwd`}
+          value={formData[`${prefix}Pwd`]}
+          onChange={onChange}
+          options={[
+            { value: "no", text: "No" },
+            { value: "yes", text: "Yes" },
+          ]}
+        />
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 /* ------------------------------------------------------------------ */
 /*  Page                                                               */
@@ -804,10 +834,12 @@ function Register() {
     teamSize: 4,
     teamName: "",
     abstract: "",
+    pptLink: "",
+    videoLink: "",
     city: "",
     college: "",
+    state: "Maharashtra",
     confirmEmail: "",
-    coupon: "",
     leadEmail: "",
     leadGender: "M",
     leadMobile: "",
@@ -830,11 +862,8 @@ function Register() {
     m3Pwd: "no",
     password: "",
     confirmPassword: "",
-    leadImage: null,
-    m1Image: null,
-    m2Image: null,
-    m3Image: null,
     paymentScreenshot: null,
+    receiptUrl: "",
     transactionId: "",
   });
 
@@ -872,7 +901,7 @@ function Register() {
       if (file.size > MAX_FILE_BYTES) {
         setFileErrors((prev) => ({
           ...prev,
-          [name]: `File size must be less than 1MB. Current size: ${(
+          [name]: `File size must be less than 10MB. Current size: ${(
             file.size /
             (1024 * 1024)
           ).toFixed(2)}MB`,
@@ -964,75 +993,126 @@ function Register() {
 
     setIsLoading(true);
     try {
-      const formDataToSend = new FormData();
+      // 1. Resolve receipt_url: if a payment screenshot file was selected, compress to webp and upload to swagserver
+      let resolvedReceiptUrl = formData.receiptUrl ? formData.receiptUrl.trim() : "";
 
-      // Append normal fields
-      formDataToSend.append("theme", THEME);
-      formDataToSend.append("teamName", formData.teamName.trim());
-      formDataToSend.append("abstract", formData.abstract);
-      formDataToSend.append("city", formData.city);
-      formDataToSend.append("college", formData.college);
-      formDataToSend.append("coupon", formData.coupon);
-      formDataToSend.append("teamSize", formData.teamSize);
-      formDataToSend.append("password", formData.password);
-      formDataToSend.append("transactionId", formData.transactionId.trim());
-
-      // Lead
-      formDataToSend.append("leadName", formData.leadName);
-      formDataToSend.append("leadEmail", formData.leadEmail);
-      formDataToSend.append("leadMobile", formData.leadMobile);
-      formDataToSend.append("leadGender", formData.leadGender);
-      formDataToSend.append("leadIsPwd", formData.leadPwd === "yes" ? 1 : 0);
-
-      // Member 1
-      formDataToSend.append("m1Name", formData.m1Name);
-      formDataToSend.append("m1Email", formData.m1Email);
-      formDataToSend.append("m1Mobile", formData.m1Mobile);
-      formDataToSend.append("m1Gender", formData.m1Gender);
-      formDataToSend.append("m1IsPwd", formData.m1Pwd === "yes" ? 1 : 0);
-
-      // Member 2
-      formDataToSend.append("m2Name", formData.m2Name);
-      formDataToSend.append("m2Email", formData.m2Email);
-      formDataToSend.append("m2Mobile", formData.m2Mobile);
-      formDataToSend.append("m2Gender", formData.m2Gender);
-      formDataToSend.append("m2IsPwd", formData.m2Pwd === "yes" ? 1 : 0);
-
-      // Member 3 (only if teamSize === 4)
-      if (formData.teamSize === 4) {
-        formDataToSend.append("m3Name", formData.m3Name);
-        formDataToSend.append("m3Email", formData.m3Email);
-        formDataToSend.append("m3Mobile", formData.m3Mobile);
-        formDataToSend.append("m3Gender", formData.m3Gender);
-        formDataToSend.append("m3IsPwd", formData.m3Pwd === "yes" ? 1 : 0);
+      if (formData.paymentScreenshot) {
+        try {
+          const uploadRes = await uploadToSwagServer(
+            formData.paymentScreenshot,
+            `receipt_${Date.now()}.webp`
+          );
+          resolvedReceiptUrl =
+            typeof uploadRes === "object"
+              ? uploadRes.imageUrl || uploadRes.fileName
+              : String(uploadRes);
+        } catch (uploadErr) {
+          console.error("Screenshot upload error:", uploadErr);
+          alert(
+            `Failed to upload payment screenshot: ${uploadErr.message || "Unknown error"}. Please check your connection and try again.`
+          );
+          setIsLoading(false);
+          return;
+        }
       }
 
-      // Files
-      if (formData.leadImage)
-        formDataToSend.append("leadProfilePic", formData.leadImage);
-      if (formData.m1Image)
-        formDataToSend.append("m1ProfilePic", formData.m1Image);
-      if (formData.m2Image)
-        formDataToSend.append("m2ProfilePic", formData.m2Image);
-      if (formData.m3Image)
-        formDataToSend.append("m3ProfilePic", formData.m3Image);
-      if (formData.paymentScreenshot)
-        formDataToSend.append("paymentProof", formData.paymentScreenshot);
+      if (!resolvedReceiptUrl) {
+        alert("Payment screenshot is required. Please upload your payment screenshot.");
+        setIsLoading(false);
+        return;
+      }
 
-      // API Request
-      const response = await fetch(`${BASE_URL}/register.php`, {
+      // Build players array for PublicTeamRegistrationRequest
+      const players = [
+        {
+          name: formData.leadName.trim(),
+          email: formData.leadEmail.trim(),
+          phone: formData.leadMobile.trim(),
+          gender: formData.leadGender,
+          pwd: formData.leadPwd === "yes",
+          is_leader: true,
+        },
+        {
+          name: formData.m1Name.trim(),
+          email: formData.m1Email.trim(),
+          phone: formData.m1Mobile.trim(),
+          gender: formData.m1Gender,
+          pwd: formData.m1Pwd === "yes",
+          is_leader: false,
+        },
+        {
+          name: formData.m2Name.trim(),
+          email: formData.m2Email.trim(),
+          phone: formData.m2Mobile.trim(),
+          gender: formData.m2Gender,
+          pwd: formData.m2Pwd === "yes",
+          is_leader: false,
+        },
+      ];
+
+      if (formData.teamSize === 4) {
+        players.push({
+          name: formData.m3Name.trim(),
+          email: formData.m3Email.trim(),
+          phone: formData.m3Mobile.trim(),
+          gender: formData.m3Gender,
+          pwd: formData.m3Pwd === "yes",
+          is_leader: false,
+        });
+      }
+
+      // Append links to abstract text for complete visibility in any admin/dashboard viewer
+      let finalAbstract = formData.abstract.trim();
+      if (formData.pptLink && formData.pptLink.trim()) {
+        finalAbstract += `\n\nPPT Drive Link: ${formData.pptLink.trim()}`;
+      }
+      if (formData.videoLink && formData.videoLink.trim()) {
+        finalAbstract += `\nVideo Drive Link: ${formData.videoLink.trim()}`;
+      }
+
+      const registrationPayload = {
+        team_name: formData.teamName.trim(),
+        description: formData.abstract.trim().slice(0, 200),
+        theme: THEME,
+        abstract: finalAbstract,
+        city: formData.city.trim(),
+        college: formData.college.trim(),
+        state: formData.state ? formData.state.trim() : "Maharashtra",
+        shared_password: formData.password,
+        payment_transaction_id: formData.transactionId.trim(),
+        receipt_url: resolvedReceiptUrl,
+        ppt_link: formData.pptLink.trim(),
+        players,
+      };
+
+      // API Request to registrations endpoint using application/json
+      const response = await fetch(`${BASE_URL}/registrations/teams`, {
         method: "POST",
-        body: formDataToSend,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(registrationPayload),
       });
 
       const result = await response.json();
-      console.log("Response:", result);
+      console.log("Registration response:", result);
 
-      if (result.success) {
-        alert(`Registration successful! Team ID: ${result.data.team_id}`);
+      if (response.ok || response.status === 201) {
+        alert(
+          result.message ||
+          `Registration successful! Team: ${result.team_name || formData.teamName} (ID: ${result.team_id})`
+        );
         navigate("/login");
       } else {
-        alert(`Registration failed: ${result.message}`);
+        const errorMsg =
+          result.error?.message ||
+          (Array.isArray(result.error?.details)
+            ? result.error.details.map((d) => d.message).join(", ")
+            : null) ||
+          result.detail ||
+          result.message ||
+          "Registration failed. Please check your submission.";
+        alert(`Registration failed: ${errorMsg}`);
       }
     } catch (error) {
       console.error("Error submitting form:", error);
@@ -1145,22 +1225,6 @@ function Register() {
               <Cube variant="ore" size={58} reverse />
             </div>
           </header>
-
-          {/* Coming Soon Toast Overlay */}
-          <ComingSoonToast
-            pageName="Registration"
-            title="COMING SOON"
-            subtitle="Official HackFusion 4.0 team registrations will open soon!"
-          />
-
-          {/* Coming Soon Banner */}
-          <div className="mb-8">
-            <ComingSoonBanner
-              text="REGISTRATIONS OPENING SOON"
-              subtitle="Get your squads ready for HackFusion 4.0"
-              withChains={true}
-            />
-          </div>
 
           {/* Shell */}
           <motion.div
@@ -1333,6 +1397,7 @@ function Register() {
                           fileErrors={fileErrors}
                           onChange={handleInputChange}
                           onBlur={handleBlur}
+                          swapEmailMobile={true}
                         >
                           <Field
                             label="Password"
@@ -1415,15 +1480,6 @@ function Register() {
                               placeholder="Full college name"
                             />
                             <Field
-                              label="City"
-                              name="city"
-                              value={formData.city}
-                              onChange={handleInputChange}
-                              onBlur={handleBlur}
-                              error={errors.city}
-                              maxLength={50}
-                            />
-                            <Field
                               label="Confirm Email"
                               type="email"
                               name="confirmEmail"
@@ -1436,15 +1492,24 @@ function Register() {
                               autoComplete="off"
                             />
                             <Field
-                              label="Coupon Code (Optional)"
-                              name="coupon"
-                              value={formData.coupon}
+                              label="City"
+                              name="city"
+                              value={formData.city}
                               onChange={handleInputChange}
                               onBlur={handleBlur}
-                              error={errors.coupon}
-                              required={false}
-                              maxLength={20}
-                              placeholder="Enter coupon code if available"
+                              error={errors.city}
+                              maxLength={50}
+                              placeholder="City"
+                            />
+                            <Field
+                              label="State"
+                              name="state"
+                              value={formData.state}
+                              onChange={handleInputChange}
+                              onBlur={handleBlur}
+                              error={errors.state}
+                              maxLength={50}
+                              placeholder="State"
                             />
                           </div>
                         </div>
@@ -1453,7 +1518,7 @@ function Register() {
                       {/* Abstract Tab */}
                       {activeTab === "abstract" && (
                         <div>
-                          <SectionTitle>Abstract and PPT Submission</SectionTitle>
+                          <SectionTitle>Abstract & Presentation Submission</SectionTitle>
                           <div className="mc-note mb-5">
                             <Link to={PS_ROUTE} target="_blank" rel="noopener noreferrer">
                               Read the Problem Statement
@@ -1462,38 +1527,99 @@ function Register() {
                               Opens in a new tab, so your form stays as it is.
                             </span>
                           </div>
-                          <label htmlFor="abstract" className="mc-label">
-                            Project Abstract <span className="text-red-400">*</span>
-                          </label>
-                          <p className="mc-hint !mt-0 mb-2">
-                            Minimum {ABSTRACT_MIN} characters. You can edit the
-                            abstract after submission from the dashboard. PPT is
-                            optional: add the link in the abstract if you have one.
-                          </p>
-                          <motion.textarea
-                            id="abstract"
-                            name="abstract"
-                            value={formData.abstract}
-                            onChange={handleInputChange}
-                            onBlur={handleBlur}
-                            rows="8"
-                            maxLength={ABSTRACT_MAX}
-                            className={`mc-input ${errors.abstract ? "err" : ""}`}
-                            animate={errors.abstract ? shake : { x: 0 }}
-                            transition={{ duration: 0.35 }}
-                            placeholder="Describe your project idea, approach, and expected outcomes..."
-                            required
-                          />
-                          {errors.abstract && <ErrorText>{errors.abstract}</ErrorText>}
-                          <p
-                            className="mc-hint"
-                            style={{ color: abstractLen >= ABSTRACT_MIN ? "#7dea2b" : undefined }}
-                          >
-                            {formData.abstract.length}/{ABSTRACT_MAX} characters
-                            {abstractLen < ABSTRACT_MIN
-                              ? ` (${ABSTRACT_MIN - abstractLen} more needed)`
-                              : ""}
-                          </p>
+                          <div className="space-y-6">
+                            <div>
+                              <label htmlFor="abstract" className="mc-label">
+                                Project Abstract <span className="text-red-400">*</span>
+                              </label>
+                              <p className="mc-hint !mt-0 mb-2">
+                                Minimum {ABSTRACT_MIN} characters. Explain your approach to solving the problem statement. You can edit your abstract or drive links from the dashboard
+                              </p>
+                              <motion.textarea
+                                id="abstract"
+                                name="abstract"
+                                value={formData.abstract}
+                                onChange={handleInputChange}
+                                onBlur={handleBlur}
+                                rows="7"
+                                maxLength={ABSTRACT_MAX}
+                                className={`mc-input ${errors.abstract ? "err" : ""}`}
+                                animate={errors.abstract ? shake : { x: 0 }}
+                                transition={{ duration: 0.35 }}
+                                placeholder="Describe your project idea, approach, and expected outcomes..."
+                                required
+                              />
+                              {errors.abstract && <ErrorText>{errors.abstract}</ErrorText>}
+                              <p
+                                className="mc-hint"
+                                style={{ color: abstractLen >= ABSTRACT_MIN ? "#7dea2b" : undefined }}
+                              >
+                                {formData.abstract.length}/{ABSTRACT_MAX} characters
+                                {abstractLen < ABSTRACT_MIN
+                                  ? ` (${ABSTRACT_MIN - abstractLen} more needed)`
+                                  : ""}
+                              </p>
+                            </div>
+
+                            <div className="pt-2 border-t border-black/40 space-y-4">
+                              {/* Official PPT Template Callout */}
+                              <div className="mc-note flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-[#4fa22a] bg-[#16240d] text-[#d6f7be]">
+                                <div>
+                                  <span className="font-['Press_Start_2P',monospace] text-[10px] text-[#7dea2b] block mb-1">
+                                    OFFICIAL PRESENTATION TEMPLATE
+                                  </span>
+                                  <span className="block text-[19px] opacity-90 leading-tight">
+                                    Use the official HackFusion slide template to prepare your Round 1 presentation submission.
+                                  </span>
+                                </div>
+                                <a
+                                  href={PPT_TEMPLATE_URL}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="mc-btn sm green whitespace-nowrap self-start sm:self-auto inline-flex items-center gap-1.5 text-xs py-2 px-3 text-white"
+                                >
+                                  <span>Open PPT Template</span>
+                                  <span>↗</span>
+                                </a>
+                              </div>
+
+                              <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+                                <Field
+                                  label="PPT Google Drive Link"
+                                  labelAction={
+                                    <a
+                                      href={PPT_TEMPLATE_URL}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="text-[#7dea2b] hover:text-white underline text-[18px] inline-flex items-center gap-1 cursor-pointer"
+                                      title="Open official Google Slides PPT template"
+                                    >
+                                      <span>[ PPT Template ↗ ]</span>
+                                    </a>
+                                  }
+                                  name="pptLink"
+                                  value={formData.pptLink}
+                                  onChange={handleInputChange}
+                                  onBlur={handleBlur}
+                                  error={errors.pptLink}
+                                  required={true}
+                                  placeholder="https://docs.google.com/presentation/d/... or Google Drive link"
+                                  hint="Compulsory: Google Drive link to your presentation PPT (Make sure viewing access is set to 'Anyone with the link can view')"
+                                />
+                                <Field
+                                  label="Video Google Drive Link (Optional)"
+                                  name="videoLink"
+                                  value={formData.videoLink}
+                                  onChange={handleInputChange}
+                                  onBlur={handleBlur}
+                                  error={errors.videoLink}
+                                  required={false}
+                                  placeholder="https://drive.google.com/... (optional)"
+                                  hint="Optional: Google Drive link to your demo or explanation video"
+                                />
+                              </div>
+                            </div>
+                          </div>
                         </div>
                       )}
 
@@ -1512,7 +1638,7 @@ function Register() {
                                 2. Pay the registration fee of ₹{REGISTRATION_FEE} per team
                               </li>
                               <li>3. Take a screenshot of the successful payment</li>
-                              <li>4. Upload the screenshot below</li>
+                              <li>4. Upload the screenshot (PNG, JPG, JPEG, WEBP) below</li>
                             </ol>
 
                             <div className="mt-6 flex flex-col items-center gap-6 md:flex-row md:items-start">
@@ -1534,23 +1660,33 @@ function Register() {
 
                               <div className="w-full flex-1">
                                 <FileField
-                                  label="Payment Screenshot"
+                                  label="Payment Screenshot (PNG, JPG, JPEG, WEBP) *"
                                   name="paymentScreenshot"
                                   onChange={handleInputChange}
                                   file={formData.paymentScreenshot}
                                   error={errors.paymentScreenshot}
                                   fileError={fileErrors.paymentScreenshot}
-                                  hint="Upload a clear screenshot of your successful payment. JPG, PNG or WEBP, maximum 1MB"
+                                  hint="Accepted: PNG, JPG, JPEG, WEBP. Automatically compressed to lossless WebP and hosted."
                                 />
+
+                                {formData.paymentScreenshot && (
+                                  <div className="mt-2.5 p-2.5 bg-[#1b2a1a] border-2 border-[#55c038] text-[20px] text-[#7dea2b] flex items-center gap-2">
+                                    <span>✔</span>
+                                    <span>
+                                      Selected: {formData.paymentScreenshot.name} ({(formData.paymentScreenshot.size / 1024).toFixed(1)} KB) — ready for WebP compression & upload
+                                    </span>
+                                  </div>
+                                )}
+
                                 <Field
                                   className="mt-5"
-                                  label="Transaction ID"
+                                  label="Transaction ID / UTR *"
                                   name="transactionId"
                                   value={formData.transactionId}
                                   onChange={handleInputChange}
                                   onBlur={handleBlur}
                                   error={errors.transactionId}
-                                  placeholder="Enter your payment transaction ID"
+                                  placeholder="Enter your payment transaction ID or UTR"
                                   autoComplete="off"
                                 />
                                 <div className="mc-note mt-5">

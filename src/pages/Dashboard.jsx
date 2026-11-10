@@ -2,10 +2,11 @@ import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Camera, X, Check, Crop, UserPlus, Trash2 } from "lucide-react";
-import { BASE_URL } from "../hooks/api";
-import logo from "../assets/logo.png";
+import { BASE_URL, convertToWebp, getApiErrorMessage, uploadToSwagServer } from "../hooks/api";
+// import logo from "../assets/logo.png";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import beestacklogo from "../assets/beestacklogo.png"
 /* ------------------------------------------------------------------ */
 /*  Things to update                                                   */
 /* ------------------------------------------------------------------ */
@@ -259,7 +260,53 @@ const statusTone = (v = "") => {
     return "green";
 };
 
-const genderText = (g) => (g === "M" ? "Male" : g === "F" ? "Female" : "Other");
+const genderText = (g) => {
+    if (!g) return "Other";
+    const s = String(g).trim().toLowerCase();
+    if (s === "m" || s === "male") return "Male";
+    if (s === "f" || s === "female") return "Female";
+    return "Other";
+};
+
+const normGender = (g) => {
+    const s = String(g || "").trim().toLowerCase();
+    if (s === "f" || s === "female") return "F";
+    if (s === "m" || s === "male") return "M";
+    return "O";
+};
+
+export const SWAG_IMAGE_BASE_URL = "https://swagserver.co.in/hackfusion/uploads/images/";
+
+export const getProfileImageUrl = (src) => {
+    if (!src || typeof src !== "string") return "";
+    const trimmed = src.trim();
+    if (!trimmed || trimmed === "null" || trimmed === "undefined") return "";
+
+    // If it's a temporary blob URL or data URL (from browser local upload/cropping)
+    if (trimmed.startsWith("blob:") || trimmed.startsWith("data:")) {
+        return trimmed;
+    }
+
+    // If it already has the exact swagserver uploads URL prefix
+    if (trimmed.startsWith(SWAG_IMAGE_BASE_URL)) {
+        return trimmed;
+    }
+
+    // If it's already an absolute URL pointing to swagserver images
+    if (trimmed.includes("swagserver.co.in/hackfusion/uploads/images/")) {
+        const filePart = trimmed.split("swagserver.co.in/hackfusion/uploads/images/").pop();
+        return `${SWAG_IMAGE_BASE_URL}${filePart}`;
+    }
+
+    // If it's another absolute external URL (e.g. google, gravatar)
+    if (trimmed.startsWith("http://") || trimmed.startsWith("https://")) {
+        return trimmed;
+    }
+
+    // Strip leading slashes, "uploads/images/", etc. so we never duplicate the path
+    const cleanFileName = trimmed.replace(/^\/?(hackfusion\/uploads\/images\/|uploads\/images\/|\/)+/, "");
+    return `${SWAG_IMAGE_BASE_URL}${cleanFileName}`;
+};
 
 const Card = ({ title, accent, delay = 0, leading, action, className = "", children }) => (
     <section
@@ -489,7 +536,8 @@ function Dashboard() {
         abstract: false,
     });
 
-    const [hideEditButtons, setHideEditButtons] = useState(false);
+    const [hideEditButtons, setHideEditButtons] = useState(true);
+    const [isUploadingImage, setIsUploadingImage] = useState(false);
     const [imageEditMode, setImageEditMode] = useState({
         lead: false,
         member1: false,
@@ -656,79 +704,193 @@ function Dashboard() {
         };
     }, [teamData]);
 
-    const fetchDashboardData = (token) => {
-        axios
-            .get(
-                `${BASE_URL}/get_dashboard.php?token=${token}`
-            )
-            .then((res) => {
-                console.log(res.data);
-                if (res.data.success) {
-                    const data = res.data.data;
-                    const leadMember = data.members.find(
-                        (member) => member.is_lead === 1
-                    );
-                    const otherMembers = data.members.filter(
-                        (member) => member.is_lead === 0
-                    );
+    const fetchDashboardData = async (token) => {
+        try {
+            const authHeader = { Authorization: `Bearer ${token}` };
 
-                    const transformedData = {
-                        teamId: data.team_id,
-                        teamName: data.team_name,
-                        theme: data.theme,
-                        abstract: data.abstract,
-                        teamSize: data.team_size,
-                        city: data.city,
-                        college: data.college,
-                        coupon: data.coupon,
-                        paymentStatus: data.payment_status,
-                        registrationStatus: data.registration_status,
-                        teamLogo: data.team_logo,
-                        paymentProof: data.payment_proof,
+            // 1. Fetch current authenticated user profile
+            const meRes = await axios.get(`${BASE_URL}/auth/me`, { headers: authHeader });
+            const meUser = meRes.data;
 
-                        leadId: leadMember?.member_id || "",
-                        leadName: leadMember?.name || "",
-                        leadEmail: leadMember?.email || "",
-                        leadMobile: leadMember?.mobile || "",
-                        leadGender: leadMember?.gender || "M",
-                        leadPwd: leadMember?.is_pwd === 1 ? "yes" : "no",
-                        leadProfilePic: leadMember?.profile_pic || "",
+            let currentTeamId = null;
+            let currentIsLead = false;
 
-                        m1Id: otherMembers[0]?.member_id || "",
-                        m1Name: otherMembers[0]?.name || "",
-                        m1Email: otherMembers[0]?.email || "",
-                        m1Mobile: otherMembers[0]?.mobile || "",
-                        m1Gender: otherMembers[0]?.gender || "M",
-                        m1Pwd: otherMembers[0]?.is_pwd === 1 ? "yes" : "no",
-                        m1ProfilePic: otherMembers[0]?.profile_pic || "",
-
-                        m2Id: otherMembers[1]?.member_id || "",
-                        m2Name: otherMembers[1]?.name || "",
-                        m2Email: otherMembers[1]?.email || "",
-                        m2Mobile: otherMembers[1]?.mobile || "",
-                        m2Gender: otherMembers[1]?.gender || "M",
-                        m2Pwd: otherMembers[1]?.is_pwd === 1 ? "yes" : "no",
-                        m2ProfilePic: otherMembers[1]?.profile_pic || "",
-
-                        m3Id: otherMembers[2]?.member_id || "",
-                        m3Name: otherMembers[2]?.name || "",
-                        m3Email: otherMembers[2]?.email || "",
-                        m3Mobile: otherMembers[2]?.mobile || "",
-                        m3Gender: otherMembers[2]?.gender || "M",
-                        m3Pwd: otherMembers[2]?.is_pwd === 1 ? "yes" : "no",
-                        m3ProfilePic: otherMembers[2]?.profile_pic || "",
-                    };
-
-                    setTeamData(transformedData);
-                } else {
-                    alert(res.data.message);
-                    navigate("/login");
+            // 2. Fetch player info from /players/{user_id}
+            try {
+                const playerRes = await axios.get(`${BASE_URL}/players/${meUser.id}`, {
+                    headers: authHeader,
+                });
+                if (playerRes.data) {
+                    currentTeamId = playerRes.data.team_id;
+                    currentIsLead = Boolean(playerRes.data.is_leader);
                 }
-            })
-            .catch((err) => {
-                console.error(err);
-                navigate("/login");
-            });
+            } catch {
+                // If not found in /players, try cached user in localStorage
+            }
+
+            if (!currentTeamId) {
+                const storedUser = localStorage.getItem("user")
+                    ? JSON.parse(localStorage.getItem("user"))
+                    : null;
+                currentTeamId = storedUser?.team_id || null;
+                if (storedUser?.is_lead) currentIsLead = true;
+            }
+
+            // Fallback: list teams if teamId still not known
+            if (!currentTeamId) {
+                try {
+                    const teamsRes = await axios.get(`${BASE_URL}/teams?limit=1`, {
+                        headers: authHeader,
+                    });
+                    const teams = Array.isArray(teamsRes.data)
+                        ? teamsRes.data
+                        : teamsRes.data?.items || [];
+                    if (teams.length > 0) {
+                        currentTeamId = teams[0].id;
+                    }
+                } catch {
+                    // ignore
+                }
+            }
+
+            if (!currentTeamId) {
+                alert("No team associated with your account.");
+                return;
+            }
+
+            setIsLead(currentIsLead ? 1 : 0);
+            setUserId(meUser.id);
+
+            // 3. Fetch team details, team players, and coupon balance in parallel
+            const [teamRes, playersRes, couponRes] = await Promise.allSettled([
+                axios.get(`${BASE_URL}/teams/${currentTeamId}`, { headers: authHeader }),
+                axios.get(`${BASE_URL}/teams/${currentTeamId}/players`, { headers: authHeader }),
+                axios.get(`${BASE_URL}/coupons/me`, { headers: authHeader }),
+            ]);
+
+            const team = teamRes.status === "fulfilled" ? teamRes.value.data : {};
+            const couponData = couponRes.status === "fulfilled" ? couponRes.value.data : null;
+
+            // Merge players from both /teams/{id} and /teams/{id}/players
+            // team.players directly contains name, email, phone, gender, pwd as shown in backend response
+            const teamPlayersFromTeam = Array.isArray(team.players) ? team.players : [];
+            const teamPlayersFromEndpoint =
+                playersRes.status === "fulfilled" && Array.isArray(playersRes.value.data)
+                    ? playersRes.value.data
+                    : [];
+
+            const playerMap = new Map();
+            for (const p of teamPlayersFromEndpoint) {
+                const key = p.user_id || p.id || p.email || p.name;
+                if (key) playerMap.set(key, { ...p });
+            }
+            for (const p of teamPlayersFromTeam) {
+                const key = p.user_id || p.id || p.email || p.name;
+                if (key) {
+                    const existing = playerMap.get(key) || {};
+                    playerMap.set(key, { ...existing, ...p });
+                }
+            }
+
+            const teamPlayers =
+                playerMap.size > 0
+                    ? Array.from(playerMap.values())
+                    : teamPlayersFromTeam.length > 0
+                        ? teamPlayersFromTeam
+                        : teamPlayersFromEndpoint;
+
+            // Separate leader and teammates
+            const leadPlayer =
+                teamPlayers.find((p) => Boolean(p.is_leader) || Boolean(p.is_lead)) ||
+                teamPlayers.find((p) => p.user_id === meUser.id || p.id === meUser.id) ||
+                teamPlayers[0];
+
+            const otherPlayers = teamPlayers.filter((p) => p !== leadPlayer);
+
+            const getPlayerProp = (player, ...keys) => {
+                if (!player) return "";
+                for (const k of keys) {
+                    if (player[k] !== undefined && player[k] !== null && String(player[k]).trim() !== "") {
+                        return String(player[k]).trim();
+                    }
+                    if (
+                        player.user &&
+                        player.user[k] !== undefined &&
+                        player.user[k] !== null &&
+                        String(player.user[k]).trim() !== ""
+                    ) {
+                        return String(player.user[k]).trim();
+                    }
+                }
+                return "";
+            };
+
+            const transformedData = {
+                teamId: team.id || currentTeamId,
+                teamName: team.name || "My Team",
+                theme: team.theme || "",
+                abstract: team.abstract || "",
+                pptLink: team.ppt_link || "",
+                teamSize: team.size || teamPlayers.length || 3,
+                city: team.city || "",
+                college: team.college || "",
+                state: team.state || "",
+                coupon: couponData?.coupon_balance ?? 0,
+                round1Passed: Boolean(team.round_1_passed),
+                allottedLab: team.allotted_lab || null,
+                verificationStatus: team.verification_status || "APPROVED",
+                teamLogo: getProfileImageUrl(team.team_profile_pic),
+                paymentProof: team.receipt_url || "",
+
+                leadId: leadPlayer?.user_id || leadPlayer?.id || leadPlayer?.user?.id || (currentIsLead ? meUser.id : ""),
+                leadName: getPlayerProp(leadPlayer, "name", "full_name") || (currentIsLead ? meUser.name : "Team Lead"),
+                leadEmail: getPlayerProp(leadPlayer, "email") || (currentIsLead ? meUser.email : ""),
+                leadMobile: getPlayerProp(leadPlayer, "phone", "mobile", "contact_number"),
+                leadGender: normGender(getPlayerProp(leadPlayer, "gender")),
+                leadPwd: (leadPlayer?.pwd === true || leadPlayer?.pwd === "yes" || leadPlayer?.is_pwd === true) ? "yes" : "no",
+                leadProfilePic: getProfileImageUrl(
+                    team.team_profile_pic ||
+                    getPlayerProp(leadPlayer, "profile_url", "profile_pic", "profile_picture", "image_url", "image") ||
+                    ""
+                ),
+
+                m1Id: otherPlayers[0]?.user_id || otherPlayers[0]?.id || otherPlayers[0]?.user?.id || "",
+                m1Name: getPlayerProp(otherPlayers[0], "name", "full_name"),
+                m1Email: getPlayerProp(otherPlayers[0], "email"),
+                m1Mobile: getPlayerProp(otherPlayers[0], "phone", "mobile", "contact_number"),
+                m1Gender: normGender(getPlayerProp(otherPlayers[0], "gender")),
+                m1Pwd: (otherPlayers[0]?.pwd === true || otherPlayers[0]?.pwd === "yes" || otherPlayers[0]?.is_pwd === true) ? "yes" : "no",
+                m1ProfilePic: getProfileImageUrl(
+                    getPlayerProp(otherPlayers[0], "profile_url", "profile_pic", "profile_picture", "image_url", "image")
+                ),
+
+                m2Id: otherPlayers[1]?.user_id || otherPlayers[1]?.id || otherPlayers[1]?.user?.id || "",
+                m2Name: getPlayerProp(otherPlayers[1], "name", "full_name"),
+                m2Email: getPlayerProp(otherPlayers[1], "email"),
+                m2Mobile: getPlayerProp(otherPlayers[1], "phone", "mobile", "contact_number"),
+                m2Gender: normGender(getPlayerProp(otherPlayers[1], "gender")),
+                m2Pwd: (otherPlayers[1]?.pwd === true || otherPlayers[1]?.pwd === "yes" || otherPlayers[1]?.is_pwd === true) ? "yes" : "no",
+                m2ProfilePic: getProfileImageUrl(
+                    getPlayerProp(otherPlayers[1], "profile_url", "profile_pic", "profile_picture", "image_url", "image")
+                ),
+
+                m3Id: otherPlayers[2]?.user_id || otherPlayers[2]?.id || otherPlayers[2]?.user?.id || "",
+                m3Name: getPlayerProp(otherPlayers[2], "name", "full_name"),
+                m3Email: getPlayerProp(otherPlayers[2], "email"),
+                m3Mobile: getPlayerProp(otherPlayers[2], "phone", "mobile", "contact_number"),
+                m3Gender: normGender(getPlayerProp(otherPlayers[2], "gender")),
+                m3Pwd: (otherPlayers[2]?.pwd === true || otherPlayers[2]?.pwd === "yes" || otherPlayers[2]?.is_pwd === true) ? "yes" : "no",
+                m3ProfilePic: getProfileImageUrl(
+                    getPlayerProp(otherPlayers[2], "profile_url", "profile_pic", "profile_picture", "image_url", "image")
+                ),
+            };
+
+            setTeamData(transformedData);
+        } catch (err) {
+            console.error("Dashboard fetch error:", err);
+            alert(getApiErrorMessage(err, "Failed to load dashboard data. Please log in again."));
+            navigate("/login");
+        }
     };
 
     const handleInputChange = (e) => {
@@ -764,8 +926,8 @@ function Dashboard() {
         if (!passwordData.newPassword) {
             errors.newPassword = "New password is required";
         }
-        if (passwordData.newPassword.length < 6) {
-            errors.newPassword = "Password must be at least 6 characters";
+        if (passwordData.newPassword.length < 12) {
+            errors.newPassword = "Password must be at least 12 characters";
         }
         if (!passwordData.confirmNewPassword) {
             errors.confirmNewPassword = "Please confirm new password";
@@ -789,20 +951,23 @@ function Dashboard() {
 
         try {
             const token = localStorage.getItem("authToken");
-            const userEmail = teamData.leadEmail;
 
             const response = await axios.post(
-                `${BASE_URL}/change_password.php`,
+                `${BASE_URL}/auth/change-password`,
                 {
-                    email: userEmail,
-                    token: token,
-                    oldPassword: passwordData.oldPassword,
-                    newPassword: passwordData.newPassword,
+                    current_password: passwordData.oldPassword,
+                    new_password: passwordData.newPassword,
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "application/json",
+                    },
                 }
             );
 
-            if (response.data.success) {
-                alert("Password changed successfully!");
+            if (response.status === 200) {
+                alert(response.data?.message || "Password changed successfully!");
                 setShowChangePasswordModal(false);
                 setPasswordData({
                     oldPassword: "",
@@ -811,11 +976,11 @@ function Dashboard() {
                 });
                 setPasswordErrors({});
             } else {
-                alert("Failed to change password: " + response.data.message);
+                alert("Failed to change password: " + (response.data?.message || "Error"));
             }
         } catch (error) {
             console.error("Error changing password:", error);
-            alert("Error changing password. Please try again.");
+            alert(getApiErrorMessage(error, "Error changing password. Please try again."));
         } finally {
             setIsChangingPassword(false);
         }
@@ -831,117 +996,77 @@ function Dashboard() {
 
     const handleDeleteMember = async (e) => {
         e.preventDefault();
-
-        if (!deletePassword) {
-            setDeleteError("Password is required");
-            return;
-        }
-
-        setIsDeletingMember(true);
-        setDeleteError("");
-
-        try {
-            const token = localStorage.getItem("authToken");
-            const leadEmail = teamData.leadEmail;
-            const teamId = teamData.teamId;
-
-            const response = await axios.post(
-                `${BASE_URL}/delete_member.php`,
-                {
-                    leadEmail: leadEmail,
-                    leadToken: token,
-                    teamId: teamId,
-                    password: deletePassword,
-                    memberId: memberToDelete.id,
-                }
-            );
-
-            if (response.data.success) {
-                alert(`Member ${memberToDelete.name} deleted successfully!`);
-                setShowDeleteMemberModal(false);
-                setMemberToDelete(null);
-                setDeletePassword("");
-
-                // Refresh dashboard data
-                fetchDashboardData(token);
-            } else {
-                setDeleteError(response.data.message || "Failed to delete member");
-            }
-        } catch (error) {
-            console.error("Error deleting member:", error);
-            setDeleteError("Error deleting member. Please try again.");
-        } finally {
-            setIsDeletingMember(false);
-        }
+        alert("Member deletions cannot be performed directly. Please contact an organizer or admin.");
+        setShowDeleteMemberModal(false);
+        setMemberToDelete(null);
+        setDeletePassword("");
     };
 
     const saveChanges = async (section) => {
         const token = localStorage.getItem("authToken");
-        let payload = { token };
-
-        switch (section) {
-            case "teamInfo":
-                payload.edit_type = "team";
-                payload.college = teamData.college;
-                payload.city = teamData.city;
-                break;
-
-            case "abstract":
-                payload.edit_type = "team";
-                payload.abstract = teamData.abstract;
-                break;
-
-            case "lead":
-                payload.edit_type = "member";
-                payload.member_id = teamData.leadId;
-                payload.name = teamData.leadName;
-                payload.email = teamData.leadEmail;
-                payload.mobile = teamData.leadMobile;
-                break;
-
-            case "member1":
-                payload.edit_type = "member";
-                payload.member_id = teamData.m1Id;
-                payload.name = teamData.m1Name;
-                payload.email = teamData.m1Email;
-                payload.mobile = teamData.m1Mobile;
-                break;
-
-            case "member2":
-                payload.edit_type = "member";
-                payload.member_id = teamData.m2Id;
-                payload.name = teamData.m2Name;
-                payload.email = teamData.m2Email;
-                payload.mobile = teamData.m2Mobile;
-                break;
-
-            case "member3":
-                payload.edit_type = "member";
-                payload.member_id = teamData.m3Id;
-                payload.name = teamData.m3Name;
-                payload.email = teamData.m3Email;
-                payload.mobile = teamData.m3Mobile;
-                break;
-
-            default:
-                return;
-        }
+        const authHeader = {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+        };
 
         try {
-            const res = await axios.post(
-                `${BASE_URL}/edit_team.php`,
-                payload
-            );
-
-            if (res.data.success) {
-                alert("Information updated successfully");
+            if (section === "teamInfo") {
+                await axios.patch(
+                    `${BASE_URL}/teams/${teamData.teamId}`,
+                    {
+                        college: teamData.college,
+                        city: teamData.city,
+                    },
+                    { headers: authHeader }
+                );
+                alert("Team information updated successfully");
+                toggleEditMode(section);
+            } else if (section === "abstract") {
+                await axios.patch(
+                    `${BASE_URL}/teams/${teamData.teamId}`,
+                    {
+                        abstract: teamData.abstract,
+                        ppt_link: teamData.pptLink || null,
+                    },
+                    { headers: authHeader }
+                );
+                alert("Abstract & PPT link updated successfully");
+                toggleEditMode(section);
+            } else if (["lead", "member1", "member2", "member3"].includes(section)) {
+                const prefixMap = {
+                    lead: "lead",
+                    member1: "m1",
+                    member2: "m2",
+                    member3: "m3",
+                };
+                const prefix = prefixMap[section];
+                const memberUserId = teamData[`${prefix}Id`];
+                if (memberUserId) {
+                    await axios.patch(
+                        `${BASE_URL}/teams/${teamData.teamId}`,
+                        {
+                            members: [
+                                {
+                                    user_id: memberUserId,
+                                    name: teamData[`${prefix}Name`],
+                                    email: teamData[`${prefix}Email`],
+                                    phone: teamData[`${prefix}Mobile`],
+                                    gender: genderText(teamData[`${prefix}Gender`]),
+                                    pwd: teamData[`${prefix}Pwd`] === "yes",
+                                },
+                            ],
+                        },
+                        { headers: authHeader }
+                    );
+                    alert("Member details updated successfully");
+                }
                 toggleEditMode(section);
             } else {
-                alert("Update failed: " + res.data.message);
+                toggleEditMode(section);
             }
         } catch (err) {
             console.error(err);
-            alert("Something went wrong while updating information.");
+            alert(getApiErrorMessage(err, "Something went wrong while updating information."));
         }
     };
 
@@ -984,62 +1109,8 @@ function Dashboard() {
 
     const handleAddMember = async (e) => {
         e.preventDefault();
-
-        if (!validateNewMember()) {
-            return;
-        }
-
-        setIsSubmittingMember(true);
-
-        try {
-            const token = localStorage.getItem("authToken");
-            const leadEmail = teamData.leadEmail;
-            const teamId = teamData.teamId;
-
-            const formData = new FormData();
-            formData.append("leadEmail", leadEmail);
-            formData.append("leadToken", token);
-            formData.append("teamId", teamId);
-            formData.append("name", newMemberData.name);
-            formData.append("email", newMemberData.email);
-            formData.append("mobile", newMemberData.mobile);
-            formData.append("gender", newMemberData.gender);
-            formData.append("isPwd", newMemberData.isPwd === "yes" ? 1 : 0);
-            formData.append("profilePic", newMemberData.profilePic);
-
-            const response = await axios.post(
-                `${BASE_URL}/add_team_member.php`,
-                formData,
-                {
-                    headers: {
-                        "Content-Type": "multipart/form-data",
-                    },
-                }
-            );
-
-            if (response.data.success) {
-                alert("Member added successfully! Refreshing dashboard...");
-                setShowAddMemberForm(false);
-                setNewMemberData({
-                    name: "",
-                    email: "",
-                    mobile: "",
-                    gender: "M",
-                    isPwd: "no",
-                    profilePic: null,
-                });
-
-                // Refresh dashboard data
-                fetchDashboardData(token);
-            } else {
-                alert("Failed to add member: " + response.data.message);
-            }
-        } catch (error) {
-            console.error("Error adding member:", error);
-            alert("Error adding member. Please try again.");
-        } finally {
-            setIsSubmittingMember(false);
-        }
+        alert("Team member changes after registration require approval from organizers.");
+        setShowAddMemberForm(false);
     };
 
     const handleImageSelect = (memberType, event) => {
@@ -1292,8 +1363,8 @@ function Dashboard() {
                         (blob) => {
                             resolve(blob);
                         },
-                        "image/jpeg",
-                        0.9
+                        "image/webp",
+                        0.92
                     );
                 };
 
@@ -1302,7 +1373,7 @@ function Dashboard() {
         }
 
         return new Promise((resolve) => {
-            const canvas = canvasRef.current;
+            const canvas = canvasRef.current || document.createElement("canvas");
             const ctx = canvas.getContext("2d");
             const img = new Image();
 
@@ -1320,8 +1391,8 @@ function Dashboard() {
                     (blob) => {
                         resolve(blob);
                     },
-                    "image/jpeg",
-                    0.9
+                    "image/webp",
+                    0.92
                 );
             };
 
@@ -1339,78 +1410,81 @@ function Dashboard() {
                 return;
             }
 
-            let memberId;
-            switch (memberType) {
-                case "lead":
-                    memberId = teamData.leadId;
-                    break;
-                case "member1":
-                    memberId = teamData.m1Id;
-                    break;
-                case "member2":
-                    memberId = teamData.m2Id;
-                    break;
-                case "member3":
-                    memberId = teamData.m3Id;
-                    break;
-                default:
-                    return;
-            }
+            setIsUploadingImage(true);
 
+            // 1. Crop to square (outputting WebP format blob)
             const croppedBlob = await cropImageToSquare(imageSrc, memberType);
 
-            const formData = new FormData();
-            formData.append("token", token);
-            formData.append("member_id", memberId);
-            formData.append("profile_pic", croppedBlob, "profile_pic.jpg");
+            // 2. Upload to SwagServer endpoint: POST https://swagserver.co.in/hackfusion/upload_image.php
+            const uploadResult = await uploadToSwagServer(croppedBlob, `${memberType}_profile.webp`);
 
-            const response = await axios.post(
-                `${BASE_URL}/edit_img.php`,
-                formData,
+            if (!uploadResult) {
+                throw new Error("Did not receive a valid image response from SwagServer");
+            }
+
+            const fileName =
+                typeof uploadResult === "object" && uploadResult.fileName
+                    ? uploadResult.fileName
+                    : String(uploadResult).split("/").pop();
+
+            const imageUrl =
+                typeof uploadResult === "object" && uploadResult.imageUrl
+                    ? uploadResult.imageUrl
+                    : `${SWAG_IMAGE_BASE_URL}${fileName}`;
+
+            // 3. Store the image filename in beeserver.online using POST /users/me/profile-picture
+            // Send only the bare filename (without the SwagServer URL prefix) per API expectation
+            await axios.post(
+                `${BASE_URL}/users/me/profile-picture`,
+                {
+                    profile_url: fileName,
+                },
                 {
                     headers: {
-                        "Content-Type": "multipart/form-data",
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "application/json",
                     },
                 }
             );
 
-            if (response.data.success) {
-                const profilePicKey =
-                    memberType === "lead"
-                        ? "leadProfilePic"
-                        : memberType === "member1"
-                            ? "m1ProfilePic"
-                            : memberType === "member2"
-                                ? "m2ProfilePic"
-                                : "m3ProfilePic";
+            // 4. Update local state with the newly uploaded image
+            const profilePicKey =
+                memberType === "lead"
+                    ? "leadProfilePic"
+                    : memberType === "member1"
+                        ? "m1ProfilePic"
+                        : memberType === "member2"
+                            ? "m2ProfilePic"
+                            : "m3ProfilePic";
 
-                setTeamData((prev) => ({
-                    ...prev,
-                    [profilePicKey]: response.data.data.profile_pic,
-                }));
+            setTeamData((prev) => ({
+                ...prev,
+                [profilePicKey]: imageUrl,
+                teamLogo: memberType === "lead" ? imageUrl : prev.teamLogo,
+                ...(memberType === "lead" ? { leadProfilePic: imageUrl } : {}),
+            }));
 
-                setSelectedImages((prev) => ({
-                    ...prev,
-                    [memberType]: null,
-                }));
+            setSelectedImages((prev) => ({
+                ...prev,
+                [memberType]: null,
+            }));
 
-                setImageEditMode((prev) => ({
-                    ...prev,
-                    [memberType]: false,
-                }));
+            setImageEditMode((prev) => ({
+                ...prev,
+                [memberType]: false,
+            }));
 
-                setCroppingMode((prev) => ({
-                    ...prev,
-                    [memberType]: false,
-                }));
+            setCroppingMode((prev) => ({
+                ...prev,
+                [memberType]: false,
+            }));
 
-                alert("Profile picture updated successfully!");
-            } else {
-                alert("Failed to update profile picture: " + response.data.message);
-            }
+            alert("Profile picture updated successfully!");
         } catch (error) {
             console.error("Error uploading image:", error);
-            alert("Error uploading image. Please try again.");
+            alert(getApiErrorMessage(error, "Failed to upload and update profile picture."));
+        } finally {
+            setIsUploadingImage(false);
         }
     };
 
@@ -1473,14 +1547,21 @@ function Dashboard() {
         const isEditing = imageEditMode[memberType];
         const selectedImage = selectedImages[memberType];
         const isCropping = croppingMode[memberType];
+        const finalPicUrl = getProfileImageUrl(profilePic);
 
         return (
             <div className="group relative shrink-0">
                 <div className="mc-avatar" style={{ "--accent": accent }}>
                     {selectedImage && !isCropping ? (
                         <img src={selectedImage} alt={name} />
-                    ) : profilePic ? (
-                        <img src={profilePic} alt={name} />
+                    ) : finalPicUrl ? (
+                        <img
+                            src={finalPicUrl}
+                            alt={name}
+                            onError={(e) => {
+                                e.currentTarget.style.display = "none";
+                            }}
+                        />
                     ) : (
                         <div className="mc-avatar-letter px" style={{ color: accent }}>
                             {name?.charAt(0) || "M"}
@@ -1552,11 +1633,12 @@ function Dashboard() {
                                         </button>
                                         <button
                                             type="button"
+                                            disabled={isUploadingImage}
                                             onClick={() => saveProfilePicture(memberType)}
                                             className="mc-btn sm green flex-1"
                                         >
                                             <Check size={14} />
-                                            Use As Is
+                                            {isUploadingImage ? "Uploading..." : "Use As Is"}
                                         </button>
                                     </div>
                                 </div>
@@ -1633,11 +1715,12 @@ function Dashboard() {
                                         </button>
                                         <button
                                             type="button"
+                                            disabled={isUploadingImage}
                                             onClick={() => saveProfilePicture(memberType)}
                                             className="mc-btn sm green flex-1"
                                         >
                                             <Check size={14} />
-                                            Save
+                                            {isUploadingImage ? "Uploading..." : "Save"}
                                         </button>
                                     </div>
                                 </div>
@@ -1688,11 +1771,11 @@ function Dashboard() {
                     <main className="relative z-10 mx-auto w-full max-w-6xl px-3 pb-14 pt-24 sm:px-6 sm:pt-28">
                         {/* Header */}
                         <Navbar/>
-                        <img
+                        {/* <img
                             src={logo}
                             alt={EVENT_NAME}
                             className="mc-logo mx-auto h-auto w-full max-w-[220px] sm:max-w-[450px]"
-                        />
+                        /> */}
                         <header className="mc-shell mc-shell-in mb-6">
 
                             <div className="mc-grass" />
@@ -1702,9 +1785,12 @@ function Dashboard() {
                                     <div className="flex min-w-0 items-center gap-4">
                                         {teamData.teamLogo ? (
                                             <img
-                                                src={teamData.teamLogo}
+                                                src={getProfileImageUrl(teamData.teamLogo)}
                                                 alt="Team Logo"
                                                 className="mc-logo-sq"
+                                                onError={(e) => {
+                                                    e.currentTarget.style.display = "none";
+                                                }}
                                             />
                                         ) : (
                                             <div className="mc-logo-sq flex items-center justify-center">
@@ -1733,16 +1819,18 @@ function Dashboard() {
                                     {/* Actions */}
                                     <div className="flex flex-col gap-3 md:items-end">
                                         <div className="flex flex-wrap gap-2">
-                                            <span className={`mc-badge ${statusTone(teamData.registrationStatus)}`}>
-                                                Team: {teamData.registrationStatus}
+                                            <span className={`mc-badge ${teamData.round1Passed ? "green" : "gold"}`}>
+                                                Round 1: {teamData.round1Passed ? "Passed" : "Pending"}
                                             </span>
-                                            <span className={`mc-badge ${statusTone(teamData.paymentStatus)}`}>
-                                                Payment: {teamData.paymentStatus}
-                                            </span>
+                                            {teamData.allottedLab && (
+                                                <span className="mc-badge green">
+                                                    Lab: {teamData.allottedLab}
+                                                </span>
+                                            )}
                                         </div>
 
                                         <div className="flex flex-wrap gap-2">
-                                            {teamData.registrationStatus !== "Pending" &&
+                                            {/* {teamData.registrationStatus !== "Pending" &&
                                                 teamData.registrationStatus !== "Rejected" && (
                                                     <button
                                                         type="button"
@@ -1756,7 +1844,7 @@ function Dashboard() {
                                                     >
                                                         View Receipt
                                                     </button>
-                                                )}
+                                                )} */}
                                             <button
                                                 type="button"
                                                 onClick={() => setShowChangePasswordModal(true)}
@@ -1785,9 +1873,9 @@ function Dashboard() {
                                         rel="noopener noreferrer"
                                     >
                                         <img
-                                            src="/beestack_text_logo.png"
+                                            src={beestacklogo}
                                             alt="BeeStack"
-                                            className="h-4 w-auto md:h-5"
+                                            className="h-4 w-auto md:h-7"
                                         />
                                     </a>
                                 </div>
@@ -1850,7 +1938,7 @@ function Dashboard() {
 
                             {/* Abstract Card */}
                             <Card
-                                title="Project Abstract"
+                                title="Project Abstract & PPT"
                                 accent={ACCENT.abstract}
                                 delay={0.28}
                                 action={
@@ -1866,17 +1954,89 @@ function Dashboard() {
                                 }
                             >
                                 {editMode.abstract ? (
-                                    <textarea
-                                        name="abstract"
-                                        value={teamData.abstract}
-                                        onChange={handleInputChange}
-                                        rows="6"
-                                        className="mc-input"
-                                    />
+                                    <div className="space-y-4">
+                                        <div>
+                                            <label className="mc-label text-yellow-300">Project Abstract</label>
+                                            <textarea
+                                                name="abstract"
+                                                value={teamData.abstract}
+                                                onChange={handleInputChange}
+                                                rows="6"
+                                                className="mc-input"
+                                                placeholder="Enter project abstract..."
+                                            />
+                                        </div>
+                                        <div>
+                                            <div className="flex items-center justify-between mb-1">
+                                                <label className="mc-label text-yellow-300 !mb-0">Presentation PPT Google Drive Link</label>
+                                                <a
+                                                    href="https://docs.google.com/presentation/d/1B4rz5M5U-V7qcySXisUqlYIv3D__50-gkGkBehU4xgg/edit?usp=sharing"
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="text-xs text-[#7dea2b] hover:text-white underline inline-flex items-center gap-1"
+                                                >
+                                                    <span>PPT Template</span>
+                                                    <span>↗</span>
+                                                </a>
+                                            </div>
+                                            <input
+                                                type="url"
+                                                name="pptLink"
+                                                value={teamData.pptLink || ""}
+                                                onChange={handleInputChange}
+                                                className="mc-input"
+                                                placeholder="https://docs.google.com/presentation/d/... or Google Drive link"
+                                            />
+                                            <p className="mc-hint">Ensure link access is set to 'Anyone with the link can view'</p>
+                                        </div>
+                                    </div>
                                 ) : (
-                                    <p className="mc-value mc-scroll max-h-72 overflow-auto whitespace-pre-wrap">
-                                        {teamData.abstract}
-                                    </p>
+                                    <div className="space-y-4">
+                                        <div className="flex items-center justify-between pb-3 border-b border-gray-700/60">
+                                            <span className="text-xs uppercase tracking-wider text-gray-400">Round 1 Evaluation</span>
+                                            <span className={`mc-badge ${teamData.round1Passed ? "green" : "gold"}`}>
+                                                {teamData.round1Passed ? "Passed" : "Pending"}
+                                            </span>
+                                        </div>
+                                        <div>
+                                            <span className="text-xs uppercase tracking-wider text-gray-400">Abstract</span>
+                                            <p className="mc-value mc-scroll max-h-56 overflow-auto whitespace-pre-wrap mt-1">
+                                                {teamData.abstract || "No abstract provided."}
+                                            </p>
+                                        </div>
+                                        <div className="pt-3 border-t border-gray-700/60">
+                                            <span className="text-xs uppercase tracking-wider text-gray-400">Presentation (PPT) Link</span>
+                                            <div className="mt-1 flex items-center gap-3">
+                                                {teamData.pptLink ? (
+                                                    <a
+                                                        href={teamData.pptLink}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="mc-btn sm text-xs inline-flex items-center gap-2 text-yellow-300 hover:text-white"
+                                                    >
+                                                        <span>Open Google Drive PPT</span>
+                                                        <span>↗</span>
+                                                    </a>
+                                                ) : (
+                                                    <span className="text-gray-400 text-sm">No PPT link submitted yet.</span>
+                                                )}
+                                                <a
+                                                    href="https://docs.google.com/presentation/d/1B4rz5M5U-V7qcySXisUqlYIv3D__50-gkGkBehU4xgg/edit?usp=sharing"
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="mc-btn sm text-xs inline-flex items-center gap-2 text-green-300 hover:text-white"
+                                                >
+                                                    <span>Official PPT Template</span>
+                                                    <span>↗</span>
+                                                </a>
+                                            </div>
+                                            {teamData.pptLink && (
+                                                <p className="text-xs text-gray-400 truncate mt-1 select-all font-mono">
+                                                    {teamData.pptLink}
+                                                </p>
+                                            )}
+                                        </div>
+                                    </div>
                                 )}
                             </Card>
 
