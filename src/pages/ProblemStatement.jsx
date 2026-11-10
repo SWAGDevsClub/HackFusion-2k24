@@ -1190,7 +1190,7 @@ SUBMISSION CHECKLIST:
                     </svg>
                   </div>
                   <div className="min-w-0">
-                    <span className="ps-section-eyebrow text-[#55FF55]">DELIVERY CRITERIA</span>
+                    <span className="ps-section-eyebrow text-[#55FF55]">DELIVERY CRITERIA (post hackathon)</span>
                     <h2 className="ps-section-title text-xl sm:text-2xl m-0 text-white">
                       H. Submission Checklist
                     </h2>

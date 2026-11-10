@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence, MotionConfig } from "motion/react";
-import { BASE_URL } from "../hooks/api";
+import { BASE_URL, getApiErrorMessage } from "../hooks/api";
 import logo from "../assets/logo.png";
 import Navbar from "../components/Navbar";
 import bg from "../assets/login_bg.webp";
@@ -340,24 +340,68 @@ export default function Login({ initialFlipped = false }) {
         setErrorMsg("");
 
         try {
-            const formData = new FormData();
-            formData.append("email", loginData.email);
-            formData.append("password", loginData.password);
+            const response = await axios.post(
+                `${BASE_URL}/auth/login`,
+                {
+                    email: loginData.email.trim(),
+                    password: loginData.password,
+                },
+                {
+                    headers: { "Content-Type": "application/json" },
+                }
+            );
 
-            const response = await axios.post(`${BASE_URL}/login.php`, formData, {
-                headers: { "Content-Type": "multipart/form-data" },
-            });
+            if (response.data && response.data.access_token) {
+                const accessToken = response.data.access_token;
+                localStorage.setItem("authToken", accessToken);
 
-            if (response.data && response.data.success) {
-                localStorage.setItem("user", JSON.stringify(response.data.data));
-                localStorage.setItem("authToken", response.data.data.token);
+                // Fetch current authenticated user profile
+                try {
+                    const meRes = await axios.get(`${BASE_URL}/auth/me`, {
+                        headers: { Authorization: `Bearer ${accessToken}` },
+                    });
+
+                    const userData = {
+                        ...meRes.data,
+                        token: accessToken,
+                        member_id: meRes.data.id,
+                    };
+
+                    // Try to retrieve player / team info if available
+                    try {
+                        const playerRes = await axios.get(
+                            `${BASE_URL}/players/${meRes.data.id}`,
+                            {
+                                headers: { Authorization: `Bearer ${accessToken}` },
+                            }
+                        );
+                        if (playerRes.data) {
+                            userData.team_id = playerRes.data.team_id;
+                            userData.is_lead = playerRes.data.is_leader ? 1 : 0;
+                            userData.player_status = playerRes.data.status;
+                        }
+                    } catch {
+                        // Non-fatal if player lookup fails or user is admin
+                    }
+
+                    localStorage.setItem("user", JSON.stringify(userData));
+                } catch {
+                    localStorage.setItem(
+                        "user",
+                        JSON.stringify({
+                            email: loginData.email.trim(),
+                            token: accessToken,
+                        })
+                    );
+                }
+
                 navigate("/dashboard");
             } else {
                 setErrorMsg(response.data?.message || "Login failed");
             }
         } catch (error) {
             console.error("Login error:", error);
-            setErrorMsg("Something went wrong. Try again.");
+            setErrorMsg(getApiErrorMessage(error, "Invalid email or password. Please try again."));
         } finally {
             setLoading(false);
         }
@@ -382,19 +426,21 @@ export default function Login({ initialFlipped = false }) {
         setResetLoading(true);
 
         try {
-            const formData = new FormData();
-            formData.append("email", emailTrimmed);
-            const response = await axios.post(`${BASE_URL}/forgot-password.php`, formData, {
-                headers: { "Content-Type": "multipart/form-data" },
-            });
-            if (response.data && response.data.success === false && response.data.message) {
-                setResetError(response.data.message);
-            } else {
+            const response = await axios.post(
+                `${BASE_URL}/auth/forgot-password`,
+                { email: emailTrimmed },
+                {
+                    headers: { "Content-Type": "application/json" },
+                }
+            );
+            if (response.status === 200) {
                 setResetSuccess(true);
+            } else {
+                setResetError(response.data?.message || "Failed to request password reset.");
             }
-        } catch {
-            // Simulated fallback so recovery message displays cleanly
-            setResetSuccess(true);
+        } catch (error) {
+            console.error("Forgot password error:", error);
+            setResetError(getApiErrorMessage(error, "Unable to send reset instructions. Please try again."));
         } finally {
             setResetLoading(false);
         }

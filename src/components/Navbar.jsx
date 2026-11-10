@@ -14,7 +14,7 @@ const SIGN_IMAGES = [chainSignA, chainSignB]
 const LEFT_LINKS = [
     { label: "Home", to: "/", section: "home" },
     { label: "Schedule", to: "/", section: "schedule" },
-    // { label: "Sponsors", to: "/sponsors" },
+    { label: "Sponsors", to: "/sponsors" },
 ]
 
 const RIGHT_LINKS = [
