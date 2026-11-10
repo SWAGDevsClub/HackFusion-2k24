@@ -6,7 +6,7 @@ import logo from "../assets/logo.png";
 import bg from "../assets/reg_bg.webp"
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer"
-import QR_IMAGE from "../assets/hackfusionpayment.png"
+import QR_IMAGE from "../assets/qrimage.png"
 
 /* ------------------------------------------------------------------ */
 /*  Things to update for HackFusion 4                                  */
