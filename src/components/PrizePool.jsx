@@ -228,7 +228,7 @@ export default function PrizePool() {
                   duration={2.5}
                   delay={0}
                   trigger="view"
-                  className="count-up-text text-amber-900 font-['Press_Start_2P'] text-3xl md:text-5xl mt-4"
+                  className="count-up-text text-amber-900 font-['Press_Start_2P'] text-2xl md:text-5xl mt-4"
                   style={{}}
                 />
 

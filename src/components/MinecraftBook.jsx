@@ -69,7 +69,7 @@ THEM THROUGHOUT THE EVENT.`,
         `REGISTRATION & PROJECTS
 
 - SUBMIT AN ABSTRACT FOR STAGE 1;
-  PPT SUBMISSION IS OPTIONAL.
+  PPT SUBMISSION IS COMPULSORY.
 - SELECTED TEAMS ADVANCE TO STAGE 2.
 - FEE: RS. 749 PER TEAM; FOOD INCLUDED.
 - IF NOT SELECTED, THE FEE IS REFUNDED.
@@ -115,9 +115,20 @@ THEM THROUGHOUT THE EVENT.`,
 - THE COMMITTEE RESOLVES DISPUTES.
 
 CONTACT THE ORGANIZERS:
-YASH WAGHMARE  +91 91728 58260
-PRACHI DAFRE   +91 70577 44394
-SWAG@SGGS.AC.IN | GDG@SGGS.AC.IN`,
+
+Khushwant Singh Mahajan  
++91 7020942799
+
+Hrishikesh Karale   
++91 97677533091
+
+Priyanka Shinde
++91 8482820885
+
+support@hackfusion.in
+swag@sggs.ac.in
+gdg@sggs.ac.in
+`,
   ],
 }) {
   const [page, setPage] = useState(0);
@@ -156,17 +167,20 @@ SWAG@SGGS.AC.IN | GDG@SGGS.AC.IN`,
     timer.current = window.setTimeout(() => {
       setTurn({ from: page, to, dir });
       timer.current = window.setTimeout(() => {
-        const visiblePages = mobile ? [to] : [to, ...(to + 1 < total ? [to + 1] : [])];
-        const longestPage = Math.max(...visiblePages.map((index) => Math.max(0, pages[index].split("\n").length - 1)));
-        setPage(to);
-        setTurn(null);
-        setFadePages([]);
-        setRevealPages(visiblePages);
-        revealTimer.current = window.setTimeout(() => {
-          setRevealPages([]);
-          transitionLock.current = false;
-        }, LINE_MS + longestPage * LINE_STAGGER_MS + 40);
-      }, 720);
+  const visiblePages = mobile ? [to] : [to, ...(to + 1 < total ? [to + 1] : [])];
+  const longestPage = Math.max(...visiblePages.map((index) => Math.max(0, pages[index].split("\n").length - 1)));
+  setPage(to);
+  setTurn(null);
+  setFadePages([]);
+  setRevealPages(visiblePages);
+
+  // Unlock immediately: the text reveal is purely cosmetic and must not block navigation
+  transitionLock.current = false;
+
+  revealTimer.current = window.setTimeout(() => {
+    setRevealPages([]);
+  }, LINE_MS + longestPage * LINE_STAGGER_MS + 40);
+}, 720);
     }, FADE_OUT_MS);
   };
   const pagePanel = (index, side) => (

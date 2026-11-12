@@ -3,7 +3,7 @@ import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom"
 import axios from "axios";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import mcmain from "../assets/mcmain.jpg";
+// import mcmain from "../assets/mcmain.jpg";
 import logo from "../assets/logo.png";
 import { BASE_URL, getApiErrorMessage } from "../hooks/api";
 
@@ -197,11 +197,11 @@ export default function ResetPassword() {
         className="fixed inset-0 z-0 overflow-hidden pointer-events-none select-none"
         aria-hidden="true"
       >
-        <img
+        {/* <img
           src={mcmain}
           alt="Minecraft Overworld Landscape"
           className="h-full w-full object-cover object-center"
-        />
+        /> */}
         <div className="absolute inset-0 bg-black/35 pointer-events-none" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/30 pointer-events-none" />
       </div>

@@ -97,7 +97,7 @@ function HangingSign({ to, index, children, square = false, onClick, label, expa
 /* Small pixel grass block used as the centre "logo" sign */
 function GrassBlock() {
     return (     
-        <img src={swag_logo} alt="swag_logo" className="block h-6 w-6 shrink-0" />     
+        <p className="text-[9px] mt-[2px]">SWAG & GDG</p>     
     )
 }
 
