@@ -15,7 +15,7 @@ import bg from "../assets/schedulebg.jpg"
 const CHECKPOINTS = [
     {
         title: "Registrations",
-        date: "5th Nov – 1st Dec",
+        date: "5th Nov – 5st Dec",
         icon: "📜",
         blurb: "Register your team and claim your spot in the mine.",
         time: "Online · All day",
@@ -27,12 +27,12 @@ const CHECKPOINTS = [
     },
     {
         title: "Abstract Submission",
-        date: "10th Nov – 1st Dec",
+        date: "10th Nov – 5st Dec",
         icon: "🔦",
         blurb: "Submit your idea and the problem it solves.",
         time: "Deadline · 11:59 PM",
         details: [
-            "One PDF, max 5 slides",
+            "One PDF, max 6 slides",
             "Pick your track",
             "Late submissions are not accepted",
         ],
@@ -156,7 +156,7 @@ function Checkpoint({ data, index, reached, current, open, onToggle, rowRef }) {
                             <h3 className="font-['Press_Start_2P'] text-[11px] leading-5 sm:text-xs">
                                 {data.title}
                             </h3>
-                            <p className="mt-2 text-sm leading-snug text-[#4a3520]">{data.blurb}</p>
+                            <p className="mt-2 text-sm leading-snug text-[#4a3520] font-['Press_Start_2P'] text-[8px]">{data.blurb}</p>
                         </div>
                     </div>
 
@@ -177,7 +177,7 @@ function Checkpoint({ data, index, reached, current, open, onToggle, rowRef }) {
                                     </p>
                                     <ul className="mt-3 space-y-1.5 text-sm text-[#2a1a0a]">
                                         {data.details.map((d) => (
-                                            <li key={d} className="flex gap-2">
+                                            <li key={d} className="flex gap-2 font-['Press_Start_2P'] text-[12px] tracking-tighter">
                                                 <span className="mt-[7px] h-1.5 w-1.5 shrink-0 bg-[#7a2d1f]" />
                                                 {d}
                                             </li>

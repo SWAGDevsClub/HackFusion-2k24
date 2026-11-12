@@ -50,8 +50,11 @@ export default function ScrollFrames({
         if (i < 0) return;
 
         const img = imagesRef.current[i];
-        const ctx = canvas.getContext("2d", { alpha: false, desynchronized: true });
+        const ctx = canvas.getContext("2d", { alpha: false });
         if (!ctx) return;
+
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = "high";
 
         const cw = canvas.width;
         const ch = canvas.height;
@@ -132,7 +135,7 @@ export default function ScrollFrames({
         const resize = () => {
             const canvas = canvasRef.current;
             if (!canvas) return;
-            const maxDpr = window.innerWidth < 768 ? 1 : 1.5;
+            const maxDpr = window.innerWidth < 768 ? 1 : 2;
             const dpr = Math.min(window.devicePixelRatio || 1, maxDpr);
             canvas.width = Math.round(window.innerWidth * dpr);
             canvas.height = Math.round(window.innerHeight * dpr);
@@ -258,7 +261,7 @@ export default function ScrollFrames({
                     )}
                     <canvas
                         ref={canvasRef}
-                        className={`absolute inset-0 h-full w-full transition-opacity duration-700 ${ready ? "opacity-100" : "opacity-0"
+                        className={`absolute inset-0 h-full w-full transition-opacity duration-300 ${ready ? "opacity-100" : "opacity-0"
                             }`}
                     />
                 </div>

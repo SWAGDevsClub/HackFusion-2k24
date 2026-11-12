@@ -7,6 +7,7 @@ import bg from "../assets/reg_bg.webp"
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer"
 import QR_IMAGE from "../assets/qrimage.png"
+import MinecraftModal from "../components/MinecraftModal";
 
 /* ------------------------------------------------------------------ */
 /*  Things to update for HackFusion 4                                  */
@@ -790,25 +791,37 @@ const PersonTab = ({
           <>
             {mobileField}
             {emailField}
+            <SelectField
+              label="Gender"
+              name={`${prefix}Gender`}
+              value={formData[`${prefix}Gender`]}
+              onChange={onChange}
+              options={[
+                { value: "M", text: "Male" },
+                { value: "F", text: "Female" },
+                { value: "O", text: "Other" },
+              ]}
+            />
+            {children}
           </>
         ) : (
           <>
             {emailField}
             {mobileField}
+            {children}
+            <SelectField
+              label="Gender"
+              name={`${prefix}Gender`}
+              value={formData[`${prefix}Gender`]}
+              onChange={onChange}
+              options={[
+                { value: "M", text: "Male" },
+                { value: "F", text: "Female" },
+                { value: "O", text: "Other" },
+              ]}
+            />
           </>
         )}
-        {children}
-        <SelectField
-          label="Gender"
-          name={`${prefix}Gender`}
-          value={formData[`${prefix}Gender`]}
-          onChange={onChange}
-          options={[
-            { value: "M", text: "Male" },
-            { value: "F", text: "Female" },
-            { value: "O", text: "Other" },
-          ]}
-        />
         <SelectField
           label="PWD (Person with Disability)"
           name={`${prefix}Pwd`}
@@ -872,6 +885,36 @@ function Register() {
   const [isLoading, setIsLoading] = useState(false);
   const [showSubmissionNotice, setShowSubmissionNotice] = useState(false);
   const [hasAcceptedNotice, setHasAcceptedNotice] = useState(false);
+  const [popup, setPopup] = useState({
+    isOpen: false,
+    title: "",
+    message: "",
+    type: "info",
+    confirmText: "OK",
+    onConfirm: null,
+  });
+
+  const showPopup = (
+    message,
+    title = "NOTICE",
+    type = "info",
+    onConfirm = null,
+    confirmText = "OK"
+  ) => {
+    setPopup({
+      isOpen: true,
+      title,
+      message,
+      type,
+      confirmText,
+      onConfirm,
+    });
+  };
+
+  const closePopup = () => {
+    setPopup((prev) => ({ ...prev, isOpen: false }));
+  };
+
   const tabsRef = useRef(null);
   const tabBarRef = useRef(null);
   const prevIndexRef = useRef(0);
@@ -1008,8 +1051,10 @@ function Register() {
               : String(uploadRes);
         } catch (uploadErr) {
           console.error("Screenshot upload error:", uploadErr);
-          alert(
-            `Failed to upload payment screenshot: ${uploadErr.message || "Unknown error"}. Please check your connection and try again.`
+          showPopup(
+            `Failed to upload payment screenshot: ${uploadErr.message || "Unknown error"}. Please check your connection and try again.`,
+            "UPLOAD FAILED",
+            "error"
           );
           setIsLoading(false);
           return;
@@ -1017,7 +1062,11 @@ function Register() {
       }
 
       if (!resolvedReceiptUrl) {
-        alert("Payment screenshot is required. Please upload your payment screenshot.");
+        showPopup(
+          "Payment screenshot is required. Please upload your payment screenshot before submitting.",
+          "SCREENSHOT REQUIRED",
+          "warning"
+        );
         setIsLoading(false);
         return;
       }
@@ -1098,11 +1147,14 @@ function Register() {
       console.log("Registration response:", result);
 
       if (response.ok || response.status === 201) {
-        alert(
+        showPopup(
           result.message ||
-          `Registration successful! Team: ${result.team_name || formData.teamName} (ID: ${result.team_id})`
+          `Registration successful! Team: ${result.team_name || formData.teamName} (ID: ${result.team_id})`,
+          "REGISTRATION SUCCESSFUL!",
+          "success",
+          () => navigate("/login"),
+          "PROCEED TO LOGIN"
         );
-        navigate("/login");
       } else {
         const errorMsg =
           result.error?.message ||
@@ -1112,11 +1164,11 @@ function Register() {
           result.detail ||
           result.message ||
           "Registration failed. Please check your submission.";
-        alert(`Registration failed: ${errorMsg}`);
+        showPopup(`Registration failed: ${errorMsg}`, "REGISTRATION FAILED", "error");
       }
     } catch (error) {
       console.error("Error submitting form:", error);
-      alert("Something went wrong while submitting the form.");
+      showPopup("Something went wrong while submitting the registration. Please check your network and try again.", "SUBMISSION ERROR", "error");
     } finally {
       setIsLoading(false);
       setShowSubmissionNotice(false);
@@ -1799,6 +1851,16 @@ function Register() {
           </motion.div>
         </main>
         <Footer />
+
+        <MinecraftModal
+          isOpen={popup.isOpen}
+          title={popup.title}
+          message={popup.message}
+          type={popup.type}
+          confirmText={popup.confirmText}
+          onConfirm={popup.onConfirm}
+          onClose={closePopup}
+        />
       </div>
     </MotionConfig>
   );

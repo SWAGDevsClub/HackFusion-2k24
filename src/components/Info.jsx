@@ -56,7 +56,7 @@ export default function Info() {
   const root = document.documentElement, body = document.body, prevRootX = root.style.overflowX, prevBodyX = body.style.overflowX;
   if (matchMedia("(max-width: 600px)").matches) { root.style.overflowX = "clip"; body.style.overflowX = "clip"; }
 
-  const parent = world.parentElement, grade = parent.querySelector(".world-grade");
+  const parent = world.parentElement;
   const sections = [...world.querySelectorAll(".world-section")];
   const layers = [...world.querySelectorAll(".world-layer")].map(element => ({
     element,
@@ -64,8 +64,7 @@ export default function Info() {
     speed: Number(element.dataset.speed || 0),
   }));
   const geo = sections.map(() => ({ mid: 0, end: 0 }));
-  const grades = ["rgba(255,210,150,.12)", "rgba(10,5,0,.2)", "rgba(110,30,190,.3)", "rgba(0,0,0,0)"];
-  let current = scrollY, target = scrollY, viewportHeight = innerHeight, raf = 0, resizeTimer, mounted = true, gradeIdx = -1;
+  let current = scrollY, target = scrollY, viewportHeight = innerHeight, raf = 0, resizeTimer, mounted = true;
 
   const schedule = () => { if (!raf && mounted) raf = requestAnimationFrame(draw); };
   // Section geometry is measured ONCE (and on resize), never inside the frame loop.
@@ -89,8 +88,6 @@ export default function Info() {
       const l = layers[i], d = geo[l.si].mid - current - half;
       l.element.style.transform = `translate3d(0,${d * l.speed * 1.35}px,0)`;
     }
-    const mid = current + half, idx = mid < geo[0].end ? 0 : mid < geo[1].end ? 1 : mid < geo[2].end ? 2 : 3;
-    if (grade && idx !== gradeIdx) { gradeIdx = idx; grade.style.backgroundColor = grades[idx]; }
     if (current !== target) schedule();
   }
 
@@ -126,7 +123,7 @@ export default function Info() {
               <h2 id="morning-heading" className="text-center text-4xl font-bold leading-[1.45] text-[#fff5d8] [font-family:'Press_Start_2P',monospace] [text-shadow:3px_4px_0_#160b25,0_0_22px_#140a30] max-[768px]:text-[clamp(18px,4.8vw,23px)] pt-10 sm:pt-0">A Fusion of Ideas, Code, and Excitement!</h2>
             </Layer>
             <Layer section="s1" image="morning-parchment-banner.webp" x={27} width={46} top="17%" speed={0} z={14} className="max-[768px]:!left-[8vw] max-[768px]:!top-[25%] max-[768px]:!w-[84vw] scale-120 md:scale-100 mt-20 sm:mt-0">
-              <div id="morning-description" className="absolute left-[18%] right-[18%] top-[7%] bottom-[8%] flex items-center justify-center overflow-hidden px-1 text-center text-[clamp(15px,1.15vw,20px)] font-bold leading-[1.4] text-[#3b2615] [font-family:'Press_Start_2P',monospace] [text-shadow:0_1px_0_rgba(255,255,220,.55)] max-[768px]:left-[15%] max-[768px]:right-[15%] max-[768px]:text-[clamp(9px,2.35vw,11px)] max-[768px]:leading-[1.25]">
+              <div id="morning-description" className="absolute left-[10%] right-[10%] top-[7%] bottom-[8%] md:left-[14%] md:right-[14%] flex items-center justify-center overflow-hidden px-1 text-center font-bold text-[#3b2615] font-['Press_Start_2P',monospace] [text-shadow:0_1px_0_rgba(255,255,220,.55)] text-[9px] leading-tight md:text-base md:leading-snug xl:text-[19px]">
                 <p>Join <strong>Hackfusion 4</strong>, a national-level hackathon at <strong>SGGSIE&amp;T Nanded</strong>, where 100+ teams unite to innovate, code, and compete! Experience the fusion of ideas, technology, and excitement while connecting with passionate developers, expert mentors, and industry sponsors.</p>
               </div>
             </Layer>
@@ -144,14 +141,14 @@ export default function Info() {
             <Layer section="s2" image="cavebg" top="0%" height="120%" speed={-.08} z={1} filter="brightness(.62)" className="max-[600px]:!top-0 max-[600px]:!h-[116%]" imgClassName="max-[600px]:object-cover max-[600px]:object-center" />
             {/* Mobile walls: start flush with the section top and fill the section. object-cover +
             object-top keeps the aspect ratio (no stretching) and can never spill into the amethyst section. */}
-        <Layer section="s2" image="walls" top="3vh" speed={.1} z={8} className="max-[600px]:!top-0 max-[600px]:!h-full max-[600px]:[-webkit-mask-image:linear-gradient(to_bottom,#000_30%,transparent_60%)] max-[600px]:[mask-image:linear-gradient(to_bottom,#000_30%,transparent_60%)]" imgClassName="max-[600px]:!h-full max-[600px]:object-cover max-[600px]:object-top">
+        <Layer section="s2" image="walls" top="3vh" speed={.1} z={8} className="max-[600px]:!top-0 max-[600px]:!h-full max-[600px]:[-webkit-mask-image:linear-gradient(to_bottom,#000_30%,transparent_60%)] max-[600px]:[mask-image:linear-gradient(to_bottom,#000_30%,transparent_60%)]" imgClassName="max-[600px]:!h-full max-[600px]:object-cover max-[600px]:object-top md:-mt-60">
           <div className="cave-torch-glow pointer-events-none absolute inset-0 mix-blend-screen animate-[cave-torch-flicker_2.6s_ease-in-out_infinite_alternate]"/>
         </Layer>
         <Layer section="s2" x={10} width={80} top="14%" speed={0} z={12} className="max-[600px]:!left-[5vw] max-[600px]:!top-[8%] max-[600px]:!w-[90vw]">
           <h2 id="participate-heading" className="text-center text-[clamp(30px,3.9vw,58px)] font-bold leading-[1.45] text-[#fff1d4] [font-family:'Press_Start_2P',monospace] [text-shadow:3px_4px_0_#090b12,0_0_20px_#ff9a36] max-[600px]:text-[clamp(19px,4.7vw,23px)] mt-20 md:mt-0">Why Participate?</h2>
         </Layer>
         <Layer section="s2" image="cave-scroll-banner.webp" x={17} width={66} top="27%" speed={0} z={10} className="max-[600px]:!left-[2vw] max-[600px]:!top-[20%] max-[600px]:!w-[96vw] mt-10 md:-mt-13">
-          <div id="participate-description" className="absolute left-[18%] right-[18%] top-[10%] bottom-[8%] flex items-center justify-center overflow-hidden px-1 text-center text-[clamp(15px,1.3vw,21px)] font-bold leading-[1.8] text-[#f3f0ea] [font-family:'Press_Start_2P',monospace] [text-shadow:1px_2px_2px_#111] max-[600px]:left-[16%] max-[600px]:right-[16%] max-[600px]:top-[12%] max-[600px]:bottom-[12%] max-[600px]:text-[clamp(10px,2.1vw,10px)] mt-2 md:mt-0">
+          <div id="participate-description" className="absolute left-[18%] right-[18%] top-[10%] bottom-[8%] flex items-center justify-center overflow-hidden px-1 text-center text-[clamp(15px,1.3vw,21px)] font-bold leading-[1.8] text-[#f3f0ea] [font-family:'Press_Start_2P',monospace] [text-shadow:1px_2px_2px_#111] max-[600px]:left-[16%] max-[600px]:right-[16%] max-[600px]:top-[12%] max-[600px]:bottom-[12%] max-[600px]:text-[clamp(7px,2.1vw,10px)] mt-2 md:mt-0">
             <p>Hackfusion 4 is where innovation meets opportunity. Turn bold ideas into real-world solutions, collaborate with brilliant minds, and learn from industry experts. Build, experiment, and make your mark. <strong className="text-[#ffd16a]">Think big. Code bold. Be the fusion!</strong></p>
           </div>
         </Layer>
@@ -173,10 +170,7 @@ export default function Info() {
         <TeleportEnderman label="amethyst" className="max-[600px]:top-[2%]"/>
       </section>
     </div>
-    {/* Mobile: soft-light blending on a full-screen fixed layer is very expensive to scroll, so phones use a plain tint. */}
-    <div className="world-grade pointer-events-none fixed inset-0 z-[60] mix-blend-soft-light transition-colors duration-[800ms] max-[600px]:mix-blend-normal max-[600px]:opacity-60" /><div className="pointer-events-none fixed inset-0 z-[60] bg-[radial-gradient(ellipse_at_50%_50%,transparent_55%,rgba(0,0,0,.5)_100%)]"/>
-
-      </div>;
-    </CascadeSection>
+  </div>
+</CascadeSection>
   )
 }

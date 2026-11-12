@@ -8,6 +8,7 @@ import ScrollFrames from "./ScrollFrames"
 import ShinyText from "../animations/ShinyText"
 
 const REGISTRATION_OPEN = true
+const REGISTRATION_DEADLINE_TEXT = "Last date to register: 5th December"
 const REGISTER_PATH = "/register"
 const PROBLEM_STATEMENT_PATH = "/problem-statement"
 const LOGIN_PATH = "/login"
@@ -324,15 +325,28 @@ export default function HeroSection() {
                     />
 
                     <div className="flex flex-col items-center gap-4 sm:flex-col sm:gap-5 md:-mt-20">
-                        <McButton
-                            to={REGISTER_PATH}
-                            color={REGISTRATION_OPEN ? "#4f9a2f" : "#7d7d7d"}
-                            disabled={!REGISTRATION_OPEN ? true : false}
-                            delay={0.4}
-                            hint="Join the hackathon!"
-                        >
-                            {REGISTRATION_OPEN ? "Register Now" : "Registration Closed"}
-                        </McButton>
+                        {/* Register button + registration deadline note */}
+                        <div className="flex w-full flex-col items-center gap-2 sm:gap-3">
+                            <McButton
+                                to={REGISTER_PATH}
+                                color={REGISTRATION_OPEN ? "#4f9a2f" : "#7d7d7d"}
+                                disabled={!REGISTRATION_OPEN ? true : false}
+                                delay={0.4}
+                                hint="Join the hackathon!"
+                            >
+                                {REGISTRATION_OPEN ? "Register Now" : "Registration Closed"}
+                            </McButton>
+                            {REGISTRATION_OPEN && (
+                                <motion.p
+                                    className="pointer-events-none select-none text-center font-['Press_Start_2P',monospace] text-[8px] uppercase leading-relaxed text-yellow-300 [text-shadow:2px_2px_0_rgba(0,0,0,0.8)] sm:text-[10px]"
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: 0.5, delay: 0.5 }}
+                                >
+                                    {REGISTRATION_DEADLINE_TEXT}
+                                </motion.p>
+                            )}
+                        </div>
                         <div ref={problemBtnRef} className="w-full">
                             <McButton
                                 to={PROBLEM_STATEMENT_PATH}

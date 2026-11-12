@@ -41,13 +41,13 @@ const teamMembers = [
     phone: "97677533091",
     image: hrishikeshImage,
   },
-  {
-    id: 3,
-    name: "Pradeep Salunke",
-    role: "Hackfusion Coordinator",
-    phone: "8956467929",
-    image: pradeepImage,
-  },
+  // {
+  //   id: 3,
+  //   name: "Pradeep Salunke",
+  //   role: "Hackfusion Coordinator",
+  //   phone: "8956467929",
+  //   image: pradeepImage,
+  // },
 ];
 
 // Opening animation style: "smooth" (fluid, default) or "blocky" (chunky Minecraft steps)
