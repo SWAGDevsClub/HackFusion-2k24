@@ -15,7 +15,7 @@ import bg from "../assets/schedulebg.jpg"
 const CHECKPOINTS = [
     {
         title: "Registrations",
-        date: "5th Nov – 1st Dec",
+        date: "5th Nov – 5st Dec",
         icon: "📜",
         blurb: "Register your team and claim your spot in the mine.",
         time: "Online · All day",
@@ -27,7 +27,7 @@ const CHECKPOINTS = [
     },
     {
         title: "Abstract Submission",
-        date: "10th Nov – 1st Dec",
+        date: "10th Nov – 5st Dec",
         icon: "🔦",
         blurb: "Submit your idea and the problem it solves.",
         time: "Deadline · 11:59 PM",

@@ -6,7 +6,8 @@ import { BASE_URL, convertToWebp, getApiErrorMessage, uploadToSwagServer } from 
 // import logo from "../assets/logo.png";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import beestacklogo from "../assets/beestacklogo.png"
+import beestacklogo from "../assets/beestacklogo.png";
+import MinecraftModal from "../components/MinecraftModal";
 /* ------------------------------------------------------------------ */
 /*  Things to update                                                   */
 /* ------------------------------------------------------------------ */
@@ -527,6 +528,35 @@ const Modal = ({ title, accent, onClose, wide, children }) => (
 /* ------------------------------------------------------------------ */
 function Dashboard() {
     const [teamData, setTeamData] = useState(null);
+    const [popup, setPopup] = useState({
+        isOpen: false,
+        title: "",
+        message: "",
+        type: "info",
+        confirmText: "OK",
+        onConfirm: null,
+    });
+
+    const showPopup = (
+        message,
+        title = "NOTICE",
+        type = "info",
+        onConfirm = null,
+        confirmText = "OK"
+    ) => {
+        setPopup({
+            isOpen: true,
+            title,
+            message,
+            type,
+            confirmText,
+            onConfirm,
+        });
+    };
+
+    const closePopup = () => {
+        setPopup((prev) => ({ ...prev, isOpen: false }));
+    };
     const [editMode, setEditMode] = useState({
         teamInfo: false,
         lead: false,
@@ -754,7 +784,7 @@ function Dashboard() {
             }
 
             if (!currentTeamId) {
-                alert("No team associated with your account.");
+                showPopup("No team associated with your account.", "NO TEAM FOUND", "warning");
                 return;
             }
 
@@ -888,8 +918,13 @@ function Dashboard() {
             setTeamData(transformedData);
         } catch (err) {
             console.error("Dashboard fetch error:", err);
-            alert(getApiErrorMessage(err, "Failed to load dashboard data. Please log in again."));
-            navigate("/login");
+            showPopup(
+                getApiErrorMessage(err, "Failed to load dashboard data. Please log in again."),
+                "SESSION EXPIRED",
+                "error",
+                () => navigate("/login"),
+                "LOGIN"
+            );
         }
     };
 
@@ -967,7 +1002,7 @@ function Dashboard() {
             );
 
             if (response.status === 200) {
-                alert(response.data?.message || "Password changed successfully!");
+                showPopup(response.data?.message || "Password changed successfully!", "SUCCESS", "success");
                 setShowChangePasswordModal(false);
                 setPasswordData({
                     oldPassword: "",
@@ -976,11 +1011,11 @@ function Dashboard() {
                 });
                 setPasswordErrors({});
             } else {
-                alert("Failed to change password: " + (response.data?.message || "Error"));
+                showPopup("Failed to change password: " + (response.data?.message || "Error"), "FAILED", "error");
             }
         } catch (error) {
             console.error("Error changing password:", error);
-            alert(getApiErrorMessage(error, "Error changing password. Please try again."));
+            showPopup(getApiErrorMessage(error, "Error changing password. Please try again."), "ERROR", "error");
         } finally {
             setIsChangingPassword(false);
         }
@@ -996,7 +1031,7 @@ function Dashboard() {
 
     const handleDeleteMember = async (e) => {
         e.preventDefault();
-        alert("Member deletions cannot be performed directly. Please contact an organizer or admin.");
+        showPopup("Member deletions cannot be performed directly. Please contact an organizer or admin.", "RESTRICTION", "warning");
         setShowDeleteMemberModal(false);
         setMemberToDelete(null);
         setDeletePassword("");
@@ -1019,7 +1054,7 @@ function Dashboard() {
                     },
                     { headers: authHeader }
                 );
-                alert("Team information updated successfully");
+                showPopup("Team information updated successfully!", "SAVED", "success");
                 toggleEditMode(section);
             } else if (section === "abstract") {
                 await axios.patch(
@@ -1030,7 +1065,7 @@ function Dashboard() {
                     },
                     { headers: authHeader }
                 );
-                alert("Abstract & PPT link updated successfully");
+                showPopup("Abstract & PPT link updated successfully!", "SAVED", "success");
                 toggleEditMode(section);
             } else if (["lead", "member1", "member2", "member3"].includes(section)) {
                 const prefixMap = {
@@ -1058,7 +1093,7 @@ function Dashboard() {
                         },
                         { headers: authHeader }
                     );
-                    alert("Member details updated successfully");
+                    showPopup("Member details updated successfully!", "SAVED", "success");
                 }
                 toggleEditMode(section);
             } else {
@@ -1066,7 +1101,7 @@ function Dashboard() {
             }
         } catch (err) {
             console.error(err);
-            alert(getApiErrorMessage(err, "Something went wrong while updating information."));
+            showPopup(getApiErrorMessage(err, "Something went wrong while updating information."), "UPDATE FAILED", "error");
         }
     };
 
@@ -1109,7 +1144,7 @@ function Dashboard() {
 
     const handleAddMember = async (e) => {
         e.preventDefault();
-        alert("Team member changes after registration require approval from organizers.");
+        showPopup("Team member changes after registration require approval from organizers.", "APPROVAL REQUIRED", "warning");
         setShowAddMemberForm(false);
     };
 
@@ -1118,12 +1153,12 @@ function Dashboard() {
         if (!file) return;
 
         if (!file.type.startsWith("image/")) {
-            alert("Please select an image file");
+            showPopup("Please select a valid image file (PNG, JPG, JPEG, WEBP).", "INVALID FILE", "warning");
             return;
         }
 
         if (file.size > 5 * 1024 * 1024) {
-            alert("Image size should be less than 5MB");
+            showPopup("Image size should be less than 5MB.", "FILE TOO LARGE", "warning");
             return;
         }
 
@@ -1406,7 +1441,7 @@ function Dashboard() {
             const imageSrc = selectedImages[memberType];
 
             if (!imageSrc) {
-                alert("No image selected");
+                showPopup("No image selected. Please choose an image to upload.", "NO IMAGE", "warning");
                 return;
             }
 
@@ -1479,10 +1514,10 @@ function Dashboard() {
                 [memberType]: false,
             }));
 
-            alert("Profile picture updated successfully!");
+            showPopup("Profile picture updated successfully!", "SUCCESS", "success");
         } catch (error) {
             console.error("Error uploading image:", error);
-            alert(getApiErrorMessage(error, "Failed to upload and update profile picture."));
+            showPopup(getApiErrorMessage(error, "Failed to upload and update profile picture."), "UPLOAD FAILED", "error");
         } finally {
             setIsUploadingImage(false);
         }
@@ -2339,6 +2374,15 @@ function Dashboard() {
                     )}
                 </>
             )}
+            <MinecraftModal
+                isOpen={popup.isOpen}
+                title={popup.title}
+                message={popup.message}
+                type={popup.type}
+                confirmText={popup.confirmText}
+                onConfirm={popup.onConfirm}
+                onClose={closePopup}
+            />
             <Footer/>
         </div>
     );
