@@ -4,6 +4,19 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import bgImage from '../assets/ps_bg.webp';
 
+// Mock Datasets & Implementation Guide
+import datasetGuidePdf from '../data/dataset_Guide.pdf';
+import categoryMasterCsv from '../data/grievance_category_master.csv?url';
+import grievanceHistoryCsv from '../data/mock_grievance_history.csv?url';
+import departmentDirectoryCsv from '../data/department_directory.csv?url';
+import readmeNotesTxt from '../data/README_dataset_notes.txt?url';
+
+const DATASET_GUIDE_URL = datasetGuidePdf || '/data/dataset_Guide.pdf';
+const CATEGORY_MASTER_URL = categoryMasterCsv || '/data/grievance_category_master.csv';
+const GRIEVANCE_HISTORY_URL = grievanceHistoryCsv || '/data/mock_grievance_history.csv';
+const DEPARTMENT_DIRECTORY_URL = departmentDirectoryCsv || '/data/department_directory.csv';
+const README_NOTES_URL = readmeNotesTxt || '/data/README_dataset_notes.txt';
+
 const BG_IMAGE = bgImage;
 const ACCENT = '#55FFFF'; // Diamond Cyan
 const EMERALD = '#55FF55';
@@ -186,25 +199,89 @@ export const problemStatementData = {
     {
       number: '1',
       title: 'Grievance Category Master',
-      format: 'Excel / CSV',
-      desc: 'Contains categories and subcategories, responsible department, default assignee, SLA days, and "Sensitive" / "Identity-Hiding" flags.',
-      badges: ['Master Source', 'SLA Config', 'Security Flags'],
+      filename: 'grievance_category_master.csv',
+      format: 'CSV File',
+      size: '7.7 KB',
+      records: '30 Category Definitions',
+      downloadUrl: CATEGORY_MASTER_URL,
+      desc: 'The single source of truth for categories and subcategories, responsible department mappings, default assignees, configured SLA days, and policy security flags.',
+      badges: ['Source of Truth', 'SLA Config', 'Sensitive Flags', 'Auto-Resolution Eligibility'],
+      keyColumns: ['category_id', 'category', 'subcategory', 'responsible_department', 'sla_days', 'sensitive', 'identity_hiding', 'auto_resolution_allowed'],
+      sampleRows: [
+        { id: 'C001', category: 'Roads & Infrastructure', sub: 'Potholes / damaged roads', dept: 'Public Works Dept', sla: '5 days', sensitive: 'False', auto: 'True' },
+        { id: 'C003', category: 'Water Supply', sub: 'Pipeline leakage', dept: 'Water Supply Dept', sla: '3 days', sensitive: 'False', auto: 'True' },
+        { id: 'C018', category: 'Women & Child Welfare', sub: 'Child safety / protection concern', dept: 'Women & Child Development', sla: '1 day', sensitive: 'TRUE (HUMAN ONLY)', auto: 'FALSE' },
+        { id: 'C026', category: 'Public Safety', sub: 'Threat / immediate safety concern', dept: 'Police Department', sla: '1 day', sensitive: 'TRUE (HUMAN ONLY)', auto: 'FALSE' },
+      ],
+      highlights: [
+        'Enforces ground truth for classification and routing',
+        'Configures SLA deadlines used by Predictive Intelligence',
+        'Sensitive & Identity-Hiding flags determine auto-resolution vs human review',
+      ],
     },
     {
       number: '2',
       title: 'Mock Grievance History',
-      format: 'Excel / CSV',
-      desc: 'Contains anonymised past grievances with complaint text, category, broad location, submission and resolution dates, status, resolution text and feedback.',
-      badges: ['RAG Vector Store', 'Historical SLA', 'Resolution Precedents'],
+      filename: 'mock_grievance_history.csv',
+      format: 'CSV File',
+      size: '243 KB',
+      records: '800 Past Synthetic Cases',
+      downloadUrl: GRIEVANCE_HISTORY_URL,
+      desc: 'Anonymised historical grievances containing complaint text, categories, broad talukas/localities, submission and resolution dates, resolution text, and feedback.',
+      badges: ['RAG Vector Store', 'Historical Durations', 'Resolution Precedents', '800 Case Records'],
+      keyColumns: ['grievance_id', 'complaint_text', 'category', 'broad_location_taluka', 'status', 'resolution_actor', 'ai_auto_closed'],
+      sampleRows: [
+        { id: 'GRV-00001', text: 'The bus shelter near Bhokar Town has a damaged roof and no seating.', cat: 'Transport', taluka: 'Bhokar', status: 'In Progress', actor: 'NOT_RESOLVED', auto: 'False' },
+        { id: 'GRV-00002', text: 'The scheduled veterinary visit did not take place in Thara.', cat: 'Animal Husbandry', taluka: 'Bhokar', status: 'Resolved', actor: 'AI_SYSTEM_DEMO', auto: 'True' },
+        { id: 'GRV-00003', text: 'Please arrange a confidential child-protection review for a concern in Bahadarpura.', cat: 'Women & Child Welfare', taluka: 'Kandhar', status: 'In Progress', actor: 'NOT_RESOLVED', auto: 'False (Sensitive)' },
+        { id: 'GRV-00004', text: 'A public safety threat reported near Vazirabad; route for immediate review.', cat: 'Public Safety', taluka: 'Nanded', status: 'In Progress', actor: 'NOT_RESOLVED', auto: 'False (Sensitive)' },
+      ],
+      highlights: [
+        'Corpus for vector database semantic retrieval (top-k RAG context)',
+        'Historical durations inform predictive delay and escalation models',
+        'Demonstrates AI_SYSTEM_DEMO vs HUMAN_OFFICER resolution actor tagging',
+      ],
     },
     {
       number: '3',
       title: 'Department Directory',
-      format: 'Excel / CSV',
-      desc: 'Contains departments, jurisdiction mapping and contact channels for routing and notifications.',
-      badges: ['Jurisdiction Map', 'Routing Channels', 'Officer Contacts'],
+      filename: 'department_directory.csv',
+      format: 'CSV File',
+      size: '8.5 KB',
+      records: '20 Department Profiles',
+      downloadUrl: DEPARTMENT_DIRECTORY_URL,
+      desc: 'Directory of departments, service scopes, jurisdiction taluka mappings, and sample contact channels / mock webhook endpoints for routing and notifications.',
+      badges: ['Jurisdiction Map', 'Routing Channels', 'Mock Webhooks', '16 Talukas'],
+      keyColumns: ['department_id', 'department_name', 'service_scope', 'jurisdiction_type', 'mock_webhook_id'],
+      sampleRows: [
+        { id: 'D001', name: 'Public Works Department', scope: 'Road maintenance, potholes, street infrastructure', map: 'District-wide (16 talukas)', webhook: 'MOCK-WEBHOOK-D001' },
+        { id: 'D002', name: 'Water Supply Department', scope: 'Water supply, pipeline leakage, water quality', map: 'District-wide (16 talukas)', webhook: 'MOCK-WEBHOOK-D002' },
+        { id: 'D018', name: 'Women & Child Development Dept', scope: 'Child protection, women support schemes', map: 'District-wide (16 talukas)', webhook: 'MOCK-WEBHOOK-D018' },
+        { id: 'D020', name: 'District Grievance Coordination Cell', scope: 'Cross-dept routing, unassigned grievances', map: 'District-wide (16 talukas)', webhook: 'MOCK-WEBHOOK-D020' },
+      ],
+      highlights: [
+        'Maps sample talukas across the illustrative district geography',
+        'Provides mock webhook IDs and email channels for action execution',
+        'Target entity for routing, escalations, and inter-department transfers',
+      ],
     },
   ],
+
+  datasetNotes: {
+    title: 'Dataset Schema & Integration Notes',
+    filename: 'README_dataset_notes.txt',
+    size: '2.4 KB',
+    downloadUrl: README_NOTES_URL,
+    desc: 'Schema relationships, join keys (category_id, department_id), policy guidelines, and synthetic demo safety practices.',
+  },
+
+  datasetGuide: {
+    title: 'Dataset & Architecture Guide',
+    filename: 'dataset_Guide.pdf',
+    size: '318 KB',
+    downloadUrl: DATASET_GUIDE_URL,
+    desc: 'Official visual and architecture reference manual outlining problem specifications, entity relations, and agent decision pipelines.',
+  },
 
   backendRules: [
     {
@@ -397,6 +474,13 @@ export default function ProblemStatement() {
 
   const [copied, setCopied] = useState(false);
 
+  // Interactive state for previewing sample data tables
+  const [activePreview, setActivePreview] = useState(null);
+
+  const togglePreview = (assetNumber) => {
+    setActivePreview((prev) => (prev === assetNumber ? null : assetNumber));
+  };
+
   const toggleCheck = (id) => {
     setCheckedItems((prev) => ({ ...prev, [id]: !prev[id] }));
   };
@@ -417,6 +501,13 @@ CORE AGENTIC CAPABILITIES:
 4. Duplicate Detection & Incident Grouping: Semantic + Geo + Time clustering. No silent drops.
 5. Predictive Intelligence: Proactive SLA breach & recurrence prediction before delay occurs.
 6. Real-world Action (Tool Use): Updates mock DB, assigns dept, triggers webhooks (n8n/Zapier).
+
+MOCK DATASETS & IMPLEMENTATION GUIDE:
+- Grievance Category Master (CSV, 30 categories)
+- Mock Grievance History (CSV, 800 synthetic cases)
+- Department Directory (CSV, 20 department profiles)
+- Official Dataset & Architecture Guide (PDF)
+* IMPORTANT NOTE: All mock data files are strictly synthetic and provided for local prototyping & testing only. They will NOT be used during hackathon evaluation.
 
 OBSERVABILITY (MANDATORY):
 - Langfuse / LangSmith live tracing required. Chain of Thought must be inspectable.
@@ -516,10 +607,19 @@ SUBMISSION CHECKLIST:
               </button>
               <button
                 onClick={() => scrollToSection('data-backend-section')}
-                className="ps-nav-pill"
+                className="ps-nav-pill text-[#FFAA00] border-[#FFAA00]/70 hover:bg-[#FFAA00]/20"
               >
-                📦 Data & Backend
+                📦 Mock Datasets
               </button>
+              <a
+                href={DATASET_GUIDE_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="ps-nav-pill text-[#55FFFF] border-[#55FFFF]/70 hover:bg-[#55FFFF]/20"
+                title="Open Official Dataset Guide PDF"
+              >
+                📘 Guide PDF ↗
+              </a>
               <button
                 onClick={() => scrollToSection('observability-section')}
                 className="ps-nav-pill text-[#C77DFF] border-[#C77DFF]/60"
@@ -750,50 +850,327 @@ SUBMISSION CHECKLIST:
 
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b-2 border-black/50">
                 <div className="min-w-0">
-                  <span className="ps-section-eyebrow text-[#FFAA00]">DATA & ENVIRONMENT</span>
+                  <span className="ps-section-eyebrow text-[#FFAA00]">DATA & ENVIRONMENT // MOCK TEST PACK</span>
                   <h2 className="ps-section-title text-xl sm:text-2xl m-0 text-white">
                     Data Assets & Mock Backend
                   </h2>
                 </div>
-                <span className="ps-chip bg-[#FFAA00] text-black self-start sm:self-auto">CSV / EXCEL SPECS</span>
+                <div className="flex flex-wrap items-center gap-2 self-start sm:self-auto">
+                  <span className="ps-chip bg-[#FFAA00] text-black">CSV DATASETS</span>
+                  <span className="ps-chip bg-[#55FFFF] text-black font-bold">GUIDE PDF INCLUDED</span>
+                </div>
               </div>
 
-              {/* Data Assets */}
-              <div className="mt-6">
-                <h3 className="font-['Press_Start_2P',monospace] text-xs sm:text-sm leading-relaxed text-[#55FFFF] mb-4">
-                  A. Three Core Data Assets Provided:
-                </h3>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {/* 1. CRITICAL SYNTHETIC DATA NOTICE */}
+              <div className="mt-6 p-4 sm:p-5 bg-[#1f130b] border-2 border-[#FFAA00] shadow-[inset_2px_2px_0_#553300,0_4px_16px_rgba(0,0,0,0.6)]">
+                <div className="flex items-start gap-3.5">
+                  <div className="ps-slot-sm bg-[#3a1d00] border-[#FFAA00] shrink-0 text-2xl flex items-center justify-center">
+                    ⚠️
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <div className="flex flex-wrap items-center gap-2 mb-1.5">
+                      <span className="font-['Press_Start_2P',monospace] text-[11px] sm:text-xs text-[#FFAA00] tracking-wide">
+                        IMPORTANT NOTICE: SYNTHETIC MOCK DATA ONLY
+                      </span>
+                      <span className="font-['Press_Start_2P',monospace] text-[8px] bg-[#FF5555] text-white px-2 py-0.5 font-bold">
+                        WILL NOT BE USED IN HACKATHON
+                      </span>
+                    </div>
+                    <p className="text-base sm:text-lg text-[#fce4b8] leading-relaxed m-0">
+                      <strong>Please Note:</strong> All records across these CSV files (categories, grievance complaints, departments, SLAs, talukas, and contact channels) are <strong>purely synthetic data</strong> provided exclusively for local development, schema alignment, and prototyping. <strong>This dataset will NOT be used during the actual hackathon evaluation or live judging rounds.</strong> During final judging, agents will be evaluated on fresh, unseen evaluation scenarios.
+                    </p>
+                    <p className="text-sm sm:text-base text-[#d8b888] leading-relaxed mt-2 mb-0">
+                      All email addresses, phone channels, and webhook IDs within the directory are non-operational mock placeholders. Do not attempt to contact or trigger real notifications to them.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* 2. PROMINENT GUIDE PDF HIGHLIGHT */}
+              <div className="mt-6 p-5 sm:p-6 bg-gradient-to-r from-[#0d1e2e] via-[#121c2c] to-[#1c1228] border-2 border-[#55FFFF] shadow-[inset_2px_2px_0_#005555,0_0_24px_rgba(85,255,255,0.25)] relative overflow-hidden">
+                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
+                  <div className="flex items-start gap-4 min-w-0 flex-1">
+                    <div className="ps-slot w-14 h-14 bg-[#071622] border-2 border-[#55FFFF] shrink-0 text-3xl flex items-center justify-center shadow-[0_0_12px_rgba(85,255,255,0.3)]">
+                      📘
+                    </div>
+                    <div className="min-w-0">
+                      <div className="flex flex-wrap items-center gap-2 mb-1.5">
+                        <span className="font-['Press_Start_2P',monospace] text-[9px] bg-[#55FFFF] text-black px-2 py-0.5 font-bold">
+                          OFFICIAL GUIDE PDF
+                        </span>
+                        <span className="font-['Press_Start_2P',monospace] text-[8px] bg-black/70 text-[#55FFFF] border border-[#55FFFF]/40 px-2 py-0.5">
+                          PDF • 318 KB
+                        </span>
+                        <span className="font-['Press_Start_2P',monospace] text-[8px] bg-[#55FF55]/20 text-[#55FF55] border border-[#55FF55]/40 px-2 py-0.5">
+                          RECOMMENDED
+                        </span>
+                      </div>
+                      <h3 className="font-['Press_Start_2P',monospace] text-xs sm:text-sm text-white leading-relaxed m-0">
+                        Dataset & Problem Statement Architecture Guide (PDF)
+                      </h3>
+                      <p className="text-base sm:text-lg text-[#d0e8ff] leading-relaxed mt-2 mb-0">
+                        Visual architecture guide detailing the district scenario, table schemas, join keys (<code className="text-[#55FFFF]">category_id</code>, <code className="text-[#55FFFF]">department_id</code>), SLA enforcement, policy rules for Sensitive / Identity-Hiding cases, and agent decision flow.
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex flex-row lg:flex-col gap-2.5 shrink-0 w-full sm:w-auto">
+                    <a
+                      href={DATASET_GUIDE_URL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="ps-nav-pill flex-1 sm:flex-initial justify-center text-center bg-[#55FFFF] text-black hover:bg-white border-[#55FFFF] font-bold text-[10px] sm:text-xs py-2.5 px-4 shadow-[0_0_14px_rgba(85,255,255,0.4)]"
+                    >
+                      📖 View Guide (PDF) ↗
+                    </a>
+                    <a
+                      href={DATASET_GUIDE_URL}
+                      download="HackFusion_Dataset_Guide.pdf"
+                      className="ps-nav-pill flex-1 sm:flex-initial justify-center text-center bg-[#141418] text-[#55FFFF] border-[#55FFFF]/60 hover:border-[#55FFFF] text-[9px] sm:text-[10px] py-2 px-3"
+                    >
+                      ⬇ Download PDF
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              {/* 3. CORE DATA ASSETS (CARDS WITH LINKS & PREVIEWS) */}
+              <div className="mt-8">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+                  <h3 className="font-['Press_Start_2P',monospace] text-xs sm:text-sm leading-relaxed text-[#55FFFF] m-0">
+                    A. Three Core Mock Data Sets Provided:
+                  </h3>
+                  <span className="text-sm text-[#99e6aa] font-mono">
+                    Direct CSV Links & Sample Previews
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                   {ps.dataAssets.map((asset) => (
-                    <div key={asset.number} className="ps-inner-panel flex flex-col justify-between min-w-0">
+                    <div
+                      key={asset.number}
+                      className="ps-inner-panel flex flex-col justify-between min-w-0 border border-black hover:border-[#55FFFF]/50 transition-colors"
+                    >
                       <div>
+                        {/* Top Meta */}
                         <div className="flex items-center justify-between gap-2 mb-2">
                           <span className="font-['Press_Start_2P',monospace] text-xs text-[#FFAA00]">
                             ASSET #{asset.number}
                           </span>
-                          <span className="font-['Press_Start_2P',monospace] text-[9px] bg-black/60 px-2 py-0.5 text-white/80 border border-white/20 shrink-0">
-                            {asset.format}
+                          <span className="font-['Press_Start_2P',monospace] text-[9px] bg-black/80 px-2 py-0.5 text-[#55FFFF] border border-[#55FFFF]/30 shrink-0">
+                            {asset.size}
                           </span>
                         </div>
-                        <h4 className="font-['Press_Start_2P',monospace] text-xs text-white leading-relaxed mb-2">
+
+                        {/* Title & Filename */}
+                        <h4 className="font-['Press_Start_2P',monospace] text-xs text-white leading-relaxed mb-1">
                           {asset.title}
                         </h4>
-                        <p className="text-base text-[#cfd8dc] leading-relaxed">
+                        <div className="font-mono text-xs text-[#99e6aa] mb-2 flex items-center gap-1.5 break-all">
+                          <span>📄</span>
+                          <code>{asset.filename}</code>
+                        </div>
+
+                        {/* Description */}
+                        <p className="text-base text-[#cfd8dc] leading-relaxed mb-3">
                           {asset.desc}
                         </p>
+
+                        {/* Highlights */}
+                        <div className="space-y-1 mb-3 pt-2 border-t border-black/40">
+                          {asset.highlights.map((h, hIdx) => (
+                            <div key={hIdx} className="text-sm text-[#b0bec5] flex items-start gap-1.5 leading-snug">
+                              <span className="text-[#55FFFF] shrink-0">▪</span>
+                              <span>{h}</span>
+                            </div>
+                          ))}
+                        </div>
                       </div>
-                      <div className="flex flex-wrap gap-1.5 mt-3 pt-3 border-t border-black/40">
-                        {asset.badges.map((b) => (
-                          <span
-                            key={b}
-                            className="font-['Press_Start_2P',monospace] text-[8px] bg-[#111] px-1.5 py-0.5 text-[#55FFFF]"
+
+                      {/* Bottom Actions & Badges */}
+                      <div>
+                        {/* Badges */}
+                        <div className="flex flex-wrap gap-1.5 mb-3 pt-3 border-t border-black/40">
+                          {asset.badges.map((b) => (
+                            <span
+                              key={b}
+                              className="font-['Press_Start_2P',monospace] text-[8px] bg-[#111] px-1.5 py-0.5 text-[#FFAA00]"
+                            >
+                              #{b}
+                            </span>
+                          ))}
+                        </div>
+
+                        {/* Action Buttons: View, Download, Preview */}
+                        <div className="flex flex-col gap-2 pt-2 border-t border-black/50">
+                          <div className="grid grid-cols-2 gap-2">
+                            <a
+                              href={asset.downloadUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="ps-nav-pill justify-center text-center text-[9px] py-1.5 px-2 bg-[#1b2b34] text-[#55FFFF] border-[#55FFFF]/50 hover:border-[#55FFFF]"
+                              title={`View raw ${asset.filename} in new tab`}
+                            >
+                              👁️ View Raw ↗
+                            </a>
+                            <a
+                              href={asset.downloadUrl}
+                              download={asset.filename}
+                              className="ps-nav-pill justify-center text-center text-[9px] py-1.5 px-2 bg-[#1b341f] text-[#55FF55] border-[#55FF55]/50 hover:border-[#55FF55]"
+                              title={`Download ${asset.filename}`}
+                            >
+                              ⬇ Download
+                            </a>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => togglePreview(asset.number)}
+                            className="ps-nav-pill justify-center text-center text-[9px] py-1.5 px-2 bg-[#1a1a24] text-[#FFAA00] border-[#FFAA00]/50 hover:border-[#FFAA00]"
                           >
-                            #{b}
-                          </span>
-                        ))}
+                            {activePreview === asset.number ? '▲ Hide Table Preview' : '🔍 Quick Table Preview'}
+                          </button>
+                        </div>
                       </div>
                     </div>
                   ))}
+                </div>
+
+                {/* Inline Quick Table Preview Drawer */}
+                {activePreview && (
+                  <div className="mt-5 p-4 sm:p-5 bg-[#0f0f14] border-2 border-[#FFAA00] shadow-[inset_2px_2px_0_#332200]">
+                    {/* Header */}
+                    <div className="flex items-center justify-between pb-3 mb-3 border-b border-black/60">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xl">📊</span>
+                        <div>
+                          <span className="font-['Press_Start_2P',monospace] text-[10px] sm:text-xs text-[#FFAA00] block">
+                            PREVIEW: {ps.dataAssets.find((a) => a.number === activePreview)?.title} ({ps.dataAssets.find((a) => a.number === activePreview)?.filename})
+                          </span>
+                          <span className="text-xs text-[#888] font-mono">
+                            Sample records from synthetic dataset (showing first 4 rows)
+                          </span>
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => setActivePreview(null)}
+                        className="ps-nav-pill text-[9px] py-1 px-2.5 text-white/80 hover:text-white"
+                      >
+                        ✕ Close
+                      </button>
+                    </div>
+
+                    {/* Table */}
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-left text-sm border-collapse font-mono">
+                        <thead>
+                          <tr className="bg-black/60 text-[#55FFFF] border-b border-[#333]">
+                            {ps.dataAssets.find((a) => a.number === activePreview)?.keyColumns.map((col) => (
+                              <th key={col} className="p-2 text-xs font-['Press_Start_2P',monospace] whitespace-nowrap">
+                                {col}
+                              </th>
+                            ))}
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {/* Asset 1 Preview */}
+                          {activePreview === '1' && ps.dataAssets[0].sampleRows.map((row, idx) => (
+                            <tr key={idx} className="border-b border-white/5 hover:bg-white/5">
+                              <td className="p-2 text-[#FFAA00] font-bold">{row.id}</td>
+                              <td className="p-2 text-white">{row.category}</td>
+                              <td className="p-2 text-[#cfd8dc]">{row.sub}</td>
+                              <td className="p-2 text-[#80cbc4]">{row.dept}</td>
+                              <td className="p-2 text-[#ffcc80]">{row.sla}</td>
+                              <td className={`p-2 font-bold ${row.sensitive.includes('TRUE') ? 'text-[#FF5555]' : 'text-[#888]'}`}>{row.sensitive}</td>
+                              <td className={`p-2 font-bold ${row.sensitive.includes('TRUE') ? 'text-[#FF5555]' : 'text-[#888]'}`}>{row.sensitive.includes('TRUE') ? 'True' : 'False'}</td>
+                              <td className={`p-2 ${row.auto === 'True' ? 'text-[#55FF55]' : 'text-[#FF5555]'}`}>{row.auto}</td>
+                            </tr>
+                          ))}
+
+                          {/* Asset 2 Preview */}
+                          {activePreview === '2' && ps.dataAssets[1].sampleRows.map((row, idx) => (
+                            <tr key={idx} className="border-b border-white/5 hover:bg-white/5">
+                              <td className="p-2 text-[#FFAA00] font-bold whitespace-nowrap">{row.id}</td>
+                              <td className="p-2 text-white max-w-xs truncate" title={row.text}>{row.text}</td>
+                              <td className="p-2 text-[#80cbc4]">{row.cat}</td>
+                              <td className="p-2 text-[#ffcc80]">{row.taluka}</td>
+                              <td className="p-2 text-[#a5d6a7]">{row.status}</td>
+                              <td className="p-2 text-[#ce93d8]">{row.actor}</td>
+                              <td className="p-2 text-[#e0e0e0]">{row.auto}</td>
+                            </tr>
+                          ))}
+
+                          {/* Asset 3 Preview */}
+                          {activePreview === '3' && ps.dataAssets[2].sampleRows.map((row, idx) => (
+                            <tr key={idx} className="border-b border-white/5 hover:bg-white/5">
+                              <td className="p-2 text-[#FFAA00] font-bold whitespace-nowrap">{row.id}</td>
+                              <td className="p-2 text-white">{row.name}</td>
+                              <td className="p-2 text-[#cfd8dc]">{row.scope}</td>
+                              <td className="p-2 text-[#80cbc4]">{row.map}</td>
+                              <td className="p-2 text-[#a5d6a7]">Mock email + mock webhook</td>
+                              <td className="p-2 text-[#55FFFF]">{row.webhook}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+
+                    <div className="mt-3 pt-2 border-t border-black/40 flex flex-wrap items-center justify-between gap-2 text-xs text-[#888]">
+                      <span>Tip: Open the full CSV file via &ldquo;View Raw&rdquo; or download it to see all entries.</span>
+                      <a
+                        href={ps.dataAssets.find((a) => a.number === activePreview)?.downloadUrl}
+                        download={ps.dataAssets.find((a) => a.number === activePreview)?.filename}
+                        className="text-[#55FF55] underline hover:text-white"
+                      >
+                        Download complete file ({ps.dataAssets.find((a) => a.number === activePreview)?.records}) →
+                      </a>
+                    </div>
+                  </div>
+                )}
+
+                {/* Quick Dataset Pack Download Toolbar */}
+                <div className="mt-6 p-3.5 bg-[#121216] border border-white/10 flex flex-col md:flex-row items-center justify-between gap-3">
+                  <div className="flex items-center gap-2 text-sm text-[#b0bec5] text-center sm:text-left">
+                    <span className="text-[#FFAA00]">📦</span>
+                    <span className="font-['Press_Start_2P',monospace] text-[9px] text-white">
+                      FULL DATA PACK DOWNLOADS:
+                    </span>
+                  </div>
+                  <div className="flex flex-wrap items-center justify-center gap-2">
+                    <a
+                      href={CATEGORY_MASTER_URL}
+                      download="grievance_category_master.csv"
+                      className="ps-nav-pill text-[8px] py-1 px-2.5 bg-black/60 text-[#FFAA00] border-[#FFAA00]/40"
+                    >
+                      ⬇ Categories (.csv)
+                    </a>
+                    <a
+                      href={GRIEVANCE_HISTORY_URL}
+                      download="mock_grievance_history.csv"
+                      className="ps-nav-pill text-[8px] py-1 px-2.5 bg-black/60 text-[#55FFFF] border-[#55FFFF]/40"
+                    >
+                      ⬇ History (.csv)
+                    </a>
+                    <a
+                      href={DEPARTMENT_DIRECTORY_URL}
+                      download="department_directory.csv"
+                      className="ps-nav-pill text-[8px] py-1 px-2.5 bg-black/60 text-[#55FF55] border-[#55FF55]/40"
+                    >
+                      ⬇ Directory (.csv)
+                    </a>
+                    <a
+                      href={README_NOTES_URL}
+                      download="README_dataset_notes.txt"
+                      className="ps-nav-pill text-[8px] py-1 px-2.5 bg-black/60 text-[#d0dcdc] border-white/20"
+                    >
+                      ⬇ Notes (.txt)
+                    </a>
+                    <a
+                      href={DATASET_GUIDE_URL}
+                      download="HackFusion_Dataset_Guide.pdf"
+                      className="ps-nav-pill text-[8px] py-1 px-2.5 bg-[#55FFFF]/20 text-[#55FFFF] border-[#55FFFF]/60 font-bold"
+                    >
+                      📘 Guide (.pdf)
+                    </a>
+                  </div>
                 </div>
               </div>
 
