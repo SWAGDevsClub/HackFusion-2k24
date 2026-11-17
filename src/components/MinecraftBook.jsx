@@ -48,7 +48,7 @@ function PageText({ text, index, total, phase }) {
 
 export default function MinecraftBook({
   pages = [
-        `WELCOME TO HACKFUSION 3
+        `WELCOME TO HACKFUSION 4
 
 TO ENSURE A FAIR, ENJOYABLE, AND
 INNOVATIVE EXPERIENCE FOR ALL
